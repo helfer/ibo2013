@@ -1,0 +1,25 @@
+<html>
+<body>
+<p>Question: <strong>{{ question.name }} primary {{question.primary_language_id}}</strong></p>
+
+
+{% if original %}
+    <p>{{ original.timestamp }}<br>
+    {{ original.text }}
+    <p>
+{% endif %}
+
+{% if compare %}
+    {{compare}}
+{% else %}
+    <p>No comparison</p>
+{% endif %}
+
+    <form action="" method="post">
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

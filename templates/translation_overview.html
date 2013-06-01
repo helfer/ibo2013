@@ -1,0 +1,33 @@
+<html>
+<body>
+{% if exam %}
+
+    <p>Exam: <strong>{{ exam.name }}</strong></p>
+
+    {% if questions %}
+        <p>{{ questions|length }} question{{ questions|pluralize }}.</p>
+        <ul>
+            {% for q in questions %}
+            <li class"qli">{{q.primary.position}} id <a href="/question/{{q.primary.question_id}}/">{{q.primary.id}}</a>
+            Status: {{q.status}} <a href="/question/{{q.primary.question_id}}/translate/{{target_language_id}}">translate this question</a>
+            </li>
+            {% empty %}
+            <li>You should never see this text</li>
+            {% endfor %}
+        </ul>
+        {{versions|length}}
+        <ul>
+        {% for v in versions %}
+            <li>{{v.text}}--{{v.language}}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>This exam does not have any questions yet.</p>
+    {% endif %}
+{% else %}
+<p>There is no such exam</p>
+
+{% endif %}
+</body>
+</html>
+

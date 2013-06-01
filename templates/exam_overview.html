@@ -1,0 +1,41 @@
+<html>
+<body>
+{% if exam %}
+
+    <p>Exam: <strong>{{ exam.name }}</strong></p>
+
+    {% if questions %}
+        <p>{{ questions|length }} question{{ questions|pluralize }}.</p>
+        <ul>
+            {% for q in questions %}
+            <li class"qli">{{q.position}}<a href="/question/{{q.question_id}}/">Question {{q.question_id}}</a>
+            <form name="move-{{q.id}}" method="POST">
+                <input type="submit" name="up" value="move up" />
+                <input type="submit" name="down" value="move down" />
+                <input type="hidden" name="move" value="{{q.id}}" />
+            </form>
+            {{ q.name }}--q.primary_language
+            </li>
+            {% empty %}
+            <li>You should never see this text</li>
+            {% endfor %}
+        </ul>
+        {{versions|length}}
+        {% for v in versions %}
+            <p>version {{v.max_version}} for {{v.question_id}} {{v.language}}</p>
+        {% endfor %}
+    {% else %}
+        <p>This exam does not have any questions yet.</p>
+    {% endif %}
+        <form action="" method="post">
+            <table>
+                {{ form.as_table }}
+            </table>
+            <input type="submit" value="Add Question">
+        </form>
+{% else %}
+<p>There is no such exam</p>
+
+{% endif %}
+</body>
+</html>

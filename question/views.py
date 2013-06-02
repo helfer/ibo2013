@@ -7,6 +7,37 @@ from django.db import connections
 
 from django.contrib.auth.decorators import login_required
 
+
+
+def jury_overview(request,lang_id):
+    try:
+        lang_id = int(lang_id)
+    except:
+        raise Http404()
+
+    exams = Exam.objects.all()
+
+    for e in exams:
+        e.load_question_status(lang_id)
+       
+
+    return render_to_response('jury_overview.html',{'exams':exams,'lang_id':lang_id})
+
+def jury_examview(request,lang_id,exam_id):
+    try:
+        lang_id = int(lang_id)
+        exam_id = int(exam_id)
+        exam = Exam.objects.get(id=exam_id)
+    except:
+        raise Http404()
+
+    exams = Exam.objects.all()
+
+    exam.load_question_status(lang_id)
+    questions = exam.question_status
+
+    return render_to_response('jury_examview.html',{'exam':exam,'exams':exams,'lang_id':lang_id,'questions':questions})
+
 def view_exam(request,exam_id):
     try:
         exam_id = int(exam_id)
@@ -122,24 +153,23 @@ def translation_overview(request,exam_id,target_language_id):
             
     return render_to_response('translation_overview.html',{'exam':exam,'questions':questions,'target_language_id':target_language_id})
 
-def translate_question(request,question_id,target_language_id):
+def jury_questionview(request,target_language_id,exam_id,question_position):
     try:
-        question_id = int(question_id)
+        question_position = int(question_position)
         target_language_id = int(target_language_id)
-        question = Question.objects.get(id=question_id)
+        exam_id = int(exam_id)
+        exam = Exam.objects.get(id=exam_id)
         language = Language.objects.get(id=target_language_id)
     except: 
         raise Http404()
+
+    question = Question.objects.get(exam__id=exam_id,examquestion__position=question_position)
+    exams = Exam.objects.all()
 
     original = question.versionnode_set.filter(language=question.primary_language_id).order_by('-timestamp')[:1]
 
     versions = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[:1]
 
-    try:
-        previous = versions[0].translation_target.all()[0].origin
-        compare = previous.compare_with(original[0])
-    except IndexError:
-        compare = 'No previous translation found'
 
     if request.method == 'POST':
         form=EditQuestionForm(request.POST)
@@ -165,8 +195,15 @@ def translate_question(request,question_id,target_language_id):
                 target=v
             )
             tr.save()
-        
-            return HttpResponse("done")
+       
+            #return HttpResponse("done") 
+            versions = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[:1]
+    
+    try:
+        previous = versions[0].translation_target.all()[0].origin
+        compare = previous.compare_with(original[0])
+    except IndexError:
+        compare = original[0].text
 
     if not versions:
         vtxt = ""
@@ -175,10 +212,12 @@ def translate_question(request,question_id,target_language_id):
 
     form=EditQuestionForm(initial={'text':vtxt})
 
+    exam.load_question_status(target_language_id)
+    
     if not original:
         return HttpResponse("This question does not yet have a version in the primary language")
 
-    return render_to_response('translate.html',{'original':original[0],'question':question,'compare':compare,'form':form})
+    return render_to_response('jury_questionview.html',{'exam':exam,'lang_id':target_language_id,'pos':question_position,'status':exam.question_status,'exams':exams,'original':original[0],'question':question,'compare':compare,'form':form})
 
 @login_required
 def view_question_history(request,question_id):

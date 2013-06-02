@@ -19,6 +19,10 @@ class Question(models.Model):
         return "question:"+self.name
 
 
+    def get_newest_version():
+        return self.versionnode_set.order_by('-timestamp')[0]
+
+
 class VersionNode(models.Model):
     text = models.TextField()
     question = models.ForeignKey(Question)
@@ -47,6 +51,12 @@ class Exam(models.Model):
     languages = models.ManyToManyField(Language)
     questions = models.ManyToManyField(Question,blank=True,null=True,through='ExamQuestion')
 
+
+
+    def __init__(self,*args,**kwargs):
+        self.question_status = None
+        super(Exam,self).__init__(*args,**kwargs)
+
     def __unicode__(self):
         return u'Exam: %s' % (self.name)
 
@@ -70,6 +80,68 @@ class Exam(models.Model):
     def add_permission(self,user,lang):
         self.exampermission_set.create(language=lang,user=user)
         self.save()
+
+
+    def load_question_status(self,lang_id):
+        
+        if self.question_status is not None:
+            return
+
+        #questions = self.examquestion_set.order_by('position')
+
+        #selects all the most recent english versions of questions from this exam
+        query = """SELECT * FROM (
+
+            SELECT eq.*, vn.text, vn.version, vn.id as vid
+            FROM question_examquestion eq
+            LEFT OUTER JOIN (
+                SELECT *
+                FROM question_versionnode
+                WHERE language_id ='%s'
+            ) AS vn ON eq.question_id = vn.question_id
+            WHERE eq.exam_id='%s'
+            ORDER BY position, version DESC
+            ) AS t1
+            GROUP BY position"""
+        q1params = [1,self.id] #todo: english = 1 is hardcoded as primary language
+
+        primary_versions = ExamQuestion.objects.raw(query,q1params)
+
+        #selects the most recent target translatsion versions of questions in exam
+        query2 = """SELECT t1.*,tr.origin_id,tr.target_id FROM (
+            SELECT eq.*, vn.text, vn.version, vn.id as vid 
+            FROM question_examquestion eq
+            LEFT OUTER JOIN (
+                SELECT *
+                FROM question_versionnode
+                WHERE language_id ='%s'
+            ) AS vn ON eq.question_id = vn.question_id
+            WHERE eq.exam_id='%s'
+            ORDER BY position, version DESC
+            )t1
+            LEFT JOIN question_translation tr ON t1.vid = tr.target_id
+            GROUP BY position"""
+        q2params = [lang_id,self.id]
+
+        target_versions = ExamQuestion.objects.raw(query2,q2params)
+
+        pv = list(primary_versions)
+        tv = list(target_versions)
+        assert len(pv) == len(tv) #if not, you screwed up the queries
+
+        questions = []
+        for i in range(len(pv)):
+            questions.append({"primary":pv[i],"target":tv[i]})
+            if tv[i].vid is None:
+                questions[i]["status"] = "empt"
+            elif tv[i].origin_id != pv[i].vid:
+                questions[i]["status"] = "updt"
+            else:
+                questions[i]["status"] = "done"
+ 
+        self.question_status = questions
+
+
 
 class ExamPermission(models.Model):
     exam = models.ForeignKey(Exam)

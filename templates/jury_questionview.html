@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>IBO Translation Interface</title>
+<link href="/static/reset.css" rel="stylesheet" type="text/css">
+<link href="/static/jury.css" rel="stylesheet" type="text/css">
+<script src="/static/jury.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div id="header">
+<div class="title">Exam Translation | {{exam.name}}</div>
+<div class="infobox">
+Coordinator: <strong>Ange Taminiau</strong> |
+Country: <strong>The Netherlands</strong> <img src="flags/NLD.gif">
+</div>
+</div>
+
+<div id="menu">
+<ul>
+    <li><a href="/jury/{{lang_id}}/overview/">Overview</a></li>
+    {% for e in exams %}
+    <li><a href="/jury/{{lang_id}}/exam/{{e.id}}/" {% if e.id == exam.id %}class="select"{% endif %}>{{e.name}}</a></li>
+    {% endfor %}
+</ul>
+</div>
+<div id="main">
+
+<div id="questionnavlist">
+<div class="inner">
+{% for q in status %}
+<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate/" class="{{q.status}}">{{q.primary.position}}</a>
+{% endfor %}
+</div>
+</div>
+
+<br style="clear: both;">
+
+<h1>Question {{pos}} : {{question.name}}</h1>
+
+<form action="" method="post">
+<div class="textorg_q">
+<h2>Original</h2>
+<textarea disabled>{{compare}}</textarea>
+</div>
+
+<div class="texttrans_q">
+<h2>Translation</h2>
+{{form.text}}
+</div>
+<!--
+<div class="textorg_a">
+<textarea disabled>
+Female fiddler crabs generally prefer larger males.
+</textarea>
+</div>
+
+<div class="texttrans_a">
+<div id="trans_a1" contenteditable="true">Some text here.</div>
+</div>
+
+<div class="textorg_a">
+<textarea disabled>
+In mate-choice selection, male handedness is an important criterion.
+</textarea>
+</div>
+
+<div class="texttrans_a">
+<div id="trans_a2" contenteditable="true">Some text here.</div>
+</div>
+
+<div class="textorg_a">
+<textarea disabled>
+Males that wave faster generally attracted more females.
+</textarea>
+</div>
+
+<div class="texttrans_a">
+<div id="trans_a3" contenteditable="true">Some text here.</div>
+</div>
+
+<div class="textorg_a">
+<textarea disabled>
+An obvious difference in cheliped size of males may be necessary before females become more decisive.
+</textarea>
+</div>
+
+<div class="texttrans_a">
+<div id="trans_a4" contenteditable="true">Some text here.</div>
+</div>
+-->
+<input type="submit" name="submit" value="submit" />
+<br style="clear: both;">
+
+<div class="infobarbig">
+    <a href="#"><img src="/static/icons/restore.png" title="Restore previous version" alt="restore"></a>
+    <a href="#"><img src="/static/icons/delete.png" title="Delete current translation" alt="delete"></a>
+    <a href="#"><img src="/static/icons/flag.png" title="Flag for attention" alt="flag"></a>
+    <a href="#"><img src="/static/icons/check.png" title="Check-out as final" alt="check"></a>
+</div>
+<div class="infobarbig">
+    <fieldset class="rating">
+    <input type="radio" id="star5" name="rating" value="5"><label for="star5"></label>
+    <input type="radio" id="star4" name="rating" value="4"><label for="star4"></label>
+    <input type="radio" id="star3" name="rating" value="3"><label for="star3"></label>
+    <input type="radio" id="star2" name="rating" value="2"><label for="star2"></label>
+    <input type="radio" id="star1" name="rating" value="1"><label for="star1"></label>
+    </fieldset>
+</div>
+
+<div class="textorg_a">
+<h2>Commentary</h2>
+<textarea disabled>
+The correct answers are A, B, C and D. This is because ... and see reference here.
+</textarea>
+</div>
+</form>
+<br style="clear: both;">
+
+<hr>
+
+<ul class="examlegend">
+    <li><div class="empt"></div> untranslated</li>
+    <li><div class="done"></div> finished</li>
+    <li><div class="need"></div> in progress</li>
+    <li><div class="updt"></div> update necessary</li>
+    <li><div class="flag"></div> flagged</li>
+</ul>
+
+</div>
+
+
+
+&copy; 2013 - ibo|suisse
+</body>
+</html>

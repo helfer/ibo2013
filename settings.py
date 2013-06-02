@@ -36,7 +36,10 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = '/static/'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = '/var/www/django/ibo2013/static/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -65,7 +68,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     #'revisions.middleware.VersionedModelRedirectMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware'
+#    'debug_toolbar.middleware.DebugToolbarMiddleware'
 )
 
 
@@ -86,9 +89,10 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.staticfiles',
     'ibo2013.books',
     'ibo2013.question',
-    'debug_toolbar',
+    #'debug_toolbar',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

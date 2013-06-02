@@ -1,0 +1,360 @@
+
+/* LAYOUT ===================================================== */
+body {
+	width: 90%;
+	min-width: 613px;
+	margin: 2em auto;
+}
+
+#header {
+	height: 100%;
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+
+#menu {
+	height: 2.4em;
+	margin-bottom: 10px;
+}
+
+#main {
+	margin-bottom: 15px;
+}
+
+
+
+
+/* MARKUP ===================================================== */
+/* general elements*/
+body {
+	font: 62.5%/1.0 Helvetica, Arial, Verdana, sans-serif;
+	background: url(style/bg.png) fixed no-repeat #eee8f0;
+}
+
+em { font-style: italic; }
+
+strong { font-weight: bold; }
+
+h1 { font-size: 2.5em;
+	 font-weight: bold;
+	 margin: 1.2em 0 0.8em 0; }
+
+h2 { font-size: 1.9em; 
+	 font-style: italic;
+	 margin: 1em 0 0.7em 0; }
+
+hr { margin: 1.5em 0; clear: both; }
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #fff;
+	background: #000;
+}
+
+/* Color definitions */
+.empt { color: #333; background: #e0e0e0; } /* unvisited */
+.done { color: #eee; background: #4a2; } /* translation done */
+.need { color: #eee; background: #24a; } /* translation in progress (not finalized) */
+.updt { color: #eee; background: #a22; } /* new server version: translation must be updated */
+.flag { color: #eee; background: #d81; } /* flagged question */
+
+/* Header */
+#header {
+	background: rgba(255,255,255,0.7);
+	background: white\9; /* IE8 hack, probably not really needed :P */
+	box-shadow: rgba(0,0,0,0.4) 0.15em 0.15em 0.15em 0.10em;
+	border: 1px solid #aaa;
+}
+
+#header .title {
+	float: left;
+	font-size: 2.2em;
+	font-weight: bold;
+	padding: 0.863636em; /* (6em - 2.2em) / (2 * 2.2em) */
+}
+#header .infobox {
+	float: right;
+	font-size: 1.5em;
+	padding: 1.5em; /* (6em - 1.5em) / (2 * 1.5em) */
+}
+
+#header .infobox img {
+	height: 0.85em;
+}
+
+/* Menu */
+#menu {
+	background: #333;
+	box-shadow: rgba(0,0,0,0.4) 0.15em 0.15em 0.15em 0.10em;
+	border: 1px solid #aaa;
+	font-size: 1.8em;
+	text-align: center;
+}
+
+#menu li {
+	display: inline-block;
+	margin: 0 10px;
+	background: url(style/bg.png) fixed no-repeat #eee8f0;
+}
+
+#menu a {
+	display: block;
+	padding: 13px 30px 12px 30px;
+	background: #333;
+	color: #fff;
+}
+
+#menu a:hover {
+	background: rgba(255,255,255,0.7);
+	background: white\9; /* IE8 hack, probably not really needed :P */
+	color: #000;
+	border-bottom: 12px solid #b9a4c2;
+}
+
+#menu a.select {
+	background: rgba(255,255,255,0.7);
+	background: white\9; /* IE8 hack, probably not really needed :P */
+	color: #000;
+	border-bottom: 12px solid #333;
+}
+
+/* Main */
+#main {
+	background: rgba(255,255,255,0.7);
+	background: white\9; /* IE8 hack, probably not really needed :P */
+	box-shadow: rgba(0,0,0,0.4) 0.15em 0.15em 0.15em 0.10em;
+	border: 1px solid #aaa;
+	padding: 1.5em 1.5em 4em 1.5em;
+	position: relative;
+}
+
+/* Exam legend */
+.examlegend li {
+	font-size: 1.3em;
+	display: inline-block;
+	padding: 1em 2.5em 1em 0;
+}
+
+.examlegend li div {
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 1em;
+	height: 1.5em;
+	width: 1.5em;
+	padding-right: 0;
+}
+
+/* Exam overview page */
+.exambox {
+	max-width: 1078px;
+}
+
+.exambox a {
+	float: left;
+	display: block;
+	width: 1em;
+	padding: 3px 18px 19px 4px;
+	margin: 0 0.5em 0.5em 0;
+	font-size: 1.3em;
+	text-decoration: none;
+}
+
+.exambox a:hover {
+	color: #eee;
+	background: #777;
+}
+
+.examinfo {
+	clear: both;
+	font-size: 1.1em;
+	line-height: 1.4em;
+}
+
+/* Exam detail page */
+.exambox.wide {
+	max-width: 1247px;
+}
+
+.exambox .questionbox {
+	display: inline-block;
+	vertical-align: top;
+	position: relative;
+	border: 1px solid #999;
+	width: 225px;
+	min-height: 100px;
+	padding: 5px 5px 35px 5px;
+	margin: 0 10px 10px 0;
+	font-size: 1.4em;
+}
+
+.exambox .questionbox p {
+	margin: 5px 0;
+	line-height: 1.2em;
+}
+
+.exambox .questionbox div {
+	width: 100%;
+	text-align: center;
+	margin: -5px 0 5px -5px;
+	padding: 5px;
+}
+
+.exambox .questionbox .infobar {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	background: #ddd;
+}
+
+.exambox .questionbox .infobar a {
+	float: none;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	width: auto;
+}
+
+.exambox .questionbox .infobar img {
+	vertical-align: middle;
+	padding: 1px;
+}
+
+.exambox .questionbox .infobar img:hover {
+	background: #333;
+	cursor: pointer;
+}
+
+
+/* Question navigation */
+#questionnavlist {
+	margin: -1.5em -1.5em 0 -1.5em;
+	background: #333;
+}
+
+#questionnavlist .inner {
+	padding: 0.3em;
+	overflow-x: scroll;
+	overflow-y: hidden;
+	white-space: nowrap
+}
+
+#questionnavlist a {
+	display: inline-block;
+	width: 1em;
+	border: 1px solid #aaa;
+	font-size: 1.2em;
+	padding: 0.75em 0.8em 0.75em 0.7em;
+	margin: 0.5em;
+	color: #fff;
+}
+
+#questionnavlist a:hover {
+	background: #fff;
+	color: #333;
+}
+
+#questionnavlist a.sel {
+	background: #fff;
+	color: #333;
+	font-weight: bold;
+}
+
+/* Translation boxes */
+.texttrans_q div[contenteditable=true]
+{
+	background: #fff;
+	border: 1px solid #999;
+	width: 95%;
+	padding: 5px;
+	font-size: 1.3em;
+	height: 15.1em;
+}
+
+.texttrans_a div[contenteditable=true]
+{
+	background: #fff;
+	border: 1px solid #999;
+	width: 95%;
+	padding: 5px;
+	font-size: 1.3em;
+	height: 4em;
+}
+
+
+.textorg_q,
+.texttrans_q,
+.textorg_a,
+.texttrans_a {
+	width: 50%;
+	float: left;
+	margin-bottom: 10px;
+}
+
+.textorg_q textarea,
+.texttrans_q textarea {
+	width: 95%;
+	height: 15em;
+}
+
+.textorg_a textarea,
+.texttrans_a textarea {
+	width: 95%;
+	height: 4em;
+}
+
+.infobarbig {
+	text-align: center;
+	margin: 15px;
+	clear: both;
+}
+
+.infobarbig a {
+	float: none;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	width: auto;
+}
+
+.infobarbig img {
+	vertical-align: middle;
+	padding: 1px;
+}
+
+.infobarbig img:hover {
+	background: #333;
+	cursor: pointer;
+}
+.rating {
+	display: inline;
+	vertical-align: middle;
+}
+
+.rating:not(:checked) > input {
+    display: none;
+}
+
+.rating:not(:checked) > label {
+    float: right;
+    padding: 0 0.1em;
+    cursor: pointer;
+    font-size: 3.5em;
+    color: #ddd;
+}
+
+.rating:not(:checked) > label:before {
+    content: '\25a0';
+}
+
+.rating > input:checked ~ label,
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: #777;
+}

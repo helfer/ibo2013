@@ -1,32 +1,10 @@
-<!doctype html>
-<html lang="en-GB">
-<head>
-<meta charset="utf-8">
-<title>IBO Translation Interface</title>
-<link href="/static/reset.css" rel="stylesheet" type="text/css">
-<link href="/static/jury.css" rel="stylesheet" type="text/css">
-<script src="/static/jury.js" type="text/javascript"></script>
-</head>
-<body>
+{% extends "jury_examview.html" %}
 
-<div id="header">
-<div class="title">Exam Translation | {{exam.name}}</div>
-<div class="infobox">
-Coordinator: <strong>Ange Taminiau</strong> |
-Country: <strong>The Netherlands</strong> <img src="flags/NLD.gif">
-</div>
-</div>
 
-<div id="menu">
-<ul>
-    <li><a href="/jury/{{lang_id}}/overview/">Overview</a></li>
-    {% for e in exams %}
-    <li><a href="/jury/{{lang_id}}/exam/{{e.id}}/" {% if e.id == exam.id %}class="select"{% endif %}>{{e.name}}</a></li>
-    {% endfor %}
-</ul>
-</div>
-<div id="main">
+{% block examlegend %}
+{% endblock %}
 
+{% block content %}
 <div id="questionnavlist">
 <div class="inner">
 {% for q in status %}
@@ -97,7 +75,9 @@ An obvious difference in cheliped size of males may be necessary before females 
     <a href="#"><img src="/static/icons/restore.png" title="Restore previous version" alt="restore"></a>
     <a href="#"><img src="/static/icons/delete.png" title="Delete current translation" alt="delete"></a>
     <a href="#"><img src="/static/icons/flag.png" title="Flag for attention" alt="flag"></a>
+    {{form.flag}}
     <a href="#"><img src="/static/icons/check.png" title="Check-out as final" alt="check"></a>
+    {{form.checkout}}
 </div>
 <div class="infobarbig">
     <fieldset class="rating">
@@ -115,6 +95,10 @@ An obvious difference in cheliped size of males may be necessary before females 
 The correct answers are A, B, C and D. This is because ... and see reference here.
 </textarea>
 </div>
+<div class="textorg_q">
+<h2>Translation</h2>
+{{form.comment}}
+</div>
 </form>
 <br style="clear: both;">
 
@@ -127,11 +111,5 @@ The correct answers are A, B, C and D. This is because ... and see reference her
     <li><div class="updt"></div> update necessary</li>
     <li><div class="flag"></div> flagged</li>
 </ul>
-
+{% endblock %}
 </div>
-
-
-
-&copy; 2013 - ibo|suisse
-</body>
-</html>

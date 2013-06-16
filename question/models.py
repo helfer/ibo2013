@@ -4,10 +4,18 @@ from ibo2013 import simplediff
 
 
 class Language(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,unique=True)
+    coordinators = models.ManyToManyField(User,related_name='coordinator_set')
+    editors = models.ManyToManyField(User,related_name='editor_set')
+
     def __unicode__(self):
         return u'%s' % (self.name)
 
+    def check_permission(self,user):
+        if user.is_superuser:
+            return True
+        else:
+            return self.editors.filter(user=user).exists() or self.coordinators.filter(user=user).exists()
 
 class Question(models.Model):
     name = models.CharField(max_length=100)
@@ -25,9 +33,12 @@ class Question(models.Model):
 
 class VersionNode(models.Model):
     text = models.TextField()
+    comment = models.TextField()
     question = models.ForeignKey(Question)
     version = models.IntegerField()
     language = models.ForeignKey(Language)
+    flag = models.BooleanField()
+    checkout = models.BooleanField()
     timestamp = models.DateTimeField(auto_now_add=True)
     #committed = models.BooleanField(default=False)
     
@@ -109,7 +120,7 @@ class Exam(models.Model):
 
         #selects the most recent target translatsion versions of questions in exam
         query2 = """SELECT t1.*,tr.origin_id,tr.target_id FROM (
-            SELECT eq.*, vn.text, vn.version, vn.id as vid 
+            SELECT eq.*, vn.text, vn.version, vn.flag, vn.checkout, vn.id as vid 
             FROM question_examquestion eq
             LEFT OUTER JOIN (
                 SELECT *
@@ -136,8 +147,12 @@ class Exam(models.Model):
                 questions[i]["status"] = "empt"
             elif tv[i].origin_id != pv[i].vid:
                 questions[i]["status"] = "updt"
-            else:
+            elif tv[i].flag:
+                questions[i]["status"] = "flag"
+            elif tv[i].checkout:
                 questions[i]["status"] = "done"
+            else:
+                questions[i]["status"] = "need"
  
         self.question_status = questions
 

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>{% block title %}IBO Translation Interface{% endblock %}</title>
+<link href="/static/reset.css" rel="stylesheet" type="text/css">
+<link href="/static/jury.css" rel="stylesheet" type="text/css">
+<script src="/static/jury.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div id="header">
+<div class="title">{% block lead %}Exam Translation{% endblock %}</div>
+<div class="infobox">
+{% block infobox %}
+Coordinator: <strong>{{ user }}</strong> |
+Country: <strong>The Netherlands</strong> <img src="flags/NLD.gif"><a href="/accounts/logout">logout</a><a href="/jury/">profile</a>
+{% endblock %}
+</div>
+</div>
+
+<div id="menu">
+{% block menu %}
+<ul>
+    <li><a href="." class="select">Overview</a></li>
+    {% for e in exams %}
+    <li><a href="/jury/{{lang_id}}/exam/{{e.id}}">{{e.name}}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}
+</div>
+<div id="main">
+{% block main %}
+[MAIN BLOCK]
+{% endblock %}
+</div>
+&copy; 2013 - ibo|suisse
+</body>
+</html>

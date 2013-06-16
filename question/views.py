@@ -4,11 +4,17 @@ from ibo2013.question.models import *
 from ibo2013.question.forms import *
 from django.db.models import Count
 from django.db import connections
+from django.template import RequestContext
+
 
 from django.contrib.auth.decorators import login_required
 
 
+def render_with_context(request,*args,**kwargs):
+    kwargs['context_instance'] = RequestContext(request)
+    return render_to_response(*args,**kwargs)
 
+@login_required
 def jury_overview(request,lang_id):
     try:
         lang_id = int(lang_id)
@@ -21,8 +27,35 @@ def jury_overview(request,lang_id):
         e.load_question_status(lang_id)
        
 
-    return render_to_response('jury_overview.html',{'exams':exams,'lang_id':lang_id})
+    return render_with_context(request,'jury_overview.html',{'exams':exams,'lang_id':lang_id})
 
+@login_required
+def jury_profile(request):
+
+    add_form = AddLanguageForm()
+
+    if request.method == "POST":
+        form = AddLanguageForm(request.POST)
+        if form.is_valid():
+            lid = form.save()
+            for exam in Exam.objects.all():
+                exam.languages.add(lid)
+        else:
+            add_form = form
+
+    exams = {}
+    languages = Language.objects.get(id=1).coordinators.all()
+    languages = request.user.coordinator_set.all() | request.user.editor_set.all()
+    return render_with_context(request,'jury_profile.html',{'exams':exams,'languages':languages,'form':add_form})
+
+@login_required
+def jury_manage_permissions(request,lang_id,exam_id):
+    #TODO make sure user has coordinator privilege on exam/lang combination
+    users = {}
+    return render_to_response('jury_manage_permissions.html',{'lang_id':lang_id,'exam_id':exam_id,'users':users})
+
+
+@login_required
 def jury_examview(request,lang_id,exam_id):
     try:
         lang_id = int(lang_id)
@@ -36,8 +69,9 @@ def jury_examview(request,lang_id,exam_id):
     exam.load_question_status(lang_id)
     questions = exam.question_status
 
-    return render_to_response('jury_examview.html',{'exam':exam,'exams':exams,'lang_id':lang_id,'questions':questions})
+    return render_with_context(request,'jury_examview.html',{'exam':exam,'exams':exams,'lang_id':lang_id,'questions':questions})
 
+@login_required
 def view_exam(request,exam_id):
     try:
         exam_id = int(exam_id)
@@ -89,6 +123,7 @@ def view_exam(request,exam_id):
     return render_to_response('exam_overview.html',{'exam':exam,'questions':questions,'versions':versionnodes,'form':form})
 
 
+@login_required
 def translation_overview(request,exam_id,target_language_id):
 
     try:
@@ -153,6 +188,7 @@ def translation_overview(request,exam_id,target_language_id):
             
     return render_to_response('translation_overview.html',{'exam':exam,'questions':questions,'target_language_id':target_language_id})
 
+@login_required
 def jury_questionview(request,target_language_id,exam_id,question_position):
     try:
         question_position = int(question_position)
@@ -185,7 +221,10 @@ def jury_questionview(request,target_language_id,exam_id,question_position):
                 question_id=question.id,
                 language_id=target_language_id,
                 version=vid,
-                text=cd['text']
+                text=cd['text'],
+                flag=cd['flag'],
+                checkout=cd['checkout'],
+                comment=cd['comment']
             )
             v.save()
 
@@ -198,6 +237,8 @@ def jury_questionview(request,target_language_id,exam_id,question_position):
        
             #return HttpResponse("done") 
             versions = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[:1]
+        else: 
+            raise ValueError(form.errors)
     
     try:
         previous = versions[0].translation_target.all()[0].origin
@@ -206,18 +247,18 @@ def jury_questionview(request,target_language_id,exam_id,question_position):
         compare = original[0].text
 
     if not versions:
-        vtxt = ""
+        initial = {}
     else:
-        vtxt = versions[0].text
+        initial = {'text':versions[0].text,'flag':versions[0].flag,'checkout':versions[0].checkout,'comment':versions[0].comment}
 
-    form=EditQuestionForm(initial={'text':vtxt})
+    form=EditQuestionForm(initial=initial)
 
     exam.load_question_status(target_language_id)
     
     if not original:
         return HttpResponse("This question does not yet have a version in the primary language")
 
-    return render_to_response('jury_questionview.html',{'exam':exam,'lang_id':target_language_id,'pos':question_position,'status':exam.question_status,'exams':exams,'original':original[0],'question':question,'compare':compare,'form':form})
+    return render_with_context(request,'jury_questionview.html',{'exam':exam,'lang_id':target_language_id,'pos':question_position,'status':exam.question_status,'exams':exams,'original':original[0],'question':question,'compare':compare,'form':form})
 
 @login_required
 def view_question_history(request,question_id):
@@ -233,6 +274,7 @@ def view_question_history(request,question_id):
 
 
 
+@login_required
 def view_question(request,question_id):
     try:
         question_id = int(question_id)

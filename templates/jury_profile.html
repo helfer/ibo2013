@@ -1,0 +1,29 @@
+{% extends "ibo2013_base.html" %}
+{% block title %}IBO Translation Interface{% endblock %}>
+{% block lead %}User Profile{% endblock %}
+
+{% block menu %}
+<ul>
+    <li><a href="." class="select">Main Profile</a></li>
+    <li><a href="." >Students</a></li>
+</ul>
+{% endblock %}
+
+{% block main %}
+<ul>
+{% for lang in languages %}
+    <li><a href="/jury/{{lang.id}}/overview/">{{lang.name}}</a></li>
+{% endfor %}
+</ul>
+
+<form method="POST">
+{{form.as_ul}}
+<input type="submit" value="submit" name="submit" />
+</form>
+
+{% endblock %}
+
+
+&copy; 2013 - ibo|suisse
+</body>
+</html>

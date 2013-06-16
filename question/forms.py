@@ -4,7 +4,9 @@ from ibo2013.question.models import *
 
 class EditQuestionForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea)
-
+    comment = forms.CharField(widget=forms.Textarea)
+    flag = forms.BooleanField(required=False)
+    checkout = forms.BooleanField(required=False)
 
 #adds a new question to an exam
 class AddQuestionForm(ModelForm):
@@ -20,3 +22,7 @@ class SwapQuestionForm(forms.Form):
     pass
     #move up button (has no effect if first question)
     #move down button (has no effect if last question)
+
+class AddLanguageForm(ModelForm):
+    class Meta:
+        model = Language

@@ -1,0 +1,32 @@
+{% extends "ibo2013_base.html" %}
+{% block title %}IBO Translation Interface{% endblock %}>
+{% block lead %}Exam Translation{% endblock %}
+{% block menu %}
+<ul>
+    <li><a href="." class="select">Overview</a></li>
+    {% for e in exams %}
+    <li><a href="/jury/{{lang_id}}/exam/{{e.id}}">{{e.name}}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block main %}
+{% block examlegend %}
+<ul class="examlegend">
+    <li><div class="empt"></div> untranslated</li>
+    <li><div class="done"></div> finished</li>
+    <li><div class="need"></div> in progress</li>
+    <li><div class="updt"></div> update necessary</li>
+    <li><div class="flag"></div> flagged</li>
+</ul>
+<hr>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+{% endblock %}
+
+
+&copy; 2013 - ibo|suisse
+</body>
+</html>

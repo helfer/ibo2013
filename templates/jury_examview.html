@@ -11,6 +11,7 @@ Exam Translation | {{exam.name}}
     {% for e in exams %}
     <li><a href="/jury/{{lang_id}}/exam/{{e.id}}/" {% if e.id == exam.id %}class="select"{% endif %}>{{e.name}}</a></li>
     {% endfor %}
+    <li><a href="/jury/{{lang_id}}/">Profile</a></li>
 </ul>
 {% endblock %}
 
@@ -25,11 +26,11 @@ Exam Translation | {{exam.name}}
     <div class="{{q.status}}">{{q.target.position}}</div>
     <p><em>Excerpt:</em>{{q.target.text}}</p>
     <div class="infobar">
-        <a href="#"><img src="/static/icons/restore.png" title="Restore previous version" alt="restore"></a>
-        <a href="#"><img src="/static/icons/delete.png" title="Delete current translation" alt="delete"></a>
+        <!--<a href="#"><img src="/static/icons/restore.png" title="Restore previous version" alt="restore"></a>
+        <a href="#"><img src="/static/icons/delete.png" title="Delete current translation" alt="delete"></a>-->
         <a href="#"><img src="/static/icons/flag.png" title="Flag for attention" alt="flag"></a>
-        <a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate"><img src="/static/icons/edit.png" title="Translate / Edit" alt="edit"></a>
         <a href="#"><img src="/static/icons/check.png" title="Check-out as final" alt="check"></a>
+        <a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate"><img src="/static/icons/edit.png" title="Translate / Edit" alt="edit"></a>
     </div>
 </div>
 

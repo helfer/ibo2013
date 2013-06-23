@@ -20,7 +20,7 @@
 <form action="" method="post">
 <div class="textorg_q">
 <h2>Original</h2>
-<textarea disabled>{{compare}}</textarea>
+<textarea readonly>{{compare}}</textarea>
 </div>
 
 <div class="texttrans_q">
@@ -68,12 +68,11 @@ An obvious difference in cheliped size of males may be necessary before females 
 <div id="trans_a4" contenteditable="true">Some text here.</div>
 </div>
 -->
-<input type="submit" name="submit" value="submit" />
+{% if 'admin' in perms or 'edit' in perms %}<input type="submit" name="submit" value="submit" />{% endif %}
 <br style="clear: both;">
-
 <div class="infobarbig">
-    <a href="#"><img src="/static/icons/restore.png" title="Restore previous version" alt="restore"></a>
-    <a href="#"><img src="/static/icons/delete.png" title="Delete current translation" alt="delete"></a>
+    <!--<a href="#"><img src="/static/icons/restore.png" title="Restore previous version" alt="restore"></a>
+    <a href="#"><img src="/static/icons/delete.png" title="Delete current translation" alt="delete"></a>-->
     <a href="#"><img src="/static/icons/flag.png" title="Flag for attention" alt="flag"></a>
     {{form.flag}}
     <a href="#"><img src="/static/icons/check.png" title="Check-out as final" alt="check"></a>
@@ -90,13 +89,13 @@ An obvious difference in cheliped size of males may be necessary before females 
 </div>
 
 <div class="textorg_a">
-<h2>Commentary</h2>
-<textarea disabled>
+<h2>Additional information</h2>
+<p>
 The correct answers are A, B, C and D. This is because ... and see reference here.
-</textarea>
+</p>
 </div>
 <div class="textorg_q">
-<h2>Translation</h2>
+<h2>Your own comments</h2>
 {{form.comment}}
 </div>
 </form>

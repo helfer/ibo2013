@@ -1,21 +1,51 @@
 from django.shortcuts import render_to_response
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from ibo2013.question.models import *
 from ibo2013.question.forms import *
 from django.db.models import Count
 from django.db import connections
 from django.template import RequestContext
-
-
+from django.contrib.admin.views.decorators import staff_member_required
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 
 
 def render_with_context(request,*args,**kwargs):
+    lang_id = args[1]["lang_id"]
+    picker = PickLanguageForm(request.user,lang_id,request,initial={'language':request.path})
     kwargs['context_instance'] = RequestContext(request)
+    args[1]["lang_picker"] = picker
     return render_to_response(*args,**kwargs)
 
+
+#decorator that checks which permissions a user has.
+def permission_check(f):
+    def secure_f(*args,**kwargs):
+        request = args[0]
+        lang_id = kwargs['lang_id']
+        permissions = ['read']
+
+        if request.user.is_superuser:
+            permissions = ['read','write','admin']
+        else:
+
+            if  Language.objects.get(id=lang_id).editors.filter(id=request.user.id).exists():
+                permissions.append('write')
+            if  Language.objects.get(id=lang_id).coordinators.filter(id=request.user.id).exists():
+                permissions.append('admin')
+
+        print args[0].user,kwargs,permissions
+
+        res = f(*args,permissions=permissions,**kwargs)
+
+        return res
+
+    return secure_f
+        
+    
 @login_required
-def jury_overview(request,lang_id):
+@permission_check
+def jury_overview(request,lang_id=1,permissions=None):
     try:
         lang_id = int(lang_id)
     except:
@@ -26,37 +56,72 @@ def jury_overview(request,lang_id):
     for e in exams:
         e.load_question_status(lang_id)
        
+    picker = PickLanguageForm(request.user,lang_id,request,initial={'language':request.path})
+    print picker   
+    print permissions 
 
-    return render_with_context(request,'jury_overview.html',{'exams':exams,'lang_id':lang_id})
+    return render_with_context(request,'jury_overview.html',{'exams':exams,'lang_id':lang_id,'perms':permissions})
 
 @login_required
-def jury_profile(request):
+@permission_check
+def jury_profile(request,lang_id=1,permissions=None):
+
+    try:
+        lang_id = int(lang_id)
+        language = Language.objects.get(id=lang_id)
+    except:
+        raise Http404()
 
     add_form = AddLanguageForm()
+    edit_form = EditLanguageForm(instance=language)
 
     if request.method == "POST":
-        form = AddLanguageForm(request.POST)
-        if form.is_valid():
-            lid = form.save()
-            for exam in Exam.objects.all():
-                exam.languages.add(lid)
+        if "editlanguage" in request.POST and 'admin' in permissions:
+            print "in edit"
+            form = EditLanguageForm(request.POST,instance=language)
+            if form.is_valid():
+                print form
+                lang = form.save()
+                print "changes saved"
+                #don't want people to remove their own permissions
+                if request.user.id not in form.cleaned_data['coordinators']:
+                    lang.coordinators.add(request.user)
+            edit_form = form
+        elif "addlanguage" in request.POST:
+            print "in add"
+            form = AddLanguageForm(request.POST)
+            if form.is_valid():
+                cd = form.cleaned_data
+                lang = Language(name=cd['name'])
+                lang.save()
+                lang.editors.add(request.user)
+                lang.coordinators.add(request.user)
+                for exam in Exam.objects.all():
+                    exam.languages.add(lang)
+                #switch view to new language
+                return HttpResponseRedirect('/jury/'+str(lang.id)+'/')
+            else:
+                add_form = form
         else:
-            add_form = form
+            print "unknown form"
+            
 
-    exams = {}
+
+    exams = Exam.objects.all()
     languages = Language.objects.get(id=1).coordinators.all()
     languages = request.user.coordinator_set.all() | request.user.editor_set.all()
-    return render_with_context(request,'jury_profile.html',{'exams':exams,'languages':languages,'form':add_form})
+    return render_with_context(request,'jury_profile.html',{'exams':exams,'perms':permissions,'languages':languages,'addform':add_form,'editform':edit_form,'lang_id':language.id,'language':language})
+
+#@login_required
+#def jury_manage_permissions(request,exam_id,lang_id=1):
+#    #TODO make sure user has coordinator privilege on exam/lang combination
+#    users = {}
+#    return render_to_response('jury_manage_permissions.html',{'lang_id':lang_id,'exam_id':exam_id,'users':users})
+
 
 @login_required
-def jury_manage_permissions(request,lang_id,exam_id):
-    #TODO make sure user has coordinator privilege on exam/lang combination
-    users = {}
-    return render_to_response('jury_manage_permissions.html',{'lang_id':lang_id,'exam_id':exam_id,'users':users})
-
-
-@login_required
-def jury_examview(request,lang_id,exam_id):
+@permission_check
+def jury_examview(request,exam_id=1,lang_id=1,permissions=None):
     try:
         lang_id = int(lang_id)
         exam_id = int(exam_id)
@@ -72,6 +137,7 @@ def jury_examview(request,lang_id,exam_id):
     return render_with_context(request,'jury_examview.html',{'exam':exam,'exams':exams,'lang_id':lang_id,'questions':questions})
 
 @login_required
+@staff_member_required
 def view_exam(request,exam_id):
     try:
         exam_id = int(exam_id)
@@ -124,11 +190,14 @@ def view_exam(request,exam_id):
 
 
 @login_required
-def translation_overview(request,exam_id,target_language_id):
+@permission_check
+def translation_overview(request,exam_id,lang_id=1,permissions=None):
+
+    raise Exception("deprecated function")
 
     try:
         exam_id = int(exam_id)
-        target_language_id = int(target_language_id)
+        target_language_id = int(lang_id)
         exam = Exam.objects.get(id=exam_id)
         language = Language.objects.get(id=target_language_id)
     except KeyError:
@@ -189,10 +258,11 @@ def translation_overview(request,exam_id,target_language_id):
     return render_to_response('translation_overview.html',{'exam':exam,'questions':questions,'target_language_id':target_language_id})
 
 @login_required
-def jury_questionview(request,target_language_id,exam_id,question_position):
+@permission_check
+def jury_questionview(request,exam_id=1,question_position=1,lang_id=1,permissions=None):
     try:
         question_position = int(question_position)
-        target_language_id = int(target_language_id)
+        target_language_id = int(lang_id)
         exam_id = int(exam_id)
         exam = Exam.objects.get(id=exam_id)
         language = Language.objects.get(id=target_language_id)
@@ -209,7 +279,7 @@ def jury_questionview(request,target_language_id,exam_id,question_position):
 
     if request.method == 'POST':
         form=EditQuestionForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and ('edit' in permissions or 'admin' in permissions):
             cd = form.cleaned_data
             
             if not versions:
@@ -238,7 +308,7 @@ def jury_questionview(request,target_language_id,exam_id,question_position):
             #return HttpResponse("done") 
             versions = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[:1]
         else: 
-            raise ValueError(form.errors)
+            raise PermissionDenied()
     
     try:
         previous = versions[0].translation_target.all()[0].origin
@@ -251,14 +321,14 @@ def jury_questionview(request,target_language_id,exam_id,question_position):
     else:
         initial = {'text':versions[0].text,'flag':versions[0].flag,'checkout':versions[0].checkout,'comment':versions[0].comment}
 
-    form=EditQuestionForm(initial=initial)
+    form=EditQuestionForm(initial=initial,permissions=permissions)
 
     exam.load_question_status(target_language_id)
     
     if not original:
         return HttpResponse("This question does not yet have a version in the primary language")
 
-    return render_with_context(request,'jury_questionview.html',{'exam':exam,'lang_id':target_language_id,'pos':question_position,'status':exam.question_status,'exams':exams,'original':original[0],'question':question,'compare':compare,'form':form})
+    return render_with_context(request,'jury_questionview.html',{'exam':exam,'lang_id':target_language_id,'pos':question_position,'status':exam.question_status,'exams':exams,'original':original[0],'question':question,'compare':compare,'form':form,'perms':permissions})
 
 @login_required
 def view_question_history(request,question_id):
@@ -271,6 +341,7 @@ def view_question_history(request,question_id):
 
     versions = question.versionnode_set.all().order_by('-timestamp')
     return render_to_response('question_overview.html',{'question':question,'versions':versions})
+
 
 
 

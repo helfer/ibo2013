@@ -93,6 +93,7 @@ class Exam(models.Model):
         self.save()
 
 
+    #strictly speaking this should be in views.py
     def load_question_status(self,lang_id):
         
         if self.question_status is not None:

@@ -10,11 +10,12 @@
 <body>
 
 <div id="header">
-<div class="title">{% block lead %}Exam Translation{% endblock %}</div>
+<div class="title">{{lang_picker.language}} | {% block lead %}Exam Translation{% endblock %}</div>
+<script type="text/javascript">document.getElementById("id_language").onchange = function(){window.location = this.value}</script>
 <div class="infobox">
 {% block infobox %}
-Coordinator: <strong>{{ user }}</strong> |
-Country: <strong>The Netherlands</strong> <img src="flags/NLD.gif"><a href="/accounts/logout">logout</a><a href="/jury/">profile</a>
+<strong>{{ user }}</strong> |
+<strong>The Netherlands</strong>&nbsp;<a href="/accounts/logout">logout</a>
 {% endblock %}
 </div>
 </div>

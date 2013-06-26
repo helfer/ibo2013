@@ -279,7 +279,10 @@ def jury_questionview(request,exam_id=1,question_position=1,lang_id=1,permission
 
     if request.method == 'POST':
         form=EditQuestionForm(request.POST)
-        if form.is_valid() and ('edit' in permissions or 'admin' in permissions):
+        print form.is_bound,request.POST
+        if not ('write' in permissions or 'admin' in permissions):
+            raise PermissionDenied()
+        if form.is_valid():
             cd = form.cleaned_data
             
             if not versions:
@@ -308,8 +311,9 @@ def jury_questionview(request,exam_id=1,question_position=1,lang_id=1,permission
             #return HttpResponse("done") 
             versions = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[:1]
         else: 
-            raise PermissionDenied()
-    
+            print "form contains errors"
+            print form.errors, form.is_valid(),form.is_bound
+            print "those were the errors"
     try:
         previous = versions[0].translation_target.all()[0].origin
         compare = previous.compare_with(original[0])
@@ -321,7 +325,10 @@ def jury_questionview(request,exam_id=1,question_position=1,lang_id=1,permission
     else:
         initial = {'text':versions[0].text,'flag':versions[0].flag,'checkout':versions[0].checkout,'comment':versions[0].comment}
 
-    form=EditQuestionForm(initial=initial,permissions=permissions)
+    if 'write' in permissions or 'admin' in permissions:
+        form=EditQuestionForm(initial=initial)
+    else:
+        form=ViewQuestionForm(initial=initial)
 
     exam.load_question_status(target_language_id)
     

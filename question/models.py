@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from ibo2013 import simplediff
+from ibo2013.question import simplediff
 
 
 class Language(models.Model):

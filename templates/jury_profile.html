@@ -3,7 +3,7 @@
 {% block lead %}User Profile{% endblock %}
 {% block menu %}
     <ul>
-        <li><a href="/jury/{{lanuage.id}}/overview/" >Overview</a></li>
+        <li><a href="/jury/{{language.id}}/overview/" >Overview</a></li>
         {% for e in exams %}
         <li><a href="/jury/{{language.id}}/exam/{{e.id}}">{{e.name}}</a></li>
         {% endfor %}

@@ -90,7 +90,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
-    'ibo2013.books',
     'ibo2013.question',
     #'debug_toolbar',
 )

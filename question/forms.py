@@ -8,11 +8,19 @@ class EditQuestionForm(forms.Form):
     flag = forms.BooleanField(required=False)
     checkout = forms.BooleanField(required=False)
 
-    def __init__(self,permissions=None,*args,**kwargs):
-        super(EditQuestionForm,self).__init__(*args,**kwargs)
-        if permissions is None or not ('admin' in permissions or 'edit' in permissions):
-            self.fields['text'] = forms.CharField(widget=forms.Textarea(attrs={'readonly':'readonly'}))
-            self.fields['comment'] = forms.CharField(widget=forms.Textarea(attrs={'readonly':'readonly'}),required=False)
+    #def __init__(self,permissions=None,*args,**kwargs):
+    #    super(EditQuestionForm,self).__init__(*args,**kwargs)
+        #if permissions is None or not ('admin' in permissions or 'edit' in permissions):
+        #    self.fields['text'] = forms.CharField(widget=forms.Textarea(attrs={'readonly':'readonly'}))
+        #    self.fields['comment'] = forms.CharField(widget=forms.Textarea(attrs={'readonly':'readonly'}),required=False)
+
+#same as above, but readonly, can never be submitted
+class ViewQuestionForm(EditQuestionForm):
+    text = forms.CharField(widget=forms.Textarea(attrs={'readonly':'readonly'}))
+    comment = forms.CharField(widget=forms.Textarea(attrs={'readonly':'readonly'}),required=False)
+        
+    def is_valid():
+        return False
 
 #adds a new question to an exam
 class AddQuestionForm(ModelForm):

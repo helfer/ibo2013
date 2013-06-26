@@ -68,7 +68,7 @@ An obvious difference in cheliped size of males may be necessary before females 
 <div id="trans_a4" contenteditable="true">Some text here.</div>
 </div>
 -->
-{% if 'admin' in perms or 'edit' in perms %}<input type="submit" name="submit" value="submit" />{% endif %}
+{% if 'admin' in perms or 'write' in perms %}<input type="submit" name="submit" value="submit" />{% endif %}
 <br style="clear: both;">
 <div class="infobarbig">
     <!--<a href="#"><img src="/static/icons/restore.png" title="Restore previous version" alt="restore"></a>
@@ -95,7 +95,7 @@ The correct answers are A, B, C and D. This is because ... and see reference her
 </p>
 </div>
 <div class="textorg_q">
-<h2>Your own comments</h2>
+<h2>Comments</h2>
 {{form.comment}}
 </div>
 </form>

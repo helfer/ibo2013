@@ -8,7 +8,7 @@ from django.template import RequestContext
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
-
+from ibo2013.question import qml
 
 def render_with_context(request,*args,**kwargs):
     lang_id = args[1]["lang_id"]
@@ -364,25 +364,46 @@ def view_question(request,question_id):
     versions = question.versionnode_set.filter(language=question.primary_language).order_by('-timestamp')[:1]
 
     if request.method == 'POST':
-        form = EditQuestionForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            if len(versions) == 0:
-                vnum = 1
-                lang_id = question.primary_language_id
+        if versions[0].text.startswith("<question"):
+            print "newform"
+            xmlq = qml.QMLquestion(versions[0].text)
+            form = QMLform(request.POST,qml=xmlq)
+            if form.is_valid():
+                xmlq.update(form.cleaned_data)
+                print "zackzack",xmlq.zackzack(),"schwupp"
             else:
-                vnum = versions[0].version + 1
-                lang_id = versions[0].language_id            
+                print form.errors
 
-            v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=cd['text'])
-            v.save()
-            versions = list(versions)
-            versions.append(v)   
-    
-    form = EditQuestionForm()
+        else: #XXX: legacy compatibility, to be removed
+            print "legacy"
+            form = EditQuestionForm(request.POST)
+            if form.is_valid():
+                cd = form.cleaned_data
+                if len(versions) == 0:
+                    vnum = 1
+                    lang_id = question.primary_language_id
+                else:
+                    vnum = versions[0].version + 1
+                    lang_id = versions[0].language_id            
+
+                v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=cd['text'])
+                v.save()
+                versions = list(versions)
+                versions.append(v)   
+
+    print versions[0].text   
+ 
+    if versions[0].text.startswith("<question"):
+        print "xmlquestion"
+        xmlq = qml.QMLquestion(versions[0].text)
+        print xmlq.summary()
+        form = QMLform(qml=xmlq)
+    else:
+        form = EditQuestionForm()
     compare = ""
     if len(versions) == 2:
         compare = versions[0].compare_with(versions[1])
 
     return render_to_response('question_overview.html',{'question':question,'versions':versions,'form':form,'compare':compare})
         
+

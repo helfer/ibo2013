@@ -62,4 +62,17 @@ class PickLanguageForm(forms.Form):
 
         self.fields['language'] = forms.ChoiceField(choices=choices)
     
+
+
+class QMLform(forms.Form):
+
+
+    def __init__(self,*args,**kwargs):
+        qml = kwargs.pop("qml")
+        super(QMLform,self).__init__(*args,**kwargs)
+
+        for i,el in enumerate(qml.get_form_elements()):
+            self.fields[el[0]] = el[1]
+
+
     #

@@ -358,3 +358,11 @@ a:hover {
 .rating:not(:checked) > label:hover ~ label {
     color: #777;
 }
+
+li.qli{
+    border: 1px solid black;
+}
+
+input.short{
+    width: 3em;
+}

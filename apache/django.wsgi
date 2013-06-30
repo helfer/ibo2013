@@ -15,3 +15,7 @@ if path not in sys.path:
     sys.path.append(path2)
     sys.path.append(path3)
 
+
+from ibo2013 import monitor
+
+monitor.start(interval=1.0)

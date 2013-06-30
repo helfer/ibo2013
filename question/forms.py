@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from ibo2013.question.models import *
 
 class EditQuestionForm(forms.Form):
-    text = forms.CharField(widget=forms.Textarea)
+    text = forms.CharField(widget=forms.Textarea(attrs={'id':'area51'}))
     comment = forms.CharField(widget=forms.Textarea,required=False)
     flag = forms.BooleanField(required=False)
     checkout = forms.BooleanField(required=False)
@@ -29,6 +29,12 @@ class AddQuestionForm(ModelForm):
 
     class Meta:
         model = Question
+        fields = ['name']
+
+class ChangePointsForm(ModelForm):
+    class Meta:
+        mode = Question
+        fields = ['points']
 
 
 #swap the position of two questions

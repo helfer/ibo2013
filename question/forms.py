@@ -1,9 +1,10 @@
 from django import forms
 from django.forms import ModelForm
 from ibo2013.question.models import *
+from ibo2013.question.widgets import QMLTableWidget
 
 class EditQuestionForm(forms.Form):
-    text = forms.CharField(widget=forms.Textarea(attrs={'id':'area51'}))
+    text = forms.CharField(widget=forms.Textarea(attrs={'id':'area51','rows':40,'cols':120}))
     comment = forms.CharField(widget=forms.Textarea,required=False)
     flag = forms.BooleanField(required=False)
     checkout = forms.BooleanField(required=False)
@@ -80,5 +81,32 @@ class QMLform(forms.Form):
         for i,el in enumerate(qml.get_form_elements()):
             self.fields[el[0]] = el[1]
 
+class QMLTableField(forms.MultiValueField):
+    #widget = forms.widgets.Textarea
 
-    #
+    def __init__(self,rows,*args,**kwargs):
+        self.rows = rows
+        kwargs["widget"] = QMLTableWidget(rows)
+        super(QMLTableField,self).__init__(*args,**kwargs)
+
+    #XXX just for testing, don't actually use those separators
+    def compress(self,data_list):
+        if not data_list:
+            print data_list
+            print "compress nothing?"
+            return ''
+        out = []
+        rown = len(self.rows)
+        coln = len(self.rows[0])
+        print rown,coln,len(data_list)
+        assert rown*coln == len(data_list)
+        newrows = chunky(data_list,coln)
+        for row in newrows:
+            out.append("&*(".join(row))
+
+        return "#$%".join(out)
+
+    def chunky(lst,n):
+        for i in xrange(0,len(lst),n):
+            yield lst[i:i+n]
+

@@ -1,7 +1,7 @@
 from django import forms
 from ibo2013.question.forms import QMLTableField
 from xml.etree import ElementTree as et
-
+import json
 class QMLobject():
 
     def __init__(self,xml):
@@ -89,18 +89,18 @@ class QMLquestion(QMLobject):
 
     @staticmethod
     def from_template(qid):
-        t = """<question id="{{qid}}" version="0" points="0">
-<text id="{{qid}}_stem">text</text>       
-<task id="{{qid}}_task">task</task>    
+        t = """<question id="{{qid}}">
+<text id="{{qid}}_st_1">text</text>       
+<task id="{{qid}}_tsk_1">task</task>    
 
 <answerlist randomize="false">
-    <answersplit id="{{qid}}_split_1">True</answersplit>
-    <answersplit id="{{qid}}_split_2">False</answersplit>
-    <choice id="{{qid}}_choice_1">answer option 1</choice>
-    <choice id="{{qid}}_choice_2">answer option 2</choice>
-    <choice id="{{qid}}_choice_3">answer option 3</choice>
-    <choice id="{{qid}}_choice_4">answer option 4</choice>
-    </answerlist>   
+    <answersplit id="{{qid}}_s_1">True</answersplit>
+    <answersplit id="{{qid}}_s_2">False</answersplit>
+    <choice id="{{qid}}_c_1">answer option 1</choice>
+    <choice id="{{qid}}_c_2">answer option 2</choice>
+    <choice id="{{qid}}_c_3">answer option 3</choice>
+    <choice id="{{qid}}_c_4">answer option 4</choice>
+</answerlist>   
 </question>"""
 
         xml = t.replace("{{qid}}",str(qid))
@@ -154,18 +154,22 @@ class QMLtable(QMLobject):
             else:
                 raise QMLException("unknown QML tag: "+child.tag)
 
-        #self.form_element = QMLTableField(rowz)
+        self.form_element = QMLTableField(rowz)
 
     def apply_update(self):
         
 
         tabledata = []
-        rows = self.data.split("#$%")
+        rows = json.loads(self.data)
+        print "rows",rows
         for row in rows:
-            cols = row.split("&*(")
-            tabledata.extend(cols)
+            print "row",row
+            row = json.loads(row)
+            for col in row:
+                print "col",col
+                tabledata.append(col)
 
-        print tabledata
+        print "tabledata",tabledata
 
         for child in self.xml:
             if child.tag == "header" or child.tag == "row":

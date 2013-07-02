@@ -104,12 +104,14 @@ def view_question(request,qid=None,mode="normal"):
     versions = question.versionnode_set.filter(language=question.primary_language).order_by('-timestamp')[:1]
 
     if request.method == 'POST':
+        print request.POST
         if mode == "normal":
             print "newform"
             xmlq = qml.QMLquestion(versions[0].text)
             form = QMLform(request.POST,qml=xmlq)
             if form.is_valid():
                 print "isvalid"
+                print form.cleaned_data
                 xmlq.update(form.cleaned_data)
                 if len(versions) == 0:
                     vnum = 1
@@ -150,18 +152,18 @@ def view_question(request,qid=None,mode="normal"):
  
     if len(versions) > 0 and mode == "normal":
         print "xmlquestion"
-        try:
-            xmlq = qml.QMLquestion(versions[0].text)
-            print xmlq.summary()
-            form = QMLform(qml=xmlq)
-        except Exception as e:
-            print "exception"
-            if versions[0].text.startswith('<question'):
-                #this should probably be xml, raise exception
-                raise e
-            else:
-                print "redirect"
-                return redirect("/staff/question/"+str(question_id)+"/xml/")
+        #try:
+        xmlq = qml.QMLquestion(versions[0].text)
+        print xmlq.summary()
+        form = QMLform(qml=xmlq)
+        #except Exception as e:
+        #    print "exception"
+        #    if versions[0].text.startswith('<question'):
+        #        #this should probably be xml, raise exception
+        #        raise e
+        #    else:
+        #        print "redirect"
+        #        return redirect("/staff/question/"+str(question_id)+"/xml/")
         
     else:
         init = {}

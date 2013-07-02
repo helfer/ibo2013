@@ -1,7 +1,8 @@
 from django import forms
 from django.forms import ModelForm
 from ibo2013.question.models import *
-from ibo2013.question.widgets import QMLTableWidget
+from ibo2013.question.widgets import QMLTableWidget,QMLRowWidget
+import json
 
 class EditQuestionForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea(attrs={'id':'area51','rows':40,'cols':120}))
@@ -25,8 +26,8 @@ class ViewQuestionForm(EditQuestionForm):
 
 #adds a new question to an exam
 class AddQuestionForm(ModelForm):
-    position = forms.CharField(label="Position")
-    points = forms.CharField(label="Points")
+    position = forms.CharField(initial=999,label="Position")
+    points = forms.CharField(initial=1,label="Points")
 
     class Meta:
         model = Question
@@ -86,27 +87,42 @@ class QMLTableField(forms.MultiValueField):
 
     def __init__(self,rows,*args,**kwargs):
         self.rows = rows
+        self.rown = len(rows)
+        self.coln = len(rows[0])
+        print "rowcol",self.rown*self.coln
         kwargs["widget"] = QMLTableWidget(rows)
+        kwargs["fields"] = [QMLRowField(row,label=None) for row in rows]
+        kwargs["required"] = False
         super(QMLTableField,self).__init__(*args,**kwargs)
+
+        print "my fields:", self.fields
 
     #XXX just for testing, don't actually use those separators
     def compress(self,data_list):
+        
+        print data_list
         if not data_list:
-            print data_list
             print "compress nothing?"
             return ''
         out = []
         rown = len(self.rows)
         coln = len(self.rows[0])
         print rown,coln,len(data_list)
-        assert rown*coln == len(data_list)
-        newrows = chunky(data_list,coln)
-        for row in newrows:
-            out.append("&*(".join(row))
+        #assert rown*coln == len(data_list)
+        #newrows = chunky(data_list,coln)
+        return json.dumps(data_list)
 
-        return "#$%".join(out)
+class QMLRowField(forms.MultiValueField):
 
-    def chunky(lst,n):
-        for i in xrange(0,len(lst),n):
-            yield lst[i:i+n]
+    def __init__(self,row,*args,**kwargs):
+        self.row = row
+        kwargs["widget"] = QMLRowWidget(row)
+        kwargs["fields"] = [forms.CharField(label=None) for i in xrange(0,len(self.row))]
+        super(QMLRowField,self).__init__(*args,**kwargs)
 
+    def compress(self,data_list):
+        
+        if not data_list:
+            return ''
+
+        return json.dumps(data_list)

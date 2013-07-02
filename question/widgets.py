@@ -9,8 +9,10 @@ class QMLTableWidget(forms.widgets.MultiWidget):
 
 
     def decompress(self,value):
+        print "table decompress"
+        print value
         if value:
-            return value.split("#$%")
+            return json.loads(value)
         return ["" for r in self.rows]
 
 class QMLRowWidget(forms.widgets.MultiWidget):
@@ -22,8 +24,10 @@ class QMLRowWidget(forms.widgets.MultiWidget):
 
 
     def decompress(self,value):
+        print "row decompress"
+        print value
         if value:
-            return value.split("&*(")
+            return json.loads(value)
         return ["" for c in self.row]
 
     #XXX: zoooomg, this is the worst hack ever!

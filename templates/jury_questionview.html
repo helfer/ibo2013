@@ -100,12 +100,12 @@ Answer D
 	</fieldset>
 	Too hard
 	<div style="width: 50px; display: inline-block"></div>
-	<a href="#" class="flag"><img src="icons/flagbigwhite.png" title="Flag for attention" alt="flag"></a>
+	<a href="#" class="flag"><img src="/static/icons/flagbigwhite.png" title="Flag for attention" alt="flag"></a>
 	{{form.flag}} {# TODO: rework the anchors into input checkboxes. #}
-	<a href="#" class="done"><img src="icons/locked.png" title="Check-out as final" alt="check"></a>
+	<a href="#" class="done"><img src="/static/icons/locked.png" title="Check-out as final" alt="check"></a>
 	{{form.checkout}}
-	{% if 'admin' in perms or 'write' in perms %}<a href="#"><img src="icons/save_old.png" title="Save" alt="check"></a>
-	<a href="#"><img src="icons/savenext_old.png" title="Save and next" alt="check"></a>{% endif %}
+	{% if 'admin' in perms or 'write' in perms %}<a href="#"><img src="/static/icons/save_old.png" title="Save" alt="check"></a>
+	<a href="#"><img src="/static/icons/savenext_old.png" title="Save and next" alt="check"></a>{% endif %}
 </div>
 
 <table class="translationtable">

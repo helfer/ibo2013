@@ -68,7 +68,10 @@ class PickLanguageForm(forms.Form):
             path = "/".join(ps)
             choices.append((path,l.name))
 
-        self.fields['language'] = forms.ChoiceField(choices=choices)
+        self.fields['language'] = forms.ChoiceField(
+            choices=choices,
+            widget = forms.Select(attrs={'onchange':'window.location = this.value;'}),
+            )
     
 
 

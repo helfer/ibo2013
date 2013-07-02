@@ -119,6 +119,7 @@ def examview(request,exam_id=1,lang_id=1,permissions=None):
         {'exam':exam,
         'exams':exams,
         'lang_id':lang_id,
+        'perms':permissions,
         'questions':questions
         })
 

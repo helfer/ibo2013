@@ -1,0 +1,45 @@
+{% extends "ibo2013_staff.html" %}
+
+{% block main %}
+    {% if exam %}
+
+        <h1>{{ exam.name }}</h1>
+
+        {% if questions %}
+            <p>{{ questions|length }} question{{ questions|pluralize }}.</p>
+            <ul>
+                {% for q in questions %}
+                    {{q.position}}:{{q.question.name}}--{{q.question.primary_language}}
+                    <li class="qli">
+                    <form name="points-{{q.id}}" method="POST">
+                                <label for="points">Points:</label><input type="text" class="short" name="points" value="{{q.points}}" />
+                                <input type="hidden" name="qid" value="{{q.id}}" />
+                                <input type="submit" name="update" value="update points"/>
+                            </form>
+                    <form name="move-{{q.id}}" method="POST">
+                        <input type="submit" name="up" value="move up" />
+                        <input type="submit" name="down" value="move down" />
+                        <input type="hidden" name="move" value="{{q.id}}" />
+                    </form>
+                    <a href="/staff/question/{{q.question_id}}/">Edit this question</a>
+                    </li>
+                {% empty %}
+                    <li>You should never see this text</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>This exam does not have any questions yet.</p>
+        {% endif %}
+            <h2>Add new question:</h2>
+            <form action="" method="post">
+                <table>
+                    {{ form.as_table }}
+                </table>
+                <input type="hidden" value="addquestion">
+                <input type="submit" value="Add Question">
+            </form>
+    {% else %}
+    <p>There is no such exam</p>
+    {% endif %}
+
+{% endblock %}

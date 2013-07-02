@@ -1,0 +1,13 @@
+
+body {
+    margin-left: 5em;
+}
+
+li.qli {
+    border: 1px solid black;
+    width: 20em
+}
+
+input.short {
+    width:3em;
+}

@@ -100,10 +100,8 @@ Answer D
 	</fieldset>
 	Too hard
 	<div style="width: 50px; display: inline-block"></div>
-	<a href="#" class="flag"><img src="/static/icons/flagbigwhite.png" title="Flag for attention" alt="flag"></a>
-	{{form.flag}} {# TODO: rework the anchors into input checkboxes. #}
-	<a href="#" class="done"><img src="/static/icons/locked.png" title="Check-out as final" alt="check"></a>
-	{{form.checkout}}
+	{{form.flag}}<label for="flag" title="Flag for attention"></label>
+	{{form.checkout}}<label for="checkout" title="Check-out as final"></label>
 	{% if 'admin' in perms or 'write' in perms %}<a href="#"><img src="/static/icons/save_old.png" title="Save" alt="check"></a>
 	<a href="#"><img src="/static/icons/savenext_old.png" title="Save and next" alt="check"></a>{% endif %}
 </div>

@@ -314,17 +314,23 @@ select {
 
 #questionnavlist a {
 	display: inline-block;
-	width: 1em;
-	border: 1px solid #aaa;
-	font-size: 1.2em;
-	padding: 0.75em 0.8em 0.75em 0.7em;
-	margin: 0.5em;
 	color: #fff;
+	width: 2em;
+	padding: 6px 17px 29px 5px;
+	margin: 0.25em;
+	font-size: 1.3em;
+	text-decoration: none;
+}
+
+#questionnavlist a.flag {
+	background-image: url('icons/flag.png');
+	background-position: bottom right;
+	background-repeat: no-repeat;
 }
 
 #questionnavlist a:hover {
-	background: #fff;
-	color: #333;
+	color: #eee;
+	background: #777;
 	text-decoration: none;
 }
 
@@ -438,9 +444,43 @@ select {
 	padding: 1px;
 }
 
+.infobarbig input {
+	display: none;
+}
+.infobarbig label {
+	display: inline-block;
+	cursor: pointer;
+	height: 75px;
+	width: 6em;
+	vertical-align: middle;
+	padding: 0 5px;
+	margin-top: -3px;
+}
+.infobarbig input.flag + label {
+	background: url('icons/flagbigwhite.png') no-repeat center;	
+}
+.infobarbig input.lock + label {
+	background: url('icons/unlocked.png') no-repeat center;
+}
+.infobarbig input.flag + label:hover,
+.infobarbig input.lock + label:hover  {
+	background-color: rgba(255,255,255,0.7);
+	background-color: white\9; /* IE8 hack, probably not really needed :P */
+}
+.infobarbig input.flag:checked + label {
+	background: #eabf03 url('icons/flagbigwhite.png') no-repeat center;
+}
+.infobarbig input.lock:checked + label {
+	background: #7fbe20 url('icons/locked.png') no-repeat center;
+}
+
+
 .rating {
 	display: inline;
 	vertical-align: middle;
+}
+.rating label {
+	padding: 0;
 }
 
 .rating:not(:checked) > input {

@@ -17,7 +17,10 @@ def overview(request,lang_id=1,permissions=None):
     except:
         raise Http404()
 
-    exams = Exam.objects.all()
+    if request.user.is_staff:
+        exams = Exam.objects.all()
+    else:
+        exams = Exam.objects.filter(staff_only=False)
 
     for e in exams:
         e.load_question_status(lang_id)
@@ -43,6 +46,11 @@ def profile(request,lang_id=1,permissions=None):
     add_form = AddLanguageForm()
     edit_form = EditLanguageForm(instance=language)
 
+    if request.user.is_staff:
+        exams = Exam.objects.all()
+    else:
+        exams = Exam.objects.filter(staff_only=False)
+    
     if request.method == "POST":
         if "editlanguage" in request.POST:
             if not 'admin' in permissions:
@@ -63,7 +71,7 @@ def profile(request,lang_id=1,permissions=None):
                 lang.save()
                 lang.editors.add(request.user)
                 lang.coordinators.add(request.user)
-                for exam in Exam.objects.all():
+                for exam in exams:
                     exam.languages.add(lang)
                 #switch view to new language
                 return HttpResponseRedirect('/jury/'+str(lang.id)+'/')
@@ -73,9 +81,6 @@ def profile(request,lang_id=1,permissions=None):
             #unknown form
             raise Http404()
             
-
-
-    exams = Exam.objects.all()
     languages = Language.objects.get(id=1).coordinators.all()
     languages = request.user.coordinator_set.all() | request.user.editor_set.all()
     return render_with_context(request,'jury_profile.html',
@@ -95,11 +100,17 @@ def examview(request,exam_id=1,lang_id=1,permissions=None):
     try:
         lang_id = int(lang_id)
         exam_id = int(exam_id)
-        exam = Exam.objects.get(id=exam_id)
+        if request.user.is_staff:
+            exam = Exam.objects.get(id=exam_id)
+        else:
+            exam = Exam.objects.get(id=exam_id,staff_only=0)
     except:
         raise Http404()
 
-    exams = Exam.objects.all()
+    if request.user.is_staff:
+        exams = Exam.objects.all()
+    else:
+        exams = Exam.objects.filter(staff_only=False)
 
     exam.load_question_status(lang_id)
     questions = exam.question_status
@@ -118,13 +129,19 @@ def questionview(request,exam_id=1,question_position=1,lang_id=1,permissions=Non
         question_position = int(question_position)
         target_language_id = int(lang_id)
         exam_id = int(exam_id)
-        exam = Exam.objects.get(id=exam_id)
+        if request.user.is_staff:
+            exam = Exam.objects.get(id=exam_id)
+        else:
+            exam = Exam.objects.get(id=exam_id,staff_only=0)
         language = Language.objects.get(id=target_language_id)
     except: 
         raise Http404()
 
     question = Question.objects.get(exam__id=exam_id,examquestion__position=question_position)
-    exams = Exam.objects.all()
+    if request.user.is_staff:
+        exams = Exam.objects.all()
+    else:
+        exams = Exam.objects.filter(staff_only=False)
 
     original = question.versionnode_set.filter(language=question.primary_language_id).order_by('-timestamp')[:1]
 

@@ -61,7 +61,7 @@ class Exam(models.Model):
     name = models.CharField(max_length=100)
     languages = models.ManyToManyField(Language)
     questions = models.ManyToManyField(Question,blank=True,null=True,through='ExamQuestion')
-
+    staff_only = models.BooleanField(default=False)
 
 
     def __init__(self,*args,**kwargs):

@@ -2,7 +2,7 @@
 /* LAYOUT ===================================================== */
 body {
 	width: 90%;
-	min-width: 613px;
+	min-width: 878px;
 	margin: 2em auto;
 }
 
@@ -22,8 +22,6 @@ body {
 }
 
 
-
-
 /* MARKUP ===================================================== */
 /* general elements*/
 body {
@@ -35,32 +33,53 @@ em { font-style: italic; }
 
 strong { font-weight: bold; }
 
+sup { font-size: 75%; vertical-align: super; }
+sub { font-size: 75%; vertical-align: sub; }
+
 h1 { font-size: 2.5em;
 	 font-weight: bold;
-	 margin: 1.2em 0 0.8em 0; }
+	 margin: 0 0 0.5em 0;
+	 padding: 0.5em;
+	 border-bottom: 1px solid #333; }
 
-h2 { font-size: 1.9em; 
+h2 { font-size: 1.8em; 
 	 font-style: italic;
-	 margin: 1em 0 0.7em 0; }
+	 margin: 1.2em 0 0.5em 0; }
+	 
+h3 { font-size: 1.3em;
+	 font-weight: bold; 
+	 margin: 0.3em 0; }
 
 hr { margin: 1.5em 0; clear: both; }
 
 a {
-	color: #000;
+	color: #009ebd;
 	text-decoration: none;
 }
 
 a:hover {
-	color: #fff;
-	background: #000;
+	color: #61265c;
+	text-decoration: underline;
+}
+
+p {
+	font-size: 150%;
+	margin: 0.5em 0;
+}
+
+select {
+	font-weight: bold;
+	border: 1px solid #ccc;
+	background: none;
+	vertical-align: middle;
 }
 
 /* Color definitions */
 .empt { color: #333; background: #e0e0e0; } /* unvisited */
-.done { color: #eee; background: #4a2; } /* translation done */
-.need { color: #eee; background: #24a; } /* translation in progress (not finalized) */
-.updt { color: #eee; background: #a22; } /* new server version: translation must be updated */
-.flag { color: #eee; background: #d81; } /* flagged question */
+.done { color: #eee; background: #7fbe20; } /* translation done */
+.need { color: #eee; background: #03a0e1; } /* translation in progress (not finalized) */
+.updt { color: #eee; background: #d61d24; } /* new server version: translation must be updated */
+.flag { color: #eee; background: #eabf03; } /* flagged question */
 
 /* Header */
 #header {
@@ -72,18 +91,27 @@ a:hover {
 
 #header .title {
 	float: left;
-	font-size: 2.2em;
-	font-weight: bold;
-	padding: 0.863636em; /* (6em - 2.2em) / (2 * 2.2em) */
+	padding: 1.5em;
 }
 #header .infobox {
 	float: right;
-	font-size: 1.5em;
-	padding: 1.5em; /* (6em - 1.5em) / (2 * 1.5em) */
+	font-size: 140%;
+	line-height: 1.2em;
+	padding: 2em 2em 1.9em 0;
 }
 
 #header .infobox img {
 	height: 0.85em;
+	padding: 0;
+}
+#header .title img {
+	vertical-align: middle;
+	margin-right: 2em;
+}
+
+#header .title select {
+	font-size: 250%;
+	font-weight: bold;
 }
 
 /* Menu */
@@ -113,6 +141,7 @@ a:hover {
 	background: white\9; /* IE8 hack, probably not really needed :P */
 	color: #000;
 	border-bottom: 12px solid #b9a4c2;
+	text-decoration: none;
 }
 
 #menu a.select {
@@ -150,22 +179,29 @@ a:hover {
 
 /* Exam overview page */
 .exambox {
-	max-width: 1078px;
+	max-width: 980px;
 }
 
 .exambox a {
 	float: left;
 	display: block;
-	width: 1em;
-	padding: 3px 18px 19px 4px;
+	width: 2em;
+	padding: 6px 17px 29px 5px;
 	margin: 0 0.5em 0.5em 0;
 	font-size: 1.3em;
 	text-decoration: none;
 }
 
+.exambox a.flag {
+	background-image: url('icons/flag.png');
+	background-position: bottom right;
+	background-repeat: no-repeat;
+}
+
 .exambox a:hover {
 	color: #eee;
 	background: #777;
+	text-decoration: none;
 }
 
 .examinfo {
@@ -175,60 +211,91 @@ a:hover {
 }
 
 /* Exam detail page */
-.exambox.wide {
+.overviewbox {
 	max-width: 1247px;
 }
 
-.exambox .questionbox {
+.overviewbox a {
+	font-size: 115%;
+}
+
+.questionbox {
 	display: inline-block;
 	vertical-align: top;
 	position: relative;
 	border: 1px solid #999;
 	width: 225px;
-	min-height: 100px;
-	padding: 5px 5px 35px 5px;
+	padding: 5px 5px 43px 5px;
 	margin: 0 10px 10px 0;
-	font-size: 1.4em;
+	background: rgba(255,255,255,0.7);
 }
 
-.exambox .questionbox p {
-	margin: 5px 0;
+.questionbox > a {
+	color: #000;
+	display: block;
+	float: none;
 	line-height: 1.2em;
-}
-
-.exambox .questionbox div {
+	font-size: 150%;
+	margin: 0.5em 0;
+	padding: 0;
 	width: 100%;
-	text-align: center;
-	margin: -5px 0 5px -5px;
-	padding: 5px;
+	min-height: 75px;
 }
 
-.exambox .questionbox .infobar {
+.questionbox > a:hover {
+	cursor: pointer;
+	background: none;
+	color: #000;
+	text-decoration: none;
+}
+
+.questionbox div {
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	width: 100%;
-	padding: 0;
-	margin: 0;
-	background: #ddd;
+	border-top: 1px solid #999;
+	background: #e0e0e0;
 }
 
-.exambox .questionbox .infobar a {
+.questionbox div a {
 	float: none;
 	display: inline-block;
-	margin: 0;
-	padding: 0;
-	width: auto;
+	margin: 0 0 0 0;
+	padding: 10px 0 2px 3px;
+	width: 3em;
+	font-size: 1.3em;
 }
 
-.exambox .questionbox .infobar img {
+.questionbox div a:first-child {
+	font-size: 2em;
+	width: 2em;
+	height: 25px;
+	display: inline-block;
+	text-align: center;
+	padding: 9px 3px 3px 0;
+	margin: 0 56px 0 0;
+}
+
+.questionbox div a.flag {
+	background-image: none;
+}
+
+.questionbox div img {
 	vertical-align: middle;
-	padding: 1px;
+	height: 30px;
+	margin: -5px 0 0 3px;
 }
 
-.exambox .questionbox .infobar img:hover {
-	background: #333;
+.questionbox div a:hover {
+	background: #999;
+	color: #000;
 	cursor: pointer;
+	text-decoration: none;
+}
+
+.questionbox div input {
+	margin: 12px 15px 11px 15px;
 }
 
 
@@ -258,6 +325,7 @@ a:hover {
 #questionnavlist a:hover {
 	background: #fff;
 	color: #333;
+	text-decoration: none;
 }
 
 #questionnavlist a.sel {
@@ -267,60 +335,102 @@ a:hover {
 }
 
 /* Translation boxes */
-.texttrans_q div[contenteditable=true]
+.translationtable
 {
-	background: #fff;
-	border: 1px solid #999;
-	width: 95%;
-	padding: 5px;
-	font-size: 1.3em;
-	height: 15.1em;
+	width: 100%;
+	font-size: 155%;
+	line-height: 1.25em;
 }
 
-.texttrans_a div[contenteditable=true]
-{
-	background: #fff;
-	border: 1px solid #999;
-	width: 95%;
-	padding: 5px;
-	font-size: 1.3em;
-	height: 4em;
+.translationtable select {
+	font-size: 1.2em;
+	font-weight: bold;
 }
 
+.translationtable th {
+	text-align: left;
+	padding-top: 0.5em;
+}
 
-.textorg_q,
-.texttrans_q,
-.textorg_a,
-.texttrans_a {
+.translationtable td
+{
+	border-top: 1px solid #999;
+	padding: 20px 5px;
+	height: 100%;
+	vertical-align: top;
+}
+
+.translationtable tr td:first-child
+{
+	font-weight: bold;
+}
+
+.translationtable tr td:last-child
+{
 	width: 50%;
-	float: left;
-	margin-bottom: 10px;
 }
 
-.textorg_q textarea,
-.texttrans_q textarea {
-	width: 95%;
-	height: 15em;
+.translationtable tr:last-child td
+{
+	border-bottom: 1px solid #999;
 }
 
-.textorg_a textarea,
-.texttrans_a textarea {
-	width: 95%;
-	height: 4em;
+.translationtable td div[contenteditable=true]
+{
+	width: 97%;
+	background: #fff;
+	border: 1px solid #999;
+	min-height: 3.5em;
+	padding: 0 10px;
+	margin: -10px 0;
+	font-size: 75%; /* why? but needed... */
 }
 
+.translationtable img {
+	padding: 0.5em 0;
+	width: 25%;
+	transition: all 200ms ease;
+}
+
+.translationtable img.large {
+	width: 100%;
+	transition: all 200ms ease;
+}
+
+.translationtable img:hover {
+	cursor: pointer;
+}
+
+.translationtable #tq img {
+	width: 100%;
+}
+
+/* Info/buttons bar for translation screen */
 .infobarbig {
 	text-align: center;
-	margin: 15px;
+	margin: 15px -1.0em;
 	clear: both;
+	font-size: 1.5em;
+	line-height: 5em;
+	background: #333;
+	box-shadow: rgba(0,0,0,0.4) 0.15em 0.15em 0.15em 0.10em;
+	border: 1px solid #aaa;
+	color: #fff;
+	padding: 5px;
 }
 
 .infobarbig a {
-	float: none;
+	color: #fff;
 	display: inline-block;
-	margin: 0;
-	padding: 0;
-	width: auto;
+	width: 6em;
+	padding: 0 5px;
+}
+
+.infobarbig a:hover {
+	background: rgba(255,255,255,0.7);
+	background: white\9; /* IE8 hack, probably not really needed :P */
+	color: #000;
+	text-decoration: none;
 }
 
 .infobarbig img {
@@ -328,10 +438,6 @@ a:hover {
 	padding: 1px;
 }
 
-.infobarbig img:hover {
-	background: #333;
-	cursor: pointer;
-}
 .rating {
 	display: inline;
 	vertical-align: middle;
@@ -343,26 +449,28 @@ a:hover {
 
 .rating:not(:checked) > label {
     float: right;
-    padding: 0 0.1em;
+    margin: 0.25em;
     cursor: pointer;
-    font-size: 3.5em;
-    color: #ddd;
+    height: 30px;
+    width: 30px;
+    border: 1px solid #aaa;
+    background: #fff;
 }
 
 .rating:not(:checked) > label:before {
-    content: '\25a0';
+    content: '\A0';
 }
 
 .rating > input:checked ~ label,
 .rating:not(:checked) > label:hover,
 .rating:not(:checked) > label:hover ~ label {
-    color: #777;
+    background: #5b266f;
 }
 
-li.qli{
-    border: 1px solid black;
-}
-
-input.short{
-    width: 3em;
+/* Settings page */
+.permissionslist table td { padding: 5px; font-size: 130%; }
+.permissionslist label { padding: 10px; }
+.permissionslist img {
+	height: 15px;
+	margin-right: 10px;
 }

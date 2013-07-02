@@ -1,10 +1,6 @@
 {% extends "jury_base.html" %}
 
-{% block lead %}
-Exam Translation | {{exam.name}}
-{% endblock %}
-
-
+{% block lead %}Exam Translation | {{exam.name}}{% endblock %}
 {% block menu %}
 <ul>
     <li><a href="/jury/{{lang_id}}/overview/">Overview</a></li>
@@ -16,27 +12,26 @@ Exam Translation | {{exam.name}}
 {% endblock %}
 
 {% block content %}
-<div class="exambox wide">
-<h1>Theoretical Exam Part 1</h1>
+<div class="overviewbox">
 
 <h2>Cell Biology</h2>
+<a href="#">Select all questions</a> | <a href="#">Deselect all questions</a> | <a href="#">Download PDF of all selected questions</a><br style="clear: both;"><br>
 
 {% for q in questions %}
 <div class="questionbox">
-    <div class="{{q.status}}">{{q.target.position}}</div>
-    <p><em>Excerpt:</em>{{q.target.text}}</p>
-    <div class="infobar">
-        <!--<a href="#"><img src="/static/icons/restore.png" title="Restore previous version" alt="restore"></a>
-        <a href="#"><img src="/static/icons/delete.png" title="Delete current translation" alt="delete"></a>-->
-        <a href="#"><img src="/static/icons/flag.png" title="Flag for attention" alt="flag"></a>
-        <a href="#"><img src="/static/icons/check.png" title="Check-out as final" alt="check"></a>
-        <a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate"><img src="/static/icons/edit.png" title="Translate / Edit" alt="edit"></a>
+	<div>
+		<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate" class="{{q.status}}">{{q.target.position}}</a>
+		<a href="#"><img src="/static/icons/flagdark.png" title="Flag" alt="flag"></a>
+        <a href="#"><img src="/static/icons/unlocked.png" title="Unlocked" alt="unlocked"></a>
+        <input type="checkbox" name="pdfselect" value="1">
     </div>
+    <a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate">{{q.target.text}}</a>
 </div>
 
 {% endfor %}
     
 <h2>Ecology</h2>
+
 </div>
     
 <br style="clear: both">
@@ -44,6 +39,5 @@ Exam Translation | {{exam.name}}
 <ul style="font-size: 1.5em; line-height: 1.5em;">
     <li><strong>Translation:</strong> 25% done</li>
     <li><strong>Last server update:</strong> 2013-07-13 01:20</li>
-    <li><a href="#">View PDF version</a></li>
 </ul>
 {% endblock %}

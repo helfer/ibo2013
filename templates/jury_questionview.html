@@ -1,8 +1,6 @@
 {% extends "jury_examview.html" %}
 
-
-{% block examlegend %}
-{% endblock %}
+{% block examlegend %}{% endblock %}
 
 {% block content %}
 <div id="questionnavlist">
@@ -18,87 +16,115 @@
 <h1>Question {{pos}} : {{question.name}}</h1>
 
 <form action="" method="post">
-<div class="textorg_q">
-<h2>Original</h2>
-<textarea readonly>{{compare}}</textarea>
-</div>
+<table class="translationtable">
+<tr><th></th><th>
+<select>  {# TODO: Make this into Django #}
+	<option value="IBOENG">IBO Official (EN)</option>
+	<option value="IBORUS">IBO Official (RU)</option>
+</select>
+</th><th><h3>Translation</h3></th></tr>
 
-<div class="texttrans_q">
-<h2>Translation</h2>
+<tr> <!-- row 1: the question -->
+<td></td>
+<td>
+{{compare}}
+</td>
+<td>
+<div id="tq" contenteditable="true">
 {{form.text}}
 </div>
-<!--
-<div class="textorg_a">
-<textarea disabled>
-Female fiddler crabs generally prefer larger males.
-</textarea>
-</div>
+</td>
+</tr>
 
-<div class="texttrans_a">
-<div id="trans_a1" contenteditable="true">Some text here.</div>
+<tr> <!-- row 2: possible image -->
+<td></td>
+<td>
+<img src="static/images/test.jpg" onclick="enlarge(this);">
+</td>
+<td>
+</td>
+</tr>
+<tr> <!-- row 3: first answer -->
+<td>A.</td>
+<td>
+Answer A
+</td>
+<td>
+<div id="ta1" contenteditable="true">
 </div>
+</td>
+</tr>
+<tr> <!-- row 4: second answer -->
+<td>B.</td>
+<td>
+Answer B
+</td>
+<td>
+<div id="ta2" contenteditable="true">
+</div>
+</td>
+</tr>
+<tr> <!-- row 5: third answer -->
+<td>C.</td>
+<td>
+Answer C
+</td>
+<td>
+<div id="ta3" contenteditable="true">
+</div>
+</td>
+</tr>
+<tr> <!-- row 6: fourth answer -->
+<td>D.</td>
+<td>
+Answer D
+</td>
+<td>
+<div id="ta4" contenteditable="true">
+</div>
+</td>
+</tr>
+</table>
 
-<div class="textorg_a">
-<textarea disabled>
-In mate-choice selection, male handedness is an important criterion.
-</textarea>
-</div>
-
-<div class="texttrans_a">
-<div id="trans_a2" contenteditable="true">Some text here.</div>
-</div>
-
-<div class="textorg_a">
-<textarea disabled>
-Males that wave faster generally attracted more females.
-</textarea>
-</div>
-
-<div class="texttrans_a">
-<div id="trans_a3" contenteditable="true">Some text here.</div>
-</div>
-
-<div class="textorg_a">
-<textarea disabled>
-An obvious difference in cheliped size of males may be necessary before females become more decisive.
-</textarea>
-</div>
-
-<div class="texttrans_a">
-<div id="trans_a4" contenteditable="true">Some text here.</div>
-</div>
--->
-{% if 'admin' in perms or 'write' in perms %}<input type="submit" name="submit" value="submit" />{% endif %}
 <br style="clear: both;">
+
 <div class="infobarbig">
-    <!--<a href="#"><img src="/static/icons/restore.png" title="Restore previous version" alt="restore"></a>
-    <a href="#"><img src="/static/icons/delete.png" title="Delete current translation" alt="delete"></a>-->
-    <a href="#"><img src="/static/icons/flag.png" title="Flag for attention" alt="flag"></a>
-    {{form.flag}}
-    <a href="#"><img src="/static/icons/check.png" title="Check-out as final" alt="check"></a>
-    {{form.checkout}}
-</div>
-<div class="infobarbig">
-    <fieldset class="rating">
+	<strong>Difficulty:</strong>
+	Too easy
+	<fieldset class="rating">
     <input type="radio" id="star5" name="rating" value="5"><label for="star5"></label>
     <input type="radio" id="star4" name="rating" value="4"><label for="star4"></label>
     <input type="radio" id="star3" name="rating" value="3"><label for="star3"></label>
     <input type="radio" id="star2" name="rating" value="2"><label for="star2"></label>
     <input type="radio" id="star1" name="rating" value="1"><label for="star1"></label>
-    </fieldset>
+	</fieldset>
+	Too hard
+	<div style="width: 50px; display: inline-block"></div>
+	<a href="#" class="flag"><img src="icons/flagbigwhite.png" title="Flag for attention" alt="flag"></a>
+	{{form.flag}} {# TODO: rework the anchors into input checkboxes. #}
+	<a href="#" class="done"><img src="icons/locked.png" title="Check-out as final" alt="check"></a>
+	{{form.checkout}}
+	{% if 'admin' in perms or 'write' in perms %}<a href="#"><img src="icons/save_old.png" title="Save" alt="check"></a>
+	<a href="#"><img src="icons/savenext_old.png" title="Save and next" alt="check"></a>{% endif %}
 </div>
 
-<div class="textorg_a">
-<h2>Additional information</h2>
-<p>
+<table class="translationtable">
+<tr><th></th><th colspan="2"><h3>Commentary</h3></th></tr>
+<tr>
+<td></td>
+<td>
 The correct answers are A, B, C and D. This is because ... and see reference here.
-</p>
-</div>
-<div class="textorg_q">
-<h2>Comments</h2>
+</td>
+<td>
+<div id="ta1" contenteditable="true">
 {{form.comment}}
 </div>
+</td>
+</tr>
+</table>
+
 </form>
+
 <br style="clear: both;">
 
 <hr>

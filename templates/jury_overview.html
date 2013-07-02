@@ -1,9 +1,6 @@
 {% extends "jury_base.html" %}
 
-
-{% block lead %}
-Exam Translation | Overview
-{% endblock %}
+{% block lead %}Exam Translation | Overview{% endblock %}
 
 {% block content %}
     {% for e in exams %}
@@ -17,7 +14,6 @@ Exam Translation | Overview
     <ul>
         <li><strong>Translation:</strong> 25% complete</li>
         <li><strong>Last server update:</strong> 2013-07-13 01:20</li>
-        <li><a href="#">View PDF version</a></li>
     </ul>
     </div>
     {% endfor %}

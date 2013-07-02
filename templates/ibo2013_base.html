@@ -6,16 +6,23 @@
 <link href="/static/reset.css" rel="stylesheet" type="text/css">
 <link href="/static/jury.css" rel="stylesheet" type="text/css">
 <script src="/static/jury.js" type="text/javascript"></script>
+<script src="/static/ckeditor/ckeditor.js" type="text/javascript"></script>
 </head>
 <body>
 
 <div id="header">
-<div class="title">{{lang_picker.language}} | {% block lead %}Exam Translation{% endblock %}</div>
+<div class="title">
+<img src="static/icons/IBO2013.png">
+{{lang_picker.language}} | {% block lead %}Exam Translation{% endblock %}
+</div>
+{# TODO: Set this scripting directly as an option for PickLanguageForm, 
+something like: widget=forms.Select(attrs={'onchange':'window.location = this.value;'} #}
 <script type="text/javascript">document.getElementById("id_language").onchange = function(){window.location = this.value}</script>
 <div class="infobox">
 {% block infobox %}
-<strong>{{ user }}</strong> |
-<strong>The Netherlands</strong>&nbsp;<a href="/accounts/logout">logout</a>
+<strong>{{ user }}</strong> (The Netherlands) | <a href="/accounts/logout">Log out</a>
+{# RB: I think it would be a good idea to show the permissions here as well, instead of only on the Profile page.
+Something like: You can <strong>{% for p in perms %}{{p}} {% endfor %}</strong> this translation. #}
 {% endblock %}
 </div>
 </div>

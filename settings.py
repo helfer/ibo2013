@@ -1,5 +1,7 @@
 # Django settings for ibo2013 project.
 
+#git test
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 

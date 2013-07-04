@@ -124,6 +124,8 @@ def view_question(request,qid=None,mode="normal"):
                 v.save()
                 versions = list(versions)
                 versions.append(v)   
+                
+                return redirect(request.path) #POST,GET redirect for instant reload   
             else:
                 print "haserrors"
                 print form.errors
@@ -144,36 +146,39 @@ def view_question(request,qid=None,mode="normal"):
                 v.save()
                 versions = list(versions)
                 versions.append(v)   
+                
+                return redirect(request.path) #POST,GET redirect for instant reload   
         else:
             raise ValueError("no such view mode: >" + str(mode)+"<")
     #print versions[0].text   
-        return redirect(request.path) #POST,GET redirect for instant reload   
-
- 
-    if len(versions) > 0 and mode == "normal":
-        print "xmlquestion"
-        #try:
-        xmlq = qml.QMLquestion(versions[0].text)
-        print xmlq.summary()
-        form = QMLform(qml=xmlq)
-        #except Exception as e:
-        #    print "exception"
-        #    if versions[0].text.startswith('<question'):
-        #        #this should probably be xml, raise exception
-        #        raise e
-        #    else:
-        #        print "redirect"
-        #        return redirect("/staff/question/"+str(question_id)+"/xml/")
-        
+    
+    #request method is not POST, no form was submitted
     else:
-        init = {}
-        if len(versions) > 0:
-            init = {
-                'text':versions[0].text,
-                'comment':versions[0].comment,
-           }
+        if len(versions) > 0 and mode == "normal":
+            print "xmlquestion"
+            try:
+                xmlq = qml.QMLquestion(versions[0].text)
+                print xmlq.summary()
+                form = QMLform(qml=xmlq)
+            except Exception as e:
+                print "exception"
+            #    if versions[0].text.startswith('<question'):
+            #        #this should probably be xml, raise exception
+            #        raise e
+            #    else:
+                print "redirect"
+                return redirect("/staff/question/"+str(question_id)+"/xml/")
+            
+        else:
+            init = {}
+            if len(versions) > 0:
+                init = {
+                    'text':versions[0].text,
+                    'comment':versions[0].comment,
+               }
 
-        form = EditQuestionForm(initial=init)
+            form = EditQuestionForm(initial=init)
+    
     compare = ""
     #if len(versions) == 2:
     #    compare = versions[0].compare_with(versions[1])

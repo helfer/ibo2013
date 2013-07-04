@@ -39,7 +39,7 @@
 <tr> <!-- row 2: possible image -->
 <td></td>
 <td>
-<img src="static/images/test.jpg" onclick="enlarge(this);">
+<img src="/static/images/test.jpg" onclick="enlarge(this);">
 </td>
 <td>
 </td>
@@ -100,8 +100,8 @@ Answer D
 	</fieldset>
 	Too hard
 	<div style="width: 50px; display: inline-block"></div>
-	{{form.flag}}<label for="flag" title="Flag for attention"></label>
-	{{form.checkout}}<label for="checkout" title="Check-out as final"></label>
+	{{form.flag}}<label for="id_flag" title="Flag for attention"></label>
+	{{form.checkout}}<label for="id_checkout" title="Check-out as final"></label>
 	{% if 'admin' in perms or 'write' in perms %}<a href="#"><img src="/static/icons/save_old.png" title="Save" alt="check"></a>
 	<a href="#"><img src="/static/icons/savenext_old.png" title="Save and next" alt="check"></a>{% endif %}
 </div>

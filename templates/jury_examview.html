@@ -15,7 +15,7 @@
 <div class="overviewbox">
 
 <h2>Cell Biology</h2>
-<a href="#">Select all questions</a> | <a href="#">Deselect all questions</a> | <a href="#">Download PDF of all selected questions</a><br style="clear: both;"><br>
+<p><a onclick="SelectAllToggle()">(De)select all questions</a> | <a onclick="DownloadPDF()">Download PDF of selected questions</a></p>
 
 {% for q in questions %}
 <div class="questionbox">
@@ -23,7 +23,7 @@
 		<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate" class="{{q.status}}">{{q.target.position}}</a>
 		<a href="#"><img src="/static/icons/flagdark.png" title="Flag" alt="flag"></a>
         <a href="#"><img src="/static/icons/unlocked.png" title="Unlocked" alt="unlocked"></a>
-        <input type="checkbox" name="pdfselect" value="1">
+        <input type="checkbox" name="pdfselect" value="{{q.target.position}}">
     </div>
     <a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate">{{q.target.text}}</a>
 </div>
@@ -31,6 +31,7 @@
 {% endfor %}
     
 <h2>Ecology</h2>
+<p><a onclick="SelectAllToggle()">(De)select all questions</a> | <a onclick="DownloadPDF()">Download PDF of selected questions</a></p>
 
 </div>
     

@@ -1,4 +1,4 @@
-{% extends "ibo2013_base.html" %}
+﻿{% extends "ibo2013_base.html" %}
 {% block title %}IBO Translation Interface{% endblock %}>
 {% block lead %}User Profile{% endblock %}
 {% block menu %}
@@ -12,28 +12,34 @@
 {% endblock %}
 
 {% block main %}
-   
-    <h2>Current language: {{language.name}}:</h2>
 
-    <h2>Your permissions for {{language.name}}: {% for p in perms %}{{p}} {% endfor %}</h2>
+	<h1>Permissions</h1>
+	<p>Current translation: <strong>{{language.name}}</strong>.</p>
+	<p>You can <strong>{% for p in perms %}{{p}} {% endfor %} this translation.</p>
+
     {% if 'admin' in perms %}
-        <h2>Edit access to {{language.name}}:</h2>
-        <form method="POST">
-        {{editform.as_ul}}
-        <input type="submit" value="submit changes" name="editlanguage" />
-        </form>
+    <h2>Edit access to {{language.name}}</h2>
+    <form method="POST">
+    {{editform.as_ul}} {# I fear this list will become impractically long with 250+ jury members #}
+    <input type="submit" value="Submit changes" name="editlanguage">
+    </form>
     {% endif %}
-    <ul>
-    <!--{% for lang in languages %}
+    <!--<ul>
+    {% for lang in languages %}
         <li><a href="/jury/{{lang.id}}/overview/">{{lang.name}}</a></li>
-    {% endfor %}-->
-    </ul>
-    <hr></hr>
-    <h2>Create new language:</h2>
+    {% endfor %}
+    </ul>-->
+    
+    {% if 'admin' in perms %}
+    <hr>
+    <h2>Create new translation</h2>
     <form method="POST">
     {{addform.as_ul}}
-    <input type="submit" value="add language" name="addlanguage" />
+    <input type="submit" value="Add translation" name="addlanguage">
     </form>
+    {% endif %}
+    
+    {# RB: Should it be possible to remove/disable translations as well, or is this too dangerous? #}
 
 {% endblock %}
 

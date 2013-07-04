@@ -26,7 +26,7 @@ body {
 /* general elements*/
 body {
 	font: 62.5%/1.0 Helvetica, Arial, Verdana, sans-serif;
-	background: url(style/bg.png) fixed no-repeat #eee8f0;
+	background: url(bg.png) fixed no-repeat #eee8f0;
 }
 
 em { font-style: italic; }
@@ -60,6 +60,7 @@ a {
 a:hover {
 	color: #61265c;
 	text-decoration: underline;
+	cursor: pointer;
 }
 
 p {
@@ -74,12 +75,33 @@ select {
 	vertical-align: middle;
 }
 
+input[type=button] {
+	background: #5b266f;
+	color: #fff;
+	font-size: 1.25em;
+	padding: 5px 20px;
+	border: 3px outset #ccc;
+}
+
+input[type=button]:hover {
+	background: #c086d6;
+	cursor: pointer;
+}
+
+input[type=button]:active {
+	border: 3px inset #ccc;
+}
+
+
 /* Color definitions */
 .empt { color: #333; background: #e0e0e0; } /* unvisited */
 .done { color: #eee; background: #7fbe20; } /* translation done */
 .need { color: #eee; background: #03a0e1; } /* translation in progress (not finalized) */
 .updt { color: #eee; background: #d61d24; } /* new server version: translation must be updated */
-.flag { color: #eee; background: #eabf03; } /* flagged question */
+.unav { color: #bbb; background: none; } /* question unavailable - currently in edit */
+/*.flag { color: #eee; background: #eabf03; }*/ /* flagged question - OLD definition */
+.flag { background-image: url('icons/flag.png'); background-position: bottom right; background-repeat: no-repeat; background-size: 27px; }
+.unav.flag { background-image: url('icons/flaggray.png'); background-position: bottom right; background-repeat: no-repeat; background-size: 27px; }
 
 /* Header */
 #header {
@@ -192,12 +214,6 @@ select {
 	text-decoration: none;
 }
 
-.exambox a.flag {
-	background-image: url('icons/flag.png');
-	background-position: bottom right;
-	background-repeat: no-repeat;
-}
-
 .exambox a:hover {
 	color: #eee;
 	background: #777;
@@ -215,10 +231,6 @@ select {
 	max-width: 1247px;
 }
 
-.overviewbox a {
-	font-size: 115%;
-}
-
 .questionbox {
 	display: inline-block;
 	vertical-align: top;
@@ -226,7 +238,7 @@ select {
 	border: 1px solid #999;
 	width: 225px;
 	padding: 5px 5px 43px 5px;
-	margin: 0 10px 10px 0;
+	margin: 0 10px 15px 0;
 	background: rgba(255,255,255,0.7);
 }
 
@@ -258,14 +270,14 @@ select {
 	background: #e0e0e0;
 }
 
-.questionbox div a {
+/*.questionbox div a {
 	float: none;
 	display: inline-block;
-	margin: 0 0 0 0;
+	margin: 0;
 	padding: 10px 0 2px 3px;
 	width: 3em;
 	font-size: 1.3em;
-}
+} */
 
 .questionbox div a:first-child {
 	font-size: 2em;
@@ -277,14 +289,10 @@ select {
 	margin: 0 56px 0 0;
 }
 
-.questionbox div a.flag {
-	background-image: none;
-}
-
 .questionbox div img {
 	vertical-align: middle;
 	height: 30px;
-	margin: -5px 0 0 3px;
+	margin: -6px 6px 3px 6px;
 }
 
 .questionbox div a:hover {
@@ -296,6 +304,7 @@ select {
 
 .questionbox div input {
 	margin: 12px 15px 11px 15px;
+	padding: 0;
 }
 
 
@@ -328,6 +337,13 @@ select {
 	background-repeat: no-repeat;
 }
 
+#questionnavlist a.lock {
+	background-image: url('icons/locked.png');
+	background-position: bottom right;
+	background-repeat: no-repeat;
+	background-size: 30px;
+}
+
 #questionnavlist a:hover {
 	color: #eee;
 	background: #777;
@@ -341,24 +357,24 @@ select {
 }
 
 /* Translation boxes */
-.translationtable
+table
 {
 	width: 100%;
 	font-size: 155%;
 	line-height: 1.25em;
 }
 
-.translationtable select {
+table select {
 	font-size: 1.2em;
 	font-weight: bold;
 }
 
-.translationtable th {
+table th {
 	text-align: left;
 	padding-top: 0.5em;
 }
 
-.translationtable td
+table td
 {
 	border-top: 1px solid #999;
 	padding: 20px 5px;
@@ -366,22 +382,22 @@ select {
 	vertical-align: top;
 }
 
-.translationtable tr td:first-child
+table tr td:first-child
 {
 	font-weight: bold;
 }
 
-.translationtable tr td:last-child
+table tr td:last-child
 {
 	width: 50%;
 }
 
-.translationtable tr:last-child td
+table tr:last-child td
 {
 	border-bottom: 1px solid #999;
 }
 
-.translationtable td div[contenteditable=true]
+table td div[contenteditable=true]
 {
 	width: 97%;
 	background: #fff;
@@ -392,22 +408,22 @@ select {
 	font-size: 75%; /* why? but needed... */
 }
 
-.translationtable img {
+table img {
 	padding: 0.5em 0;
 	width: 25%;
 	transition: all 200ms ease;
 }
 
-.translationtable img.large {
+table img.large {
 	width: 100%;
 	transition: all 200ms ease;
 }
 
-.translationtable img:hover {
+table img:hover {
 	cursor: pointer;
 }
 
-.translationtable #tq img {
+table #tq img {
 	width: 100%;
 }
 
@@ -433,8 +449,7 @@ select {
 }
 
 .infobarbig a:hover {
-	background: rgba(255,255,255,0.7);
-	background: white\9; /* IE8 hack, probably not really needed :P */
+	background: #ccc;
 	color: #000;
 	text-decoration: none;
 }
@@ -456,21 +471,20 @@ select {
 	padding: 0 5px;
 	margin-top: -3px;
 }
-.infobarbig input.flag + label {
+.infobarbig #id_flag + label {
 	background: url('icons/flagbigwhite.png') no-repeat center;	
 }
-.infobarbig input.lock + label {
+.infobarbig #id_checkout + label {
 	background: url('icons/unlocked.png') no-repeat center;
 }
-.infobarbig input.flag + label:hover,
-.infobarbig input.lock + label:hover  {
-	background-color: rgba(255,255,255,0.7);
-	background-color: white\9; /* IE8 hack, probably not really needed :P */
+.infobarbig #id_flag + label:hover,
+.infobarbig #id_checkout + label:hover  {
+	background-color: #ccc;
 }
-.infobarbig input.flag:checked + label {
+.infobarbig #id_flag:checked + label {
 	background: #eabf03 url('icons/flagbigwhite.png') no-repeat center;
 }
-.infobarbig input.lock:checked + label {
+.infobarbig #id_checkout:checked + label {
 	background: #7fbe20 url('icons/locked.png') no-repeat center;
 }
 

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
@@ -17,7 +17,7 @@
 </div>
 <div class="infobox">
 {% block infobox %}
-<strong>{{ user }}</strong> (The Netherlands) | <a href="/accounts/logout">Log out</a>
+<strong>{{ user }}</strong> (The Netherlands) | <a href="/accounts/logout">Log out</a><br>
 You can <strong>{% for p in perms %}{{p}} {% endfor %}</strong> this translation.
 {% endblock %}
 </div>

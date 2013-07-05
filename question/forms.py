@@ -33,6 +33,23 @@ class AddQuestionForm(ModelForm):
         model = Question
         fields = ['name']
 
+class AddCategoryForm(ModelForm):
+    title = forms.CharField(label="Full English name")    
+
+    class Meta:
+        model = QuestionCategory
+
+class EditCategoryForm(ModelForm):
+
+    class Meta:
+        model = QuestionCategory
+
+class TranslateCategoryForm(ModelForm):
+    
+    class Meta:
+        model = CategoryTranslation
+        fields = ['text']
+
 class ChangePointsForm(ModelForm):
     class Meta:
         mode = Question

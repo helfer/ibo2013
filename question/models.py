@@ -20,6 +20,7 @@ class Language(models.Model):
 class Question(models.Model):
     name = models.CharField(max_length=100)
     primary_language = models.ForeignKey(Language)
+
     def __unicode__(self):
         return u'%s' % (self.name)
 
@@ -29,6 +30,16 @@ class Question(models.Model):
 
     def get_newest_version():
         return self.versionnode_set.order_by('-timestamp')[0]
+
+class QuestionCategory(models.Model):
+    name = models.CharField(max_length=100)
+    position = models.IntegerField() #position in exam
+
+class CategoryTranslation(models.Model):
+    category = models.ForeignKey(QuestionCategory)
+    language = models.ForeignKey(Language)
+    text = models.CharField(max_length=100)
+
 
 
 class VersionNode(models.Model):
@@ -76,10 +87,16 @@ class Exam(models.Model):
 
     #reassigns positions to exam questions such that each position is unique
     def order_questions(self):
-      qr = ExamQuestion.objects.filter(exam=self).order_by('position')
-      for i in range(len(qr)):
-        qr[i].position = i+1
+      qr = ExamQuestion.objects.filter(exam=self).order_by('category_id','position')
+      ccid = -1
+      pos = 0
+      for q in qr:
+        if q.category_id != ccid:
+            pos = 1
+            ccid = q.category_id
+        qr[i].position = pos
         qr[i].save()
+        pos += 1
 
 
     def check_permission(self,user,lang):
@@ -168,6 +185,7 @@ class ExamPermission(models.Model):
 class ExamQuestion(models.Model):
     exam = models.ForeignKey(Exam)
     question = models.ForeignKey(Question)
+    category = models.ForeignKey(QuestionCategory)
     position = models.IntegerField()
     points = models.DecimalField(max_digits=5,decimal_places=2)
 

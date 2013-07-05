@@ -9,7 +9,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from ibo2013.question import qml
-
+from django.db.models import Q
 
 @login_required
 @staff_member_required
@@ -190,4 +190,88 @@ def view_question(request,qid=None,mode="normal"):
         'compare':compare,
         'viewmode':mode})
         
+@staff_member_required
+def view_categories(request):
+
+    categories = QuestionCategory.objects.all().order_by('position')
+    errors = ""
+    addform = AddCategoryForm()
+    if request.method == "POST":
+        if "submit" in request.POST:
+            addform = AddCategoryForm(request.POST)
+            if addform.is_valid():
+                cd = addform.cleaned_data
+                cat = QuestionCategory(name=cd['name'],position=cd['position'])
+                cat.save()
+                trans = CategoryTranslation(language_id=1,text=cd['title'])
+                cat.categorytranslation_set.add(trans)
+                cat.save()
+                return redirect("/staff/categories?success")
+            else:
+                print "form contains errors"
+        if "update" in request.POST:
+            try:
+                #insecure, but only staff have access
+                print "cat_id " + request.POST["cat_id"]
+                instance=QuestionCategory.objects.get(id=int(request.POST['cat_id']))
+                f = EditCategoryForm(request.POST,instance=instance)
+                if f.is_valid():
+                    f.save()
+                    return redirect("/staff/categories?success")
+                else:
+                    errors = form.errors
+            except:
+                print "this category doesn't exist"
+    else:
+        pass
+    cats = []
+    for c in categories:
+        cats.append({'form':EditCategoryForm(instance=c),'cat':c})
+
+
+    return render_to_response('staff_categories.html', {'categories':cats,'errors':errors,'addform':addform})
+
+@staff_member_required
+def translate_categories(request,lang_id):
+
+    try:
+        lid = int(lang_id)
+        language = Language.objects.get(pk=lid)
+        english = Language.objects.get(pk=1)
+    except:
+        raise Http404()
+
+
+    if request.method == 'POST':
+        try:
+            inst = CategoryTranslation.objects.get(category=int(request.POST['cat_id']),language=lid)
+        except:
+            inst = CategoryTranslation(category_id=int(request.POST['cat_id']),language_id=lid)
+            inst.save()
+        frm = TranslateCategoryForm(request.POST,instance=inst)
+        if frm.is_valid():
+            frm.save()
+
+
+    cats = QuestionCategory.objects.all().order_by('position')
+
+    objs = []
+    for c in cats:
+        trans = c.categorytranslation_set.filter(Q(language=language) | Q(language=english)).order_by('language')
+        print "len" + str(len(trans))
+        orig = trans[0]
+        if len(trans) == 1:
+            frm = TranslateCategoryForm()
+        else:
+            frm = TranslateCategoryForm(instance=trans[1])
+            
+        objs.append({"orig":orig,"form":frm})
+
+
+    print objs
+
+    return render_to_response('staff_categories_trans.html',{'objs':objs})
+
+
+
 

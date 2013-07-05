@@ -35,3 +35,8 @@ function DownloadPDF() {
 	else
 		alert('No questions selected!');
 }
+
+function updateCK(){
+    for(var instanceName in CKEDITOR.instances)
+        CKEDITOR.instances[instanceName].updateElement();
+}

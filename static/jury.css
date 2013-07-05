@@ -75,7 +75,8 @@ select {
 	vertical-align: middle;
 }
 
-input[type=button] {
+input[type=button],
+input[type=submit] {
 	background: #5b266f;
 	color: #fff;
 	font-size: 1.25em;
@@ -83,12 +84,14 @@ input[type=button] {
 	border: 3px outset #ccc;
 }
 
-input[type=button]:hover {
+input[type=button]:hover,
+input[type=submit]:hover {
 	background: #c086d6;
 	cursor: pointer;
 }
 
-input[type=button]:active {
+input[type=button]:active,
+input[type=submit]:active {
 	border: 3px inset #ccc;
 }
 

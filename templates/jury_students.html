@@ -1,0 +1,62 @@
+{% extends "ibo2013_base.html" %}
+{% block title %}IBO Translation Interface{% endblock %}>
+{% block lead %}Students{% endblock %}
+{% block menu %}
+<ul>
+	<li><a href="/jury/{{language.id}}/overview/" >Overview</a></li>
+	{% for e in exams %}
+	<li><a href="/jury/{{language.id}}/exam/{{e.id}}">{{e.name}}</a></li>
+	{% endfor %}
+	<li><a href="/jury/{{language.id}}/">Profile</a></li>
+	<li><a href="/jury/{{language.id}}/students/" class="select">Students</a></li>
+</ul>
+{% endblock %}
+
+{% block main %}
+
+<h1>Assign exam</h1>
+<p>Chose a default exam for each student</p>
+<table style="width: 600px">
+{# for s in students #}
+<tr>
+<td>{#{{s.name}}#}</td>
+<td>{{lang_picker.language}}</td>
+</tr>
+{# endfor #}
+</table>
+
+<p><input type="button" value="Save"></p>
+
+<br style="clear: both;">
+
+{% if 'admin' in perms %}
+<h1>Finalize exam</h1>
+<p>By clicking the button below, you confirm that the current version of the exam is the final version. The current version will be locked and presented to your students at the exam. This option is only available after the official IBO versions have been finalized. Every exam <strong>must</strong> be finalized, or it cannot be used. Only IBO-personnel can undo finalization.</p>
+<table style="width: 500px">
+{# make a list of exams where user has admin rights #}
+{# for blah in blah #}
+<tr>
+<td>Exam name (owned) 1</td>
+<td><input type="button" value="Finalize"></td>
+</tr>
+<tr>
+<td>Exam name (owned) 2</td>
+<td><input type="button" value="Finalize"></td>
+</tr>
+<tr>
+<td>Exam name (owned) 3</td>
+<td><strong style="color: #f00;">Finalized!</strong></td>
+</tr>
+{# endfor #}
+</table>
+<br style="clear: both;">
+{% endif %}
+
+<br><br>
+<h1>Exam preview</h1>
+
+<iframe src="." style="width: 1280px; height: 728px; border: 8px outset #ccc; overflow: hidden;">
+Here will be the preview of the exam...
+</iframe>
+
+{% endblock %}

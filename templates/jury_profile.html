@@ -15,7 +15,7 @@
 
 	<h1>Permissions</h1>
 	<p>Current translation: <strong>{{language.name}}</strong>.</p>
-	<p>You can <strong>{% for p in perms %}{{p}} {% endfor %} this translation.</p>
+	<p>You can <strong>{% for p in perms %}{{p}} {% endfor %}</strong> this translation.</p>
 
     {% if 'admin' in perms %}
     <h2>Edit access to {{language.name}}</h2>

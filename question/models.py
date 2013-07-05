@@ -87,16 +87,22 @@ class Exam(models.Model):
 
     #reassigns positions to exam questions such that each position is unique
     def order_questions(self):
-      qr = ExamQuestion.objects.filter(exam=self).order_by('category_id','position')
-      ccid = -1
-      pos = 0
-      for q in qr:
-        if q.category_id != ccid:
-            pos = 1
-            ccid = q.category_id
-        qr[i].position = pos
-        qr[i].save()
-        pos += 1
+        qr = ExamQuestion.objects.filter(exam=self).order_by('position')
+        for i in range(len(qr)):
+            qr[i].position = i+1
+            qr[i].save()
+
+
+      #qr = ExamQuestion.objects.filter(exam=self).order_by('category_id','position')
+      #ccid = -1
+      #pos = 0
+      #for q in qr:
+      #  if q.category_id != ccid:
+      #      pos = 1
+      #      ccid = q.category_id
+      #  qr[i].position = pos
+      #  qr[i].save()
+      #  pos += 1
 
 
     def check_permission(self,user,lang):

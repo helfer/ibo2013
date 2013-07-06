@@ -14,25 +14,23 @@
 
 {% block content %}
 <div class="overviewbox">
+{% for o in categories %}
+    <h2>{{o.cat.text}}</h2>
+    <p><a onclick="SelectAllToggle()">(De)select all questions</a> | <a onclick="DownloadPDF()">Download PDF of selected questions</a></p>
 
-<h2>Cell Biology</h2>
-<p><a onclick="SelectAllToggle()">(De)select all questions</a> | <a onclick="DownloadPDF()">Download PDF of selected questions</a></p>
-
-{% for q in questions %}
-<div class="questionbox">
-	<div>
-		<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate" class="{{q.status}}">{{q.target.position}}</a>
-		<a href="#"><img src="/static/icons/flagdark.png" title="Flag" alt="flag"></a>
-        <a href="#"><img src="/static/icons/unlocked.png" title="Unlocked" alt="unlocked"></a>
-        <input type="checkbox" name="pdfselect" value="{{q.target.position}}">
+    {% for q in o.questions %}
+    <div class="questionbox">
+        <div>
+            <a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate" class="{{q.status}}">{{q.target.position}}</a>
+            <a href="#"><img src="/static/icons/flagdark.png" title="Flag" alt="flag"></a>
+            <a href="#"><img src="/static/icons/unlocked.png" title="Unlocked" alt="unlocked"></a>
+            <input type="checkbox" name="pdfselect" value="{{q.target.position}}">
+        </div>
+        <a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate">{{q.target.text}}</a>
     </div>
-    <a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate">{{q.target.text}}</a>
-</div>
 
-{% endfor %}
-    
-<h2>Ecology</h2>
-<p><a onclick="SelectAllToggle()">(De)select all questions</a> | <a onclick="DownloadPDF()">Download PDF of selected questions</a></p>
+    {% endfor %}
+{% endfor %}    
 
 </div>
     

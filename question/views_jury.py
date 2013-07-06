@@ -25,7 +25,7 @@ def overview(request,lang_id=1,permissions=None):
     for e in exams:
         e.load_question_status(lang_id)
        
-    picker = PickLanguageForm(request.user,lang_id,request,initial={'language':request.path})
+    #picker = PickLanguageForm(request.user,lang_id,request,initial={'language':request.path})
 
     return render_with_context(request,'jury_overview.html',
         {'exams':exams,
@@ -112,15 +112,14 @@ def examview(request,exam_id=1,lang_id=1,permissions=None):
     else:
         exams = Exam.objects.filter(staff_only=False)
 
-    exam.load_question_status(lang_id)
-    questions = exam.question_status
+    categories = exam.get_categorized_status(lang_id)
 
     return render_with_context(request,'jury_examview.html',
         {'exam':exam,
         'exams':exams,
         'lang_id':lang_id,
         'perms':permissions,
-        'questions':questions
+        'categories':categories
         })
 
 @login_required
@@ -244,7 +243,7 @@ def students(request,lang_id=1,permissions=None):
     for e in exams:
         e.load_question_status(lang_id)
        
-    picker = PickLanguageForm(request.user,lang_id,request,initial={'language':request.path})
+    #picker = PickLanguageForm(request.user,lang_id,request,initial={'language':request.path})
 
     return render_with_context(request,'jury_students.html',
         {'exams':exams,

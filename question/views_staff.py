@@ -19,10 +19,11 @@ def view_exam(request,exam_id):
         exam = Exam.objects.get(id=exam_id)
     except:
         raise Http404()
-
+    
     if request.method == 'POST':
-        if "move" in request.POST:
-            qid = int(request.POST["move"])
+        print request.POST
+        if "up" in request.POST or "down" in request.POST or "delete" in request.POST:
+            qid = int(request.POST["qid"])
             q1 = ExamQuestion.objects.get(id=qid)
             if "up" in request.POST:
                 try:
@@ -36,16 +37,19 @@ def view_exam(request,exam_id):
                     q1.swap_position(q2)
                 except ExamQuestion.DoesNotExist:
                     pass
+            elif "delete" in request.POST:
+                q1.delete()
             else:
                 raise ValueError("move question must be either up or down")
         elif "update" in request.POST:
             try:
                 q = ExamQuestion.objects.get(id=long(request.POST["qid"]))
-                q.points = float(request.POST["points"])
-                q.save()
+                form = UpdateCategoryForm(request.POST,instance=q)
+                if form.is_valid():
+                    form.save()
             except:
                 raise ValueError("your points update does not compute")
-        else:
+        elif "addquestion" in request.POST:
     
             qf = AddQuestionForm(request.POST)
             if qf.is_valid():
@@ -53,7 +57,7 @@ def view_exam(request,exam_id):
                 q = qf.save(commit=False)
                 q.primary_language_id = 1 #English, hardcoded
                 q.save()
-                eq = ExamQuestion(exam_id=exam.id,question_id=q.id,position=qfcd["position"],points=qfcd["points"])
+                eq = ExamQuestion(exam_id=exam.id,question_id=q.id,position=qfcd["position"],points=qfcd["points"],category=qfcd['category'])
                 eq.save()
                 vtext = qml.QMLquestion.from_template(q.id).zackzack()
                 vn = VersionNode(question=q,language_id=q.primary_language_id,version=1,text=vtext,comment='auto generated stub')
@@ -63,16 +67,34 @@ def view_exam(request,exam_id):
             else:
                 raise ValueError("form is invalid")
     
+        elif "insertquestion" in request.POST:
+            form = AddExamquestionForm(request.POST)
+            if form.is_valid():
+                cd = form.cleaned_data
+                eq = ExamQuestion(exam=exam,question=cd['question'],position=cd['position'],points=1,category_id=1)
+                eq.save()
+                exam.order_questions()
+        else:
+            raise KeyError("unkown form submitted")
+
     questions = ExamQuestion.objects.filter(exam=exam).order_by('position')
     qids = [q.id for q in questions]
     #versionnodes = VersionNode.objects.filter(question__in=qids).values("language","question_id").annotate(max_version=Count('language'))
     form = AddQuestionForm()
+    insertform = AddExamquestionForm()#this adds existing examquestions
+    objs = []
+    for q in questions:
+       objs.append({
+        'form': UpdateCategoryForm(instance=q),
+        'q':q})
 
     return render_to_response('staff_examview.html',
         {'exam':exam,
-        'questions':questions,
+        'questions':objs,
+        #'catform':catform,
         #'versions':versionnodes,
-        'form':form
+        'form':form,
+        'insertform':insertform
         })
 
 @login_required

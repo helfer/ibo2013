@@ -3,6 +3,13 @@ from django.contrib.auth.models import User
 from ibo2013.question import simplediff
 
 
+
+def dictify(obj_list,key):
+    ret = {}
+    for obj in obj_list:
+        ret[getattr(obj,key)] = obj
+    return ret
+
 class Language(models.Model):
     name = models.CharField(max_length=100,unique=True)
     coordinators = models.ManyToManyField(User,related_name='coordinator_set')
@@ -34,6 +41,9 @@ class Question(models.Model):
 class QuestionCategory(models.Model):
     name = models.CharField(max_length=100)
     position = models.IntegerField() #position in exam
+
+    def __unicode__(self,empty_label=None):
+        return self.name
 
 class CategoryTranslation(models.Model):
     category = models.ForeignKey(QuestionCategory)
@@ -116,7 +126,28 @@ class Exam(models.Model):
         self.save()
 
 
-    #strictly speaking this should be in views.py
+    def get_categorized_status(self,lang_id):
+        if self.question_status is None:
+            self.load_question_status(lang_id)
+
+        current_cat = 0
+        categories = CategoryTranslation.objects.filter(language=1).order_by('category')
+        categories = dictify(categories,'category_id')
+        print categories
+
+        cid = -1
+        objs = []
+        for q in self.question_status:
+            if q['primary'].category_id != cid:
+                cid = q['primary'].category_id
+                print "cid " + str(cid)
+                objs.append({'cat':categories[cid],'questions':[]})
+
+            objs[-1]['questions'].append(q)
+
+        return objs
+
+    #strictly speaking this should be in views.py, but I find it more convenient to access here
     def load_question_status(self,lang_id):
         
         if self.question_status is not None:
@@ -137,7 +168,8 @@ class Exam(models.Model):
             WHERE eq.exam_id='%s'
             ORDER BY position, version DESC
             ) AS t1
-            GROUP BY position"""
+            GROUP BY position
+            ORDER BY category_id,position"""
         q1params = [1,self.id] #todo: english = 1 is hardcoded as primary language
 
         primary_versions = ExamQuestion.objects.raw(query,q1params)
@@ -155,7 +187,8 @@ class Exam(models.Model):
             ORDER BY position, version DESC
             )t1
             LEFT JOIN question_translation tr ON t1.vid = tr.target_id
-            GROUP BY position"""
+            GROUP BY position
+            ORDER BY category_id,position"""
         q2params = [lang_id,self.id]
 
         target_versions = ExamQuestion.objects.raw(query2,q2params)

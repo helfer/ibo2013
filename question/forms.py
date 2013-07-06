@@ -28,6 +28,7 @@ class ViewQuestionForm(EditQuestionForm):
 class AddQuestionForm(ModelForm):
     position = forms.CharField(initial=999,label="Position")
     points = forms.CharField(initial=1,label="Points")
+    category = forms.ModelChoiceField(queryset=QuestionCategory.objects.all(),empty_label=None)
 
     class Meta:
         model = Question
@@ -146,3 +147,12 @@ class QMLRowField(forms.MultiValueField):
             return ''
 
         return json.dumps(data_list)
+
+class AddExamquestionForm(forms.Form):
+    question = forms.ModelChoiceField(queryset=Question.objects.all(),empty_label=None)
+    position = forms.IntegerField()
+
+class UpdateCategoryForm(forms.ModelForm):
+    class Meta:
+        model = ExamQuestion
+        fields = ['points','category']

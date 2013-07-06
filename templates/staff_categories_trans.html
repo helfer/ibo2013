@@ -1,0 +1,19 @@
+{% extends "ibo2013_staff.html" %}
+
+{% block main %}
+
+<h1>Translate/change category labels</h1>
+
+<hr></hr>
+{{errors|safe}}
+{% for obj in objs %}
+    {{obj.orig.category.name}} : {{obj.orig.text}}
+    <form action="" method="POST">
+    {{obj.form.as_table}}
+    <input type="hidden" name="cat_id" value="{{obj.orig.category_id}}" />
+    <input type="submit" value="update" name="update" />
+    </form>
+{% endfor %}
+
+
+{% endblock %}

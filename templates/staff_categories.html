@@ -1,0 +1,25 @@
+{% extends "ibo2013_staff.html" %}
+
+{% block main %}
+
+<h1>Create or modify categories</h1>
+
+<form method="POST" action="">
+{{addform.errors}}
+{{addform.as_table}}
+<input type="submit" value="submit" name="submit" />
+</form>
+
+<hr></hr>
+{{errors|safe}}
+{% for c in categories %}
+    <form action="" method="POST">
+    {{c.form.errors}}
+    {{c.form.as_table}}
+    <input type="hidden" name="cat_id" value="{{c.cat.id}}" />
+    <input type="submit" value="update" name="update" />
+    </form>
+{% endfor %}
+
+
+{% endblock %}

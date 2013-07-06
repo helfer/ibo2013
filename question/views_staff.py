@@ -59,7 +59,9 @@ def view_exam(request,exam_id):
                 q.save()
                 eq = ExamQuestion(exam_id=exam.id,question_id=q.id,position=qfcd["position"],points=qfcd["points"],category=qfcd['category'])
                 eq.save()
-                vtext = qml.QMLquestion.from_template(q.id).zackzack()
+                xmlq = qml.QMLquestion.from_template(q.id)
+                xmlq.assign_initial_id(q.id)
+                vtext = xmlq.zackzack() 
                 vn = VersionNode(question=q,language_id=q.primary_language_id,version=1,text=vtext,comment='auto generated stub')
                 vn.save()
                 exam.order_questions()
@@ -127,53 +129,65 @@ def view_question(request,qid=None,mode="normal"):
 
     if request.method == 'POST':
         print request.POST
-        if mode == "normal":
+        if len(versions) == 0:
+            vnum = 1
+            lang_id = question.primary_language_id
+        else:
+            vnum = versions[0].version + 1
+            lang_id = versions[0].language_id            
+            
+        if "reident" in request.POST:
             print "newform"
             xmlq = qml.QMLquestion(versions[0].text)
-            form = QMLform(request.POST,qml=xmlq)
-            if form.is_valid():
-                print "isvalid"
-                print form.cleaned_data
-                xmlq.update(form.cleaned_data)
-                if len(versions) == 0:
-                    vnum = 1
-                    lang_id = question.primary_language_id
-                else:
-                    vnum = versions[0].version + 1
-                    lang_id = versions[0].language_id            
-                
-                v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=xmlq.zackzack())
-                v.save()
-                versions = list(versions)
-                versions.append(v)   
-                
-                return redirect(request.path) #POST,GET redirect for instant reload   
-            else:
-                print "haserrors"
-                print form.errors
+            xmlq.reassign_identifiers(question.id) 
+            v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=xmlq.zackzack())
+            v.save()
+            return redirect(request.path) #POST,GET redirect for instant reload   
 
-        elif mode == "xml": #XXX: legacy compatibility, to be removed
-            print "legacy"
-            form = EditQuestionForm(request.POST)
-            if form.is_valid():
-                cd = form.cleaned_data
-                if len(versions) == 0:
-                    vnum = 1
-                    lang_id = question.primary_language_id
-                else:
-                    vnum = versions[0].version + 1
-                    lang_id = versions[0].language_id            
-
-                v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=cd['text'])
-                v.save()
-                versions = list(versions)
-                versions.append(v)   
-                
-                return redirect(request.path) #POST,GET redirect for instant reload   
         else:
-            raise ValueError("no such view mode: >" + str(mode)+"<")
-    #print versions[0].text   
-    
+            if mode == "normal":
+                print "newform"
+                xmlq = qml.QMLquestion(versions[0].text)
+                form = QMLform(request.POST,qml=xmlq)
+                if form.is_valid():
+                    print "isvalid"
+                    print form.cleaned_data
+                    xmlq.update(form.cleaned_data)
+                   
+                    v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=xmlq.zackzack())
+                    v.save()
+                    versions = list(versions)
+                    versions.append(v)   
+                    
+                    return redirect(request.path) #POST,GET redirect for instant reload   
+                else:
+                    print "haserrors"
+                    print form.errors
+
+            elif mode == "xml": #XXX: legacy compatibility, to be removed
+                print "legacy"
+                form = EditQuestionForm(request.POST)
+                if form.is_valid():
+                    cd = form.cleaned_data
+                    if len(versions) == 0:
+                        vnum = 1
+                        lang_id = question.primary_language_id
+                    else:
+                        vnum = versions[0].version + 1
+                        lang_id = versions[0].language_id            
+
+                    xmlq = qml.QMLquestion(cd['text'])
+                    xmlq.assign_initial_id(question.id)
+                    v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=xmlq.zackzack())
+                    v.save()
+                    versions = list(versions)
+                    versions.append(v)   
+                    
+                    return redirect(request.path) #POST,GET redirect for instant reload   
+            else:
+                raise ValueError("no such view mode: >" + str(mode)+"<")
+        #print versions[0].text   
+        
     #request method is not POST, no form was submitted
     else:
         if len(versions) > 0 and mode == "normal":

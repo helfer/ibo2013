@@ -16,8 +16,10 @@ class QMLobject():
         self.xml = root
 
         try:
-            self.identifier = root.attrib['id']
+            self.identifier = self.xml.attrib['id']
         except KeyError:
+            if not self.__class__.__name__ in ["QMLanswerlist"]:
+                raise KeyError("id missing from QML element "+ self.xml.tag)
             self.identifier = "element has no identifier"
             print "no ident: ",root.tag
         self.children = []
@@ -25,6 +27,42 @@ class QMLobject():
 
     def addChild(self,child):
         self.children.append(child)
+
+    #assign initial xml id attribute where it is empty
+    def assign_initial_id(self,question_id,blacklist=None):
+        if blacklist is None:
+            blacklist = self.list_id()
+
+        print blacklist
+        if "id" in self.xml.attrib:
+            if self.xml.attrib["id"] == "":
+                i = 0
+                ident = False
+                while (not ident) or (ident in blacklist):
+                    i += 1
+                    ident = self.make_ident(question_id,i)
+
+                self.xml.attrib["id"] = ident
+                print "assigned initial id " + ident
+                blacklist.append(ident)
+
+        for c in self.children:
+            c.assign_initial_id(question_id,blacklist)
+                
+
+    #list xml attribute id for self and all sub-elements
+    def list_id(self):
+        lst = []
+        if "id" in self.xml.attrib:
+            lst.append(self.xml.attrib["id"])
+        for c in self.children:
+            lst.extend(c.list_id())
+        
+        return lst
+
+    def make_ident(self,question_id,i):
+        return str(question_id) + "_" + self.__class__.abbr + str(i)
+
 
     #outputs a django form consisting of all elements
     def formalize(self):
@@ -42,6 +80,26 @@ class QMLobject():
         for c in self.children:
             c.update(cd)
 
+
+    def reassign_identifiers(self,question_id,blacklist=None):
+        if blacklist is None:
+            blacklist = []
+       
+        print "reassign" 
+        
+        if "id" in self.xml.attrib:
+            i = 0
+            ident = False
+            while (not ident) or (ident in blacklist):
+                i += 1
+                ident = self.make_ident(question_id,i)
+
+            print "update id to " + ident
+            self.xml.attrib['id'] = ident
+            blacklist.append(self.xml.attrib['id'])
+
+        for c in self.children:
+            c.reassign_identifiers(question_id,blacklist)
 
     def apply_update(self):
         self.xml.text = self.data
@@ -68,7 +126,7 @@ class QMLobject():
         return prefix + str(self.__class__.__name__) + "\n" + "".join([c.summary(prefix+">") for c in self.children])
 
 class QMLquestion(QMLobject):
-
+    abbr = "q"
     #takes element tree as input and parses it
     def parse(self,root):
         for child in root:
@@ -90,16 +148,16 @@ class QMLquestion(QMLobject):
     @staticmethod
     def from_template(qid):
         t = """<question id="{{qid}}">
-<text id="{{qid}}_st_1">text</text>       
-<task id="{{qid}}_tsk_1">task</task>    
+<text id="">text</text>       
+<task id="">task</task>    
 
 <answerlist randomize="false">
-    <answersplit id="{{qid}}_s_1">True</answersplit>
-    <answersplit id="{{qid}}_s_2">False</answersplit>
-    <choice id="{{qid}}_c_1">answer option 1</choice>
-    <choice id="{{qid}}_c_2">answer option 2</choice>
-    <choice id="{{qid}}_c_3">answer option 3</choice>
-    <choice id="{{qid}}_c_4">answer option 4</choice>
+    <answersplit id="">True</answersplit>
+    <answersplit id="">False</answersplit>
+    <choice id="">answer option 1</choice>
+    <choice id="">answer option 2</choice>
+    <choice id="">answer option 3</choice>
+    <choice id="">answer option 4</choice>
 </answerlist>   
 </question>"""
 
@@ -110,14 +168,17 @@ class QMLquestion(QMLobject):
 
 
 class QMLtext(QMLobject):
+    abbr = "tx"
     def parse(self,elem):
        self.form_element = forms.CharField(label="text",initial = elem.text,widget = forms.Textarea)
 
 
 class QMLtask(QMLtext):
+    abbr = "ta"
     pass
 
 class QMLanswerlist(QMLobject):
+    abbr = "ans"
     def parse(self,elem):
         self.choices = []
         self.answersplit = []
@@ -132,6 +193,7 @@ class QMLanswerlist(QMLobject):
 
 
 class QMLfigure(QMLobject):
+    abbr = "fi"
     def get_filename(self,elem):
         self.filename = self.xml.attrib["imagefile"]
 
@@ -142,6 +204,7 @@ class QMLfigure(QMLobject):
         self.form_element = forms.CharField(label="figure", initial = elem.attrib["imagefile"])
 
 class QMLtable(QMLobject):
+    abbr = "tb"
     def parse(self,elem):
         rowz = []
         for child in elem:
@@ -149,7 +212,7 @@ class QMLtable(QMLobject):
                 ro = []
                 for sub in child:
                     ro.append(sub.text)
-                
+                    self.addChild(QMLtableCol(sub))
                 rowz.append(ro)
             else:
                 raise QMLException("unknown QML tag: "+child.tag)
@@ -180,7 +243,12 @@ class QMLtable(QMLobject):
             else:
                 raise QMLException("unknown QML tag: "+child.tag)
 
+class QMLtableCol(QMLobject):
+    abbr = "cl"
+
+
 class QMLanswersplit(QMLobject):
+    abbr = "sp"
     def parse(self,elem):
         self.form_element = forms.CharField(label="answersplit",initial = elem.text)
 
@@ -189,10 +257,12 @@ class QMLanswersplit(QMLobject):
         
 
 class QMLchoice(QMLobject):
+    abbr = "ch"
     def parse(self,elem):
         self.form_element = forms.CharField(label="choice",initial = elem.text,widget=forms.Textarea)
 
 class QMLlist(QMLobject):
+    abbr = "ls"
     def parse(self,elem):
         for child in elem:
             if child.tag == "item":
@@ -202,6 +272,7 @@ class QMLlist(QMLobject):
 
 
 class QMLlistitem(QMLobject):
+    abbr = "li"
     def parse(self,elem):
         self.form_element = forms.CharField(label="item"+elem.attrib["id"],initial = elem.text)
 

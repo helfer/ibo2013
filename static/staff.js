@@ -3,10 +3,10 @@ function make_table(nrows,ncols) {
     var textarea = document.getElementById("area51");
     var qid = document.getElementById("question_id").value;
 
-    var xml = '<table id="'+qid+'_table">';
+    var xml = '<table id="">';
     var header = '\n<header>';
     for(var h=0;h<ncols;h++){
-        header += '\n\t<col id="table_h_c'+h+'">header '+h+'</col>';
+        header += '\n\t<col id="">header '+h+'</col>';
     }  
     header +=  '\n</header>';
 
@@ -14,7 +14,7 @@ function make_table(nrows,ncols) {
     for(var i = 0;i<nrows;i++){
         var row = '\n<row id="'+qid+'_r'+i+'">';
         for(var j = 0;j<ncols;j++){
-            row += '\n\t<col id="'+qid+'_r'+i+'_c'+j+'">col '+j+'</col>';
+            row += '\n\t<col id="">col '+j+'</col>';
         }
         row += '\n</row>';
         rows += row
@@ -34,18 +34,18 @@ function add_table(){
 
 function add_figure(){
     var qid = document.getElementById("question_id").value;
-    var image = '<figure id="'+qid+'_fig" imagefile="filename.svg" />';
+    var image = '<figure id="" imagefile="filename.svg" />';
     insertAtCaret("area51",image);
     return false;
 }
  
 function add_list(){
     var qid = document.getElementById("question_id").value;
-    var list = '<list id="'+qid+'_list">\n';
-    var items = ['\t<item id="'+qid+'_listitem_1"></item>',
-                '\t<item id="'+qid+'_listitem_2"></item>',
-                '\t<item id="'+qid+'_listitem_3"></item>',
-                '\t<item id="'+qid+'_listitem_4"></item>'].join("\n");
+    var list = '<list id="">\n';
+    var items = ['\t<item id=""></item>',
+                '\t<item id=""></item>',
+                '\t<item id=""></item>',
+                '\t<item id=""></item>'].join("\n");
     list += items;
     list += '\n</list>\n';
     

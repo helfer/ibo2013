@@ -16,6 +16,9 @@
 
 {% if viewmode == "xml" %}
     <a href="..">Back to normal view</a>
+    <form action="" method="post">
+        <input type="submit" name="reident" value="renumber fields" />
+    </form>
 {% else %}
     <a href="./xml/">View raw xml</a>
 {% endif %}

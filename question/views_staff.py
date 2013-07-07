@@ -10,6 +10,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from ibo2013.question import qml
 from django.db.models import Q
+from xml.etree import ElementTree as et
 
 @login_required
 @staff_member_required
@@ -309,5 +310,67 @@ def translate_categories(request,lang_id):
     return render_to_response('staff_categories_trans.html',{'objs':objs})
 
 
+@staff_member_required
+def upload_figure(request):
+    if request.method == 'POST':
+        form = UploadFigureForm(request.POST, request.FILES)
+        if form.is_valid():
+            cd = form.cleaned_data
+            process_uploaded_figure(request.FILES['imgfile'],cd['name'],cd['description'])
+            return HttpResponseRedirect(request.path + "?success")
+    else:
+        form = UploadFigureForm()
+
+    images = Figure.objects.all()
+    return render_to_response('staff_uploadfigure.html',{'form':form,'images':images})
+
+def process_uploaded_figure(f,fname,descr):
+    #on success, insert picture in database
+    xml = f.read()
+    et.register_namespace("","http://www.w3.org/2000/svg")
+    fsvg = et.fromstring(xml)
+    tags = find_figure_tags(fsvg)
+    var = '<replace>'
+    for (el_id,txt) in tags:
+        var += '<textarea id="{0}">{1}</textarea>\n'.format(el_id,txt)
+    var += '</replace>'
+    fig = Figure(name=fname,description=descr,svg=et.tostring(fsvg),var=var)
+    fig.save()
+
+
+def find_figure_tags(svg_el):
+    rt = []
+    if "id" in svg_el.attrib:
+        sid = svg_el.attrib["id"]
+        if sid.startswith("IBOtranslation"):
+            if len(svg_el):
+                raise QMLParseError("IBOtranslation tagged element must not have subelements "+ svg_el.text)
+            print "tag found " + sid
+            rt.append((sid,svg_el.text))
+            svg_el.text = hex(hash(sid))
+
+    for child in svg_el:
+        rt.extend(find_figure_tags(child))
+
+
+    return rt
+
+def QMLParseError(Exception):
+    pass
+
+@staff_member_required
+def view_image(request,fname):
+    try:
+        img = Figure.objects.get(name=fname)
+    except:
+        raise Http404()
+
+    svg = img.svg
+
+    replace = et.fromstring(img.var)
+    for r in replace:
+        svg = svg.replace(hex(hash(r.attrib['id'])),r.text)
+
+    return HttpResponse(svg,mimetype="image/svg+xml")
 
 

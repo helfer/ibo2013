@@ -33,7 +33,7 @@ class QMLobject():
         if blacklist is None:
             blacklist = self.list_id()
 
-        print blacklist
+        #print blacklist
         if "id" in self.xml.attrib:
             if self.xml.attrib["id"] == "":
                 i = 0
@@ -43,7 +43,7 @@ class QMLobject():
                     ident = self.make_ident(question_id,i)
 
                 self.xml.attrib["id"] = ident
-                print "assigned initial id " + ident
+                #print "assigned initial id " + ident
                 blacklist.append(ident)
 
         for c in self.children:
@@ -72,10 +72,11 @@ class QMLobject():
     def update(self,cd):
         if self.identifier in cd:
             self.data = cd[self.identifier]
-            print self.__class__.__name__,"has data",self.data
+            ##print self.__class__.__name__,"has data",self.data
             self.apply_update()
         else:
-            print "no data",self.__class__.__name__
+            pass
+            #print "no data",self.__class__.__name__
 
         for c in self.children:
             c.update(cd)
@@ -85,7 +86,7 @@ class QMLobject():
         if blacklist is None:
             blacklist = []
        
-        print "reassign" 
+        #print "reassign" 
         
         if "id" in self.xml.attrib:
             i = 0
@@ -94,7 +95,7 @@ class QMLobject():
                 i += 1
                 ident = self.make_ident(question_id,i)
 
-            print "update id to " + ident
+            #print "update id to " + ident
             self.xml.attrib['id'] = ident
             blacklist.append(self.xml.attrib['id'])
 
@@ -224,21 +225,21 @@ class QMLtable(QMLobject):
 
         tabledata = []
         rows = json.loads(self.data)
-        print "rows",rows
+        #print "rows",rows
         for row in rows:
-            print "row",row
+            #print "row",row
             row = json.loads(row)
             for col in row:
-                print "col",col
+                #print "col",col
                 tabledata.append(col)
 
-        print "tabledata",tabledata
+        #print "tabledata",tabledata
 
         for child in self.xml:
             if child.tag == "header" or child.tag == "row":
                 for sub in child:
                     newval = tabledata.pop(0)
-                    print "updating child",sub.attrib["id"],"from",sub.text,"to",newval
+                    #print "updating child",sub.attrib["id"],"from",sub.text,"to",newval
                     sub.text = newval
             else:
                 raise QMLException("unknown QML tag: "+child.tag)

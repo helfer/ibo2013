@@ -156,3 +156,9 @@ class UpdateCategoryForm(forms.ModelForm):
     class Meta:
         model = ExamQuestion
         fields = ['points','category']
+
+class UploadFigureForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    description = forms.CharField(max_length=100)
+    imgfile = forms.FileField()
+

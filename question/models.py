@@ -240,7 +240,10 @@ class ExamQuestion(models.Model):
       self.save()
       q2.save()
 
-   
- 
+class Figure(models.Model):
+    name = models.CharField(unique=True,max_length=100)   
+    description = models.TextField()
+    svg = models.TextField() 
+    var = models.TextField()
 
 

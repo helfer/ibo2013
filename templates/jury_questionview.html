@@ -25,7 +25,8 @@
 	</fieldset>
 	Too hard
 	<div style="width: 125px; display: inline-block"></div>
-	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position-1}}/translate/"><img src="/static/icons/prev.png" title="Goto previous" alt="previous"></a>
+	{# TODO: make link to previous and next questions #}
+	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate/"><img src="/static/icons/prev.png" title="Goto previous" alt="previous"></a>
     {{form.flag.errors}}
 	{{form.flag}}<label for="id_flag" title="Flag for attention"></label>
     {{form.checkout.errors}}
@@ -34,7 +35,7 @@
 	<a href="#"><img src="/static/icons/save_old.png" title="Save" alt="save" onclick="document.getElementById('submitter').click();"></a>
 	<a href="#"><img src="/static/icons/savenext_old.png" title="Save and next" alt="savenext"></a>
 	{% endif %}
-	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position+1}}/translate/"><img src="/static/icons/next.png" title="Goto next" alt="next"></a>
+	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate/"><img src="/static/icons/next.png" title="Goto next" alt="next"></a>
 </div>
 
 <h1>Question {{pos}} : {{question.name}}</h1>

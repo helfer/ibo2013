@@ -1,56 +1,54 @@
-
-/* LAYOUT ===================================================== */
+/* LAYOUT & COMMON MARKUP ===================================== */
 body {
 	width: 90%;
-	min-width: 878px;
-	margin: 2em auto;
+	min-width: 1184px;
+	margin: 20px auto;
+	font: 62.5%/1.0 Helvetica, Arial, Verdana, sans-serif;
+	background: #eee8f0 url(bg.png) fixed no-repeat;
 }
 
-#header {
-	height: 100%;
+#header,
+#menu,
+#main {
 	margin-bottom: 10px;
 	overflow: hidden;
-}
-
-#menu {
-	height: 2.4em;
-	margin-bottom: 10px;
-}
-
-#main {
-	margin-bottom: 15px;
+	clear: both;
+	background: rgba(255,255,255,0.7);
+	background: white\9; /* IE8 hack */
+	box-shadow: rgba(0,0,0,0.4) 0.15em 0.15em 0.15em 0.10em;
+	border: 1px solid #aaa;
 }
 
 
-/* MARKUP ===================================================== */
-/* general elements*/
-body {
-	font: 62.5%/1.0 Helvetica, Arial, Verdana, sans-serif;
-	background: url(bg.png) fixed no-repeat #eee8f0;
-}
-
+/* MARKUP GENERAL ELEMENTS ==================================== */
 em { font-style: italic; }
-
 strong { font-weight: bold; }
-
 sup { font-size: 75%; vertical-align: super; }
 sub { font-size: 75%; vertical-align: sub; }
 
-h1 { font-size: 2.5em;
-	 font-weight: bold;
-	 margin: 0 0 0.5em 0;
-	 padding: 0.5em;
-	 border-bottom: 1px solid #333; }
+h1 {
+	font-size: 2.5em;
+	font-weight: bold;
+	margin-bottom: 0.5em;
+	padding: 0.5em;
+	border-bottom: 1px solid #333; }
 
-h2 { font-size: 1.8em; 
-	 font-style: italic;
-	 margin: 1.2em 0 0.5em 0; }
-	 
-h3 { font-size: 1.3em;
-	 font-weight: bold; 
-	 margin: 0.3em 0; }
+h2 {
+	font-size: 1.8em;
+	font-style: italic;
+	margin: 1.2em 0 0.5em 0;
+}
 
-hr { margin: 1.5em 0; clear: both; }
+h3 {
+	font-size: 1.3em;
+	font-weight: bold;
+	margin: 0.3em 0;
+}
+
+hr {
+	margin: 1.5em 0;
+	clear: both;
+}
 
 a {
 	color: #009ebd;
@@ -79,7 +77,7 @@ input[type=button],
 input[type=submit] {
 	background: #5b266f;
 	color: #fff;
-	font-size: 1.25em;
+	font-size: 1em;
 	padding: 5px 20px;
 	border: 3px outset #ccc;
 }
@@ -95,95 +93,118 @@ input[type=submit]:active {
 	border: 3px inset #ccc;
 }
 
-
-/* Color definitions */
-.empt { color: #333; background: #e0e0e0; } /* unvisited */
-.done { color: #eee; background: #7fbe20; } /* translation done */
-.need { color: #eee; background: #03a0e1; } /* translation in progress (not finalized) */
-.updt { color: #eee; background: #d61d24; } /* new server version: translation must be updated */
-.unav { color: #bbb; background: none; } /* question unavailable - currently in edit */
-/*.flag { color: #eee; background: #eabf03; }*/ /* flagged question - OLD definition */
-.flag { background-image: url('icons/flag.png'); background-position: bottom right; background-repeat: no-repeat; background-size: 27px; }
-.unav.flag { background-image: url('icons/flaggray.png'); background-position: bottom right; background-repeat: no-repeat; background-size: 27px; }
-
-/* Header */
-#header {
-	background: rgba(255,255,255,0.7);
-	background: white\9; /* IE8 hack, probably not really needed :P */
-	box-shadow: rgba(0,0,0,0.4) 0.15em 0.15em 0.15em 0.10em;
-	border: 1px solid #aaa;
+table {
+	width: 100%;
+	font-size: 1.6em;
+	line-height: 1.25em;
+	margin: 0;
 }
 
-#header .title {
-	float: left;
-	padding: 1.5em;
-}
-#header .infobox {
-	float: right;
-	font-size: 140%;
-	line-height: 1.2em;
-	padding: 2em 2em 1.9em 0;
-}
-
-#header .infobox img {
-	height: 0.85em;
-	padding: 0;
-}
-#header .title img {
-	vertical-align: middle;
-	margin-right: 2em;
-}
-
-#header .title select {
-	font-size: 250%;
+table select {
+	font-size: 100%;
 	font-weight: bold;
 }
 
-/* Menu */
+table th {
+	text-align: left;
+	padding: 0.5em 0;
+	vertical-align: middle;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+table td {
+	border-top: 1px solid #999;
+	padding: 20px 5px;
+	vertical-align: top;
+}
+
+table tr td:first-child { font-weight: bold; }
+
+table tr td:last-child { width: 47.4%; }
+
+table tr:last-child td { border-bottom: 1px solid #999; }
+
+
+
+/* COLOR DEFINITIONS ========================================== */
+.empt { color: #333; background-color: #e0e0e0; border: #e0e0e0 solid 2px; } /* unsaved */
+.done { color: #eee; background-color: #7fbe20; border: #7fbe20 solid 2px; } /* finalized */
+.need { color: #eee; background-color: #03a0e1; border: #03a0e1 solid 2px; } /* in progress */
+.updt { color: #eee; background-color: #d61d24; border: #d61d24 solid 2px; } /* server update */
+
+/* STATUS DEFINIONS =========================================== */
+.flag { background-image: url('icons/flag.png'); background-position: bottom right; background-repeat: no-repeat; background-size: 27px; }
+.lock { border: #000 solid 2px; }
+
+/* HEADER ===================================================== */
+#header {
+	font-size: 240%;
+	font-weight: bold;
+	padding: 0.6em;
+}
+
+#header img {
+	vertical-align: middle;
+	margin-right: 0.5em;
+}
+
+#header select {
+	font-size: 100%;
+}
+
+#header .infobox {
+	float: right;
+	font-size: 60%;
+	font-weight: normal;
+	line-height: 1.5em;
+	padding: 0.5em 0.5em 0.5em 1.5em;
+}
+
+#header .infobox img {
+	height: 0.9em;
+	vertical-align: baseline;
+}
+
+/* MENU BAR =================================================== */
 #menu {
+	overflow: visible;
 	background: #333;
-	box-shadow: rgba(0,0,0,0.4) 0.15em 0.15em 0.15em 0.10em;
-	border: 1px solid #aaa;
-	font-size: 1.8em;
+	font-size: 180%;
 	text-align: center;
 }
 
 #menu li {
 	display: inline-block;
-	margin: 0 10px;
-	background: url(style/bg.png) fixed no-repeat #eee8f0;
+	margin: 0 10px -12px 0;
+	background: url(bg.png) fixed no-repeat #eee8f0;
 }
 
 #menu a {
 	display: block;
-	padding: 13px 30px 12px 30px;
+	padding: 12px 30px;
 	background: #333;
 	color: #fff;
 }
 
+#menu a.select {
+	background: rgba(255,255,255,0.7);
+	background: white\9; /* IE8 hack */
+	color: #000;
+	border-bottom: 12px solid #333;
+}
+
 #menu a:hover {
 	background: rgba(255,255,255,0.7);
-	background: white\9; /* IE8 hack, probably not really needed :P */
+	background: white\9; /* IE8 hack */
 	color: #000;
 	border-bottom: 12px solid #b9a4c2;
 	text-decoration: none;
 }
 
-#menu a.select {
-	background: rgba(255,255,255,0.7);
-	background: white\9; /* IE8 hack, probably not really needed :P */
-	color: #000;
-	border-bottom: 12px solid #333;
-}
-
-/* Main */
+/* MAIN ELEMENTS ============================================== */
 #main {
-	background: rgba(255,255,255,0.7);
-	background: white\9; /* IE8 hack, probably not really needed :P */
-	box-shadow: rgba(0,0,0,0.4) 0.15em 0.15em 0.15em 0.10em;
-	border: 1px solid #aaa;
-	padding: 1.5em 1.5em 4em 1.5em;
-	position: relative;
+	padding: 1.5em 1.5em 5em 1.5em;
 }
 
 /* Exam legend */
@@ -202,17 +223,13 @@ input[type=submit]:active {
 	padding-right: 0;
 }
 
-/* Exam overview page */
-.exambox {
-	max-width: 980px;
-}
-
+/* 'Exam overview' */
 .exambox a {
 	float: left;
 	display: block;
-	width: 2em;
-	padding: 6px 17px 29px 5px;
-	margin: 0 0.5em 0.5em 0;
+	width: 2.25em;
+	padding: 6px 16px 32px 6px;
+	margin: 0 0.7em 0.7em 0;
 	font-size: 1.3em;
 	text-decoration: none;
 }
@@ -221,6 +238,7 @@ input[type=submit]:active {
 	color: #eee;
 	background: #777;
 	text-decoration: none;
+	border: 2px solid #777;
 }
 
 .examinfo {
@@ -229,32 +247,29 @@ input[type=submit]:active {
 	line-height: 1.4em;
 }
 
-/* Exam detail page */
+/* 'Exam detail' */
 .overviewbox {
-	max-width: 1247px;
+	max-width: 1393px;
 }
 
 .questionbox {
 	display: inline-block;
 	vertical-align: top;
 	position: relative;
-	border: 1px solid #999;
-	width: 225px;
-	padding: 5px 5px 43px 5px;
-	margin: 0 10px 15px 0;
 	background: rgba(255,255,255,0.7);
+	border: 1px solid #999;
+	width: 256px;
+	padding: 0 0 38px 0;
+	margin: 0 15px 20px 0;
 }
 
-.questionbox > a {
+.questionbox > a { /* excerpt */
 	color: #000;
 	display: block;
-	float: none;
 	line-height: 1.2em;
 	font-size: 150%;
-	margin: 0.5em 0;
-	padding: 0;
-	width: 100%;
-	min-height: 75px;
+	padding: 0.75em 0.5em;
+	min-height: 95px;
 }
 
 .questionbox > a:hover {
@@ -264,7 +279,7 @@ input[type=submit]:active {
 	text-decoration: none;
 }
 
-.questionbox div {
+.questionbox div { /* button row */
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -283,13 +298,21 @@ input[type=submit]:active {
 } */
 
 .questionbox div a:first-child {
-	font-size: 2em;
+	font-size: 1.75em;
 	width: 2em;
-	height: 25px;
+	height: 22px;
 	display: inline-block;
 	text-align: center;
 	padding: 9px 3px 3px 0;
-	margin: 0 56px 0 0;
+	margin: 0 115px 0 0;
+}
+
+.questionbox div a:hover {
+	background: #999;
+	color: #000;
+	cursor: pointer;
+	text-decoration: none;
+	border: 2px solid #999;
 }
 
 .questionbox div img {
@@ -298,35 +321,27 @@ input[type=submit]:active {
 	margin: -6px 6px 3px 6px;
 }
 
-.questionbox div a:hover {
-	background: #999;
-	color: #000;
-	cursor: pointer;
-	text-decoration: none;
-}
-
 .questionbox div input {
 	margin: 12px 15px 11px 15px;
 	padding: 0;
 }
 
+/* 'Question page' */
 
-/* Question navigation */
-#questionnavlist {
+/* Navigation bar */
+.questionnavlist {
 	margin: -1.5em -1.5em 0 -1.5em;
-	background: #333;
 }
 
-#questionnavlist .inner {
+.questionnavlist .inner {
 	padding: 0.3em;
 	overflow-x: scroll;
 	overflow-y: hidden;
-	white-space: nowrap
+	white-space: nowrap;
 }
 
-#questionnavlist a {
+.questionnavlist a {
 	display: inline-block;
-	color: #fff;
 	width: 2em;
 	padding: 6px 17px 29px 5px;
 	margin: 0.25em;
@@ -334,121 +349,78 @@ input[type=submit]:active {
 	text-decoration: none;
 }
 
-#questionnavlist a.flag {
-	background-image: url('icons/flag.png');
-	background-position: bottom right;
-	background-repeat: no-repeat;
-}
-
-#questionnavlist a.lock {
-	background-image: url('icons/locked.png');
-	background-position: bottom right;
-	background-repeat: no-repeat;
-	background-size: 30px;
-}
-
-#questionnavlist a:hover {
+.questionnavlist a:hover {
 	color: #eee;
 	background: #777;
 	text-decoration: none;
+	border: 2px solid #777;
 }
 
-#questionnavlist a.sel {
-	background: #fff;
-	color: #333;
+.questionnavlist a.sel {
 	font-weight: bold;
+	background: #fff;
+	border: 2px solid #ccc;
+	color: #000;
 }
 
 /* Translation boxes */
-table
-{
-	width: 100%;
-	font-size: 155%;
-	line-height: 1.25em;
-}
+.translationtable th { height: 50px; }
 
-table select {
-	font-size: 1.2em;
-	font-weight: bold;
-}
-
-table th {
-	text-align: left;
-	padding-top: 0.5em;
-}
-
-table td
-{
-	border-top: 1px solid #999;
-	padding: 20px 5px;
-	height: 100%;
-	vertical-align: top;
-}
-
-table tr td:first-child
-{
-	font-weight: bold;
-}
-
-table tr td:last-child
-{
-	width: 50%;
-}
-
-table tr:last-child td
-{
-	border-bottom: 1px solid #999;
-}
-
-table td div[contenteditable=true]
-{
-	width: 97%;
+.translationtable td div[contenteditable=true] {
 	background: #fff;
 	border: 1px solid #999;
 	min-height: 3.5em;
 	padding: 0 10px;
-	margin: -10px 0;
-	font-size: 75%; /* why? but needed... */
+	margin: -9px 0;
+	font-size: 65%;
+	line-height: 1.95em;
 }
 
-table img {
-	padding: 0.5em 0;
+.translationtable img {
+	padding: 0;
 	width: 25%;
 	transition: all 200ms ease;
 }
 
-table img.large {
+.translationtable img.large {
 	width: 100%;
 	transition: all 200ms ease;
 }
 
-table img:hover {
+.translationtable img:hover {
 	cursor: pointer;
 }
 
-table #tq img {
+.translationtable td div img {
 	width: 100%;
 }
+.translationtable td div img:hover {
+	cursor: default;
+}
+
 
 /* Info/buttons bar for translation screen */
 .infobarbig {
+	position: fixed;
+	width: 90%;
+	min-width: 1184px;
+	bottom: 0;
+	z-index: 9999;
 	text-align: center;
-	margin: 15px -1.0em;
-	clear: both;
+	margin: 0 -1.0em;
 	font-size: 1.5em;
-	line-height: 5em;
 	background: #333;
 	box-shadow: rgba(0,0,0,0.4) 0.15em 0.15em 0.15em 0.10em;
 	border: 1px solid #aaa;
 	color: #fff;
-	padding: 5px;
 }
 
 .infobarbig a {
 	color: #fff;
 	display: inline-block;
-	width: 6em;
-	padding: 0 5px;
+	width: 60px;
+	margin: 0 10px;
+	padding: 5px;
 }
 
 .infobarbig a:hover {
@@ -468,14 +440,14 @@ table #tq img {
 .infobarbig label {
 	display: inline-block;
 	cursor: pointer;
-	height: 75px;
-	width: 6em;
-	vertical-align: middle;
+	height: 60px;
+	width: 60px;
 	padding: 0 5px;
-	margin-top: -3px;
+	vertical-align: middle;
+	margin: 0 10px;
 }
 .infobarbig #id_flag + label {
-	background: url('icons/flagbigwhite.png') no-repeat center;	
+	background: url('icons/flag.png') no-repeat center;	
 }
 .infobarbig #id_checkout + label {
 	background: url('icons/unlocked.png') no-repeat center;
@@ -485,7 +457,7 @@ table #tq img {
 	background-color: #ccc;
 }
 .infobarbig #id_flag:checked + label {
-	background: #eabf03 url('icons/flagbigwhite.png') no-repeat center;
+	background: #eabf03 url('icons/flag.png') no-repeat center;
 }
 .infobarbig #id_checkout:checked + label {
 	background: #7fbe20 url('icons/locked.png') no-repeat center;
@@ -525,9 +497,10 @@ table #tq img {
 }
 
 /* Settings page */
+/* NO LONGER USED
 .permissionslist table td { padding: 5px; font-size: 130%; }
 .permissionslist label { padding: 10px; }
 .permissionslist img {
 	height: 15px;
 	margin-right: 10px;
-}
+} */

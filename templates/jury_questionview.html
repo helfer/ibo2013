@@ -74,11 +74,12 @@ Translated version
 </td>
 <td>
 <div id="tqi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
+<textarea class="ckeditor" id="tq" cols="80" rows="10">
 {{form.text.errors}}
 {{form.text}}
-<div id="tq" contenteditable="true">
-</div>
+</textarea>
 <br>
+<input type="submit" value="Submit text" onclick="alert(document.getElementById('tq').innerHTML)">
 <input type="button" value="Click to show the innerHTML" onclick="debugCK()">
 </td>
 </tr>
@@ -138,7 +139,7 @@ Proposition text comes here... {# TODO: which db field holds this information? #
 <td id="oa1">
 Answer A
 </td>
-<td><a onclick="CopyContent('oa1','ta1')"><img src="icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ta1')"><img src="icons/empty.png" style="width: 30px;"></a></td>
+<td><a onclick="CopyContent('oa1','ta1')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ta1')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
 <td>
 <div id="ta1" contenteditable="true">
 </div>
@@ -149,7 +150,7 @@ Answer A
 <td id="oa2">
 Answer B
 </td>
-<td><a onclick="CopyContent('oa2','ta2')"><img src="icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ta2')"><img src="icons/empty.png" style="width: 30px;"></a></td>
+<td><a onclick="CopyContent('oa2','ta2')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ta2')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
 <td>
 <div id="ta2" contenteditable="true">
 </div>
@@ -160,7 +161,7 @@ Answer B
 <td id="oa3">
 Answer C
 </td>
-<td><a onclick="CopyContent('oa3','ta3')"><img src="icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ta3')"><img src="icons/empty.png" style="width: 30px;"></a></td>
+<td><a onclick="CopyContent('oa3','ta3')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ta3')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
 <td>
 <div id="ta3" contenteditable="true">
 </div>
@@ -171,7 +172,7 @@ Answer C
 <td id="oa4">
 Answer D
 </td>
-<td><a onclick="CopyContent('oa4','ta4')"><img src="icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ta4')"><img src="icons/empty.png" style="width: 30px;"></a></td>
+<td><a onclick="CopyContent('oa4','ta4')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ta4')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
 <td>
 <div id="ta4" contenteditable="true">
 </div>

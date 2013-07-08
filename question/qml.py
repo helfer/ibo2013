@@ -2,7 +2,7 @@ from django import forms
 from ibo2013.question.forms import QMLTableField
 from ibo2013.question.models import Figure
 from xml.etree import ElementTree as et
-import lxml.etree as lxmltree
+#import lxml.etree as lxmltree
 import json
 class QMLobject():
 
@@ -124,7 +124,8 @@ class QMLobject():
         txt = et.tostring(self.xml,'utf-8')
         if pretty:
             print "prettifyyyyyyyyyyyyyyyyyy"
-            return lxmltree.tostring(lxmltree.fromstring(txt),pretty_print=True)
+            #return lxmltree.tostring(lxmltree.fromstring(txt),pretty_print=True)
+            return txt
         else:
             return txt
     def get_form_field(self):

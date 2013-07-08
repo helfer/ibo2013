@@ -149,8 +149,8 @@ def questionview(request,exam_id=1,question_position=1,lang_id=1,permissions=Non
 
 
     if request.method == 'POST':
-        form=EditQuestionForm(request.POST)
-        print form.is_bound,request.POST
+        print request.POST
+        form=JuryQuestionForm(request.POST)
         if not ('write' in permissions or 'admin' in permissions):
             raise PermissionDenied()
         if form.is_valid():
@@ -202,7 +202,7 @@ def questionview(request,exam_id=1,question_position=1,lang_id=1,permissions=Non
         }
 
     if 'write' in permissions or 'admin' in permissions:
-        form=EditQuestionForm(initial=initial)
+        form=JuryQuestionForm(initial=initial)
     else:
         form=ViewQuestionForm(initial=initial)
 

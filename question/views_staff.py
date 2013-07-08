@@ -165,7 +165,7 @@ def view_question(request,qid=None,mode="normal"):
                     print "haserrors"
                     print form.errors
 
-            elif mode == "xml": #XXX: legacy compatibility, to be removed
+            elif mode == "xml": 
                 print "legacy"
                 form = EditQuestionForm(request.POST)
                 if form.is_valid():
@@ -178,8 +178,12 @@ def view_question(request,qid=None,mode="normal"):
                         lang_id = versions[0].language_id            
 
                     xmlq = qml.QMLquestion(cd['text'])
-                    xmlq.assign_initial_id(question.id)
-                    v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=xmlq.zackzack())
+
+                    #order is important! parse figure first, then assign id
+                    xmlq.parse_figures() #inserts variable fields for figure
+                    xmlq.assign_initial_id(question.id) #assigns unique id where id=""
+
+                    v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=xmlq.zackzack(pretty=False))
                     v.save()
                     versions = list(versions)
                     versions.append(v)   
@@ -220,12 +224,16 @@ def view_question(request,qid=None,mode="normal"):
     #if len(versions) == 2:
     #    compare = versions[0].compare_with(versions[1])
 
+    fig_form = FigureChoiceForm()
+    #print fig_form.figure
+
     return render_to_response('staff_questionview.html',
         {'question':question,
         'versions':versions,
         'form':form,
         'compare':compare,
-        'viewmode':mode})
+        'viewmode':mode,
+        'fig_form':fig_form})
         
 @staff_member_required
 def view_categories(request):
@@ -316,6 +324,10 @@ def upload_figure(request):
         form = UploadFigureForm(request.POST, request.FILES)
         if form.is_valid():
             cd = form.cleaned_data
+            if cd['name'] == "":
+                print "setname"
+                cd['name'] = request.FILES['imgfile'].name
+                print cd['name']
             process_uploaded_figure(request.FILES['imgfile'],cd['name'],cd['description'])
             return HttpResponseRedirect(request.path + "?success")
     else:
@@ -330,11 +342,11 @@ def process_uploaded_figure(f,fname,descr):
     et.register_namespace("","http://www.w3.org/2000/svg")
     fsvg = et.fromstring(xml)
     tags = find_figure_tags(fsvg)
-    var = '<replace>'
+    var = u'<replace>'
     for (el_id,txt) in tags:
-        var += '<textarea id="{0}">{1}</textarea>\n'.format(el_id,txt)
-    var += '</replace>'
-    fig = Figure(name=fname,description=descr,svg=et.tostring(fsvg),var=var)
+        var += u'<textarea id="" ibotag="{0}">{1}</textarea>\n'.format(el_id,unicode(txt))
+    var += u'</replace>'
+    fig = Figure(name=fname,description=descr,svg=et.tostring(fsvg),var=unicode(var))
     fig.save()
 
 
@@ -343,11 +355,18 @@ def find_figure_tags(svg_el):
     if "id" in svg_el.attrib:
         sid = svg_el.attrib["id"]
         if sid.startswith("IBOtranslation"):
-            if len(svg_el):
-                raise QMLParseError("IBOtranslation tagged element must not have subelements "+ svg_el.text)
-            print "tag found " + sid
-            rt.append((sid,svg_el.text))
-            svg_el.text = hex(hash(sid))
+            if len(svg_el) == 1:
+                if len(svg_el[0]) > 0:
+                    raise QMLParseError("tspan Element shouldn't have any subelements  at " + sid + " " + et.tostring(svg_el))
+                print "tag found " + sid
+                rt.append((sid,svg_el[0].text))
+                svg_el[0].text = hex(hash(sid))
+            elif len(svg_el) == 0:
+                print "tag found " + sid
+                rt.append((sid,svg_el.text))
+                svg_el.text = hex(hash(sid))
+            else:
+                raise QMLParseError("IBOtranslation tagged text element can only have one tspan "+ et.tostring(svg_el))
 
     for child in svg_el:
         rt.extend(find_figure_tags(child))
@@ -355,21 +374,34 @@ def find_figure_tags(svg_el):
 
     return rt
 
-def QMLParseError(Exception):
+class QMLParseError(Exception):
     pass
 
 @staff_member_required
-def view_image(request,fname):
+def view_image(request,fname="",qid=None,lang_id=1,version=None):
     try:
+        print fname
         img = Figure.objects.get(name=fname)
     except:
         raise Http404()
 
     svg = img.svg
+    if qid is None:
+        replace = et.fromstring(img.var.encode('utf-8'))
+    else:
+        try:
+            q = Question.objects.get(id=int(qid))
+        except:
+            raise Http404()
 
-    replace = et.fromstring(img.var)
+        if version is None:
+            vn = q.versionnode_set.filter(language=lang_id).order_by('-timestamp')[0]
+        else:
+            vn = q.versionnode_set.get(language=lang_id,version=version)
+        search = ".//figure[@imagefile='{0}']/textarea".format(fname)
+        replace = et.fromstring(vn.text).findall(search)
     for r in replace:
-        svg = svg.replace(hex(hash(r.attrib['id'])),r.text)
+        svg = svg.replace(hex(hash(r.attrib['ibotag'])),r.text)
 
     return HttpResponse(svg,mimetype="image/svg+xml")
 

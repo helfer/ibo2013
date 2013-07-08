@@ -17,7 +17,7 @@
     </form>
 <ul>
 {% for img in images %}
-    <li><a href="/staff/images/{{img.name}}">{{img.name}}-{{img.description}}</a></li>
+    <li><a href="/staff/images/{{img.name}}">{{img.name}}</a>({{img.description}})</li>
 {% endfor %}
 </ul>
 {% endblock %}

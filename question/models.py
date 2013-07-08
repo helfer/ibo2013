@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from ibo2013.question import simplediff
-
-
+from xml.etree import ElementTree as et
 
 def dictify(obj_list,key):
     ret = {}
@@ -197,9 +196,21 @@ class Exam(models.Model):
         tv = list(target_versions)
         assert len(pv) == len(tv) #if not, you screwed up the queries
 
+        #import at file start fails due to some cyclic dependencies
+        #from ibo2013.question import qml
+        
         questions = []
         for i in range(len(pv)):
-            questions.append({"primary":pv[i],"target":tv[i]})
+            try:
+                if tv[i].text is None:
+                    preview = et.fromstring(pv[i].text.encode('utf-8')).find('./text').text
+                else:
+                    preview = et.fromstring(tv[i].text.encode('utf-8')).find('./text').text
+                if len(preview) > 130:
+                    preview = preview[:127] + "..."
+            except:
+                    preview = pv[i].text #fallback if not XML or no text element
+            questions.append({"primary":pv[i],"target":tv[i],"preview":preview})
             if tv[i].vid is None:
                 questions[i]["status"] = "empt"
             elif tv[i].origin_id != pv[i].vid:
@@ -246,4 +257,5 @@ class Figure(models.Model):
     svg = models.TextField() 
     var = models.TextField()
 
-
+    def __unicode__(self):
+        return self.name

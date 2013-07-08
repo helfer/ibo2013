@@ -34,7 +34,9 @@ function add_table(){
 
 function add_figure(){
     var qid = document.getElementById("question_id").value;
-    var image = '<figure id="" imagefile="filename.svg" />';
+    var sel = document.getElementById("id_figure")
+    var fname = sel.options[sel.selectedIndex].innerHTML
+    var image = '<figure id="" imagefile="'+fname+'" />';
     insertAtCaret("area51",image);
     return false;
 }

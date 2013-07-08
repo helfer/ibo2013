@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from ibo2013.question.models import *
 from ibo2013.question.widgets import QMLTableWidget,QMLRowWidget
+#from ckeditor.widgets import CKEditorWidget
 import json
 
 class EditQuestionForm(forms.Form):
@@ -10,11 +11,11 @@ class EditQuestionForm(forms.Form):
     flag = forms.BooleanField(required=False)
     checkout = forms.BooleanField(required=False)
 
-    #def __init__(self,permissions=None,*args,**kwargs):
-    #    super(EditQuestionForm,self).__init__(*args,**kwargs)
-        #if permissions is None or not ('admin' in permissions or 'edit' in permissions):
-        #    self.fields['text'] = forms.CharField(widget=forms.Textarea(attrs={'readonly':'readonly'}))
-        #    self.fields['comment'] = forms.CharField(widget=forms.Textarea(attrs={'readonly':'readonly'}),required=False)
+class JuryQuestionForm(forms.Form):
+    text = forms.CharField(widget=Textarea(attrs={'id':'area51','rows':40,'cols':120}))
+    comment = forms.CharField(widget=forms.Textarea,required=False)
+    flag = forms.BooleanField(required=False)
+    checkout = forms.BooleanField(required=False)
 
 #same as above, but readonly, can never be submitted
 class ViewQuestionForm(EditQuestionForm):
@@ -158,7 +159,11 @@ class UpdateCategoryForm(forms.ModelForm):
         fields = ['points','category']
 
 class UploadFigureForm(forms.Form):
-    name = forms.CharField(max_length=100)
-    description = forms.CharField(max_length=100)
+    name = forms.CharField(max_length=100,required=False)
+    description = forms.CharField(max_length=100,required=False)
     imgfile = forms.FileField()
 
+
+class FigureChoiceForm(forms.Form):
+    figure = forms.ModelChoiceField(queryset=Figure.objects.all(),empty_label=None)
+    

@@ -1,6 +1,8 @@
 from django import forms
 from ibo2013.question.forms import QMLTableField
+from ibo2013.question.models import Figure
 from xml.etree import ElementTree as et
+import lxml.etree as lxmltree
 import json
 class QMLobject():
 
@@ -42,13 +44,25 @@ class QMLobject():
                     i += 1
                     ident = self.make_ident(question_id,i)
 
+                self.identifier = ident
                 self.xml.attrib["id"] = ident
                 #print "assigned initial id " + ident
                 blacklist.append(ident)
 
         for c in self.children:
             c.assign_initial_id(question_id,blacklist)
-                
+    
+    def parse_figures(self):
+        if self.xml.tag == "figure":
+           if len(self.xml) == 0:
+                repl = et.fromstring(Figure.objects.get(name=self.xml.attrib['imagefile']).var) 
+                for c in repl:
+                    c.attrib['id'] = ''
+                    self.xml.append(c)
+                    self.addChild(QMLfigureText(c))
+        else:
+            for c in self.children:
+                c.parse_figures()            
 
     #list xml attribute id for self and all sub-elements
     def list_id(self):
@@ -64,9 +78,6 @@ class QMLobject():
         return str(question_id) + "_" + self.__class__.abbr + str(i)
 
 
-    #outputs a django form consisting of all elements
-    def formalize(self):
-        raise Exception("not implemented")
 
     #takes cleaned form data as input and updates its own values accordingly
     def update(self,cd):
@@ -88,7 +99,7 @@ class QMLobject():
        
         #print "reassign" 
         
-        if "id" in self.xml.attrib:
+        if "id" in self.xml.attrib and self.xml.tag != "question":
             i = 0
             ident = False
             while (not ident) or (ident in blacklist):
@@ -97,6 +108,7 @@ class QMLobject():
 
             #print "update id to " + ident
             self.xml.attrib['id'] = ident
+            self.identifier = ident
             blacklist.append(self.xml.attrib['id'])
 
         for c in self.children:
@@ -108,9 +120,13 @@ class QMLobject():
     def parse(self,xml):
         pass
 
-    def zackzack(self):
-        return et.tostring(self.xml,'utf-8')
-
+    def zackzack(self,pretty=False):
+        txt = et.tostring(self.xml,'utf-8')
+        if pretty:
+            print "prettifyyyyyyyyyyyyyyyyyy"
+            return lxmltree.tostring(lxmltree.fromstring(txt),pretty_print=True)
+        else:
+            return txt
     def get_form_field(self):
         return forms.CharField(label=self.__class__.__name__)
 
@@ -202,7 +218,17 @@ class QMLfigure(QMLobject):
         self.xml.attrib["imagefile"] = self.data
 
     def parse(self,elem):
-        self.form_element = forms.CharField(label="figure", initial = elem.attrib["imagefile"])
+        for child in elem:
+            if child.tag == "textarea":
+                self.addChild(QMLfigureText(child))
+            else:
+                raise QMLException("invalid sub-element in figure: "+child.tag)
+        #self.form_element = forms.CharField(label="figure", initial = elem.attrib["imagefile"])
+
+class QMLfigureText(QMLobject):
+    abbr = "ft"
+    def parse(self,elem):
+        self.form_element = forms.CharField(label=elem.attrib['ibotag'],initial=elem.text)
 
 class QMLtable(QMLobject):
     abbr = "tb"

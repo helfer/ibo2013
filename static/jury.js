@@ -44,7 +44,15 @@ function debugCK() {
 function CopyContent(id_source,id_dest) {
 	var m = gid(id_source);
 	var n = gid(id_dest);
-	n.innerHTML = '<p>'+m.innerHTML+'</p>';
+	
+	if (n.tagName == 'input')
+	{
+		n.value = m.innerHTML;
+	}
+	else if (n.tagName == 'textarea')
+	{
+		n.innerHTML = '<p>'+m.innerHTML+'</p>';
+	}
 }
 
 function CopyContentAll() {

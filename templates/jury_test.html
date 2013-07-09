@@ -38,7 +38,7 @@
 
 <h1>Question {{pos}} : {{question.name}}</h1>
 
-<form action="" method="post" id="questionform">
+<form action="" method="post" id="questionform" enctype="application/x-www-form-urlencoded">
 <table class="translationtable">
 
 <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px; border-bottom: 1px solid #999">Translation</td></tr>
@@ -85,7 +85,7 @@ Translated version (ID = {{versions.trans}})
     <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Task</td></tr>
     <tr><!-- the task -->
         <td></td>
-        <td id="ott">
+        <td id="ott-{{el.id}}">
         {{el.data}}
         </td>
         <td>

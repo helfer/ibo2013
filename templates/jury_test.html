@@ -76,7 +76,7 @@ Translated version (ID = {{versions.trans}})
         </td>
         <td>
         <div id="otxi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
-        <textarea name="ttx-{{el.id}}" id="ttx-{{el.id}}" class="ckeditor">{{el.form}}</textarea>
+        <textarea name="ttx-{{el.id}}" id="ttx-{{el.id}}">{{el.form}}</textarea>
         </td>
 	</tr>
     {% endif %}
@@ -94,7 +94,7 @@ Translated version (ID = {{versions.trans}})
         </td>
         <td>
         <div id="otai">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
-        <input type="text" name="ttt-{{el.id}}" id="ttt-{{el.id}}" value="{{el.form}}">
+        <textarea name="ttt-{{el.id}}" id="ttt-{{el.id}}">{{el.form}}</textarea>
         </td>
     </tr>
     {% endif %}

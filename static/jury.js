@@ -44,7 +44,7 @@ function debugCK() {
 function CopyContent(id_source,id_dest) {
 	var m = gid(id_source);
 	var n = gid(id_dest);
-	n.innerHTML = '<p>'+m.innerHTML+'</p';
+	n.innerHTML = '<p>'+m.innerHTML+'</p>';
 }
 
 function CopyContentAll() {

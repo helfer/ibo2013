@@ -63,9 +63,8 @@ Translated version (ID = {{versions.trans}})
 {% for q in struct %}
   {% for el in q.data %}
   
-  	<tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Question text</td></tr>
-
     {% if el.tag == "text" %}
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Question text</td></tr>
     <tr><!-- the question text -->
         <td></td>
         <td id="otx-{{el.id}}">
@@ -82,16 +81,15 @@ Translated version (ID = {{versions.trans}})
 	</tr>
     {% endif %}
     
-    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Task</td></tr>
-
     {% if el.tag == "task" %}
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Task</td></tr>
     <tr><!-- the task -->
         <td></td>
         <td id="ott">
         {{el.data}}
         </td>
         <td>
-        	<a onclick="CopyContent('ott-{{el.id}}',ttt-{{el.id}})"><img src="/static/icons/copy.png" style="width: 30px;"></a>
+        	<a onclick="CopyContent('ott-{{el.id}}','ttt-{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a>
         	<a onclick="ClearContent('ttt-{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
         </td>
         <td>
@@ -101,9 +99,8 @@ Translated version (ID = {{versions.trans}})
     </tr>
     {% endif %}
 
-	<tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Answers</td></tr>
-
     {% if el.tag == "answerlist" %}
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Answers</td></tr>
     {% for sub in el.data %}
     	{% if sub.tag == "answersplit" %}
 		<tr><!-- answer choices true/false -->
@@ -138,9 +135,8 @@ Translated version (ID = {{versions.trans}})
     {% endfor %}
     {% endif %}
 
-    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">List</td></tr>
-
     {% if el.tag == "list" %}
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">List</td></tr>
     {% for sub in el.data %}
     <tr><!-- possible list -->
     	<td></td>
@@ -156,9 +152,8 @@ Translated version (ID = {{versions.trans}})
     {% endfor %}
     {% endif %}
 
-    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Image</td></tr>
-
     {% if el.tag == "figure" %}
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Image</td></tr>
     <tr><!-- possible image -->
         <td></td>
         <td>

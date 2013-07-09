@@ -74,7 +74,7 @@ Translated version {{versions.trans}}
         </td>
         <td>
         <div id="tqi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
-        <textarea name="{{el.id}}">{{el.form}}</textarea>
+        <textarea name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
         </td>
     </tr>
     {% endif %}

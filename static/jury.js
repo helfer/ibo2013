@@ -44,7 +44,17 @@ function debugCK() {
 function CopyContent(id_source,id_dest) {
 	var m = gid(id_source);
 	var n = gid(id_dest);
-	n.innerHTML = '<p>'+m.innerHTML+'</p';
+	
+	if (n.tagName == 'input')
+	{
+		n.value = m.innerHTML;
+		alert('I copied "'+m.innerHTML+'" from a div (id = '+id_source+', to an input field (id = '+id_dest+')');
+	}
+	if (n.tagName == 'textarea')
+	{
+		n.innerHTML = '<p>'+m.innerHTML+'</p>';
+		alert('I copied "'+m.innerHTML+'" from a div (id = '+id_source+', to a textarea (id = '+id_dest+')');
+	}
 }
 
 function CopyContentAll() {
@@ -66,6 +76,7 @@ function CopyContentAll() {
 function ClearContent(id_dest) {
 	var m = gid(id_dest);
 	m.innerHTML = '';
+	m.value = '';
 }
 
 function ClearContentAll() {

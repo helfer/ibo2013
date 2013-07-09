@@ -60,12 +60,12 @@ Translated version {{versions.trans}}
 <a href="#">Restore this version</a>
 </th></tr>
 
-<tr>
-<td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Question text</td>
-</tr>
+
 {% for q in struct %}
   {% for el in q.data %} 
-    {% if el.tag == "text" %}<tr> <!-- the question -->
+    {% if el.tag == "text" %}
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Question text</td></tr>
+    <tr> <!-- the question -->
         <td></td>
         <td id="oq">
         {{el.data}}
@@ -76,13 +76,12 @@ Translated version {{versions.trans}}
         <div id="tqi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
         <textarea name="{{el.id}}">{{el.form}}</textarea>
         </td>
-        </tr>
-
+    </tr>
     {% endif %}
+
     {% if el.tag == "task" %}
-        <tr>
-        <td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Task</td>
-        </tr>
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Task</td></tr>
+    <tr> <!-- the task -->
         <td></td>
         <td id="oq">
         {{el.data}}
@@ -93,19 +92,15 @@ Translated version {{versions.trans}}
         <div id="tqi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
         <input type="text" name="{{el.id}}" value="{{el.form}}" />
         </td>
-        </tr>
-
-
-
+    </tr>
     {% endif %}
+
     {% if el.tag == "answerlist" %}
-        <tr>
-        <td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Answers</td>
-        </tr>
-        Answer: <br/>
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Answers</td></tr>
+    
         {% for sub in el.data %}
             {% if sub.tag == "answersplit" %}
-                <tr> <!-- answers -->
+                <tr> <!-- answer options -->
                 <td>Option</td>
                 <td id="oa-{{sub.id}}">
                 {{sub.data}}
@@ -126,34 +121,22 @@ Translated version {{versions.trans}}
             {% endif %}
         {% endfor %}
     {% endif %}
+
     {% if el.tag == "list" %}
-        <tr>
-        <td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">List</td>
-        </tr>
-        <tr> <!-- possible image -->
-        <td></td>
-        <td>
-        </td>
-        <td></td>
-        <td>
-        </td>
-        </tr>
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">List</td></tr>
         {% for sub in el.data %}
-            <tr> <!-- possible image -->
+        <tr> <!-- possible image -->
+            <td></td>
             <td>{{sub.data}}</td>
-            <td>
-            </td>
+            <td></td>
             <td><input type="text" id="{{sub.id}}" name="{{sub.id}}" value="{{sub.form}}" /></td>
-            <td>
-            </td>
-            </tr>
+        </tr>
         {% endfor %}
     {% endif %}
+
     {% if el.tag == "figure" %}
-        <tr>
-        <td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Image</td>
-        </tr>
-        <tr> <!-- possible image -->
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Image</td></tr>
+    <tr> <!-- possible image -->
         <td></td>
         <td>
         <img src="/staff/images/{{el.meta}}/{{question.id}}/1/{{versions.orig}}/" onclick="enlarge(this);">

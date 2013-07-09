@@ -40,18 +40,18 @@
 
 <form action="" method="post" id="questionform">
 <table class="translationtable">
-<tr>
-<td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px; border-bottom: 1px solid #999">Translation</td>
-</tr>
-<tr><th></th><th>
-Original version {{versions.orig}}
+
+<tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px; border-bottom: 1px solid #999">Translation</td></tr>
+
+<tr><th></th><th> {# TODO: id's -> timestamps? #}
+Original version (ID = {{versions.orig}})
 <select> {# TODO: Make this into Django -- toggle between two official translations #}
 	<option value="IBOENG">IBO Official (EN)</option>
 	<option value="IBORUS">IBO Official (RU)</option>
 </select>
 </th><th style="width: 5%"><a onclick="CopyContentAll()"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContentAll()"><img src="/static/icons/empty.png" style="width: 30px;"></a>
 </td></th><th>
-Translated version {{versions.trans}}
+Translated version (ID = {{versions.trans}})
 <select> {# TODO: Make this into Django -- latest x versions #}
 	<option value="434">2013-07-15 14:55.18 (latest)</option>
 	<option value="433">2013-07-15 14:50.59</option>
@@ -60,100 +60,106 @@ Translated version {{versions.trans}}
 <a href="#">Restore this version</a>
 </th></tr>
 
-<tr>
-<td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Question text</td>
-</tr>
 {% for q in struct %}
-  {% for el in q.data %} 
-    {% if el.tag == "text" %}<tr> <!-- the question -->
+  {% for el in q.data %}
+  
+  	<tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Question text</td></tr>
+
+    {% if el.tag == "text" %}
+    <tr><!-- the question text -->
         <td></td>
-        <td id="oq">
+        <td id="otx-{{el.id}}">
         {{el.data}}
         </td>
-        <td><a onclick="CopyContent('oq','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('tq')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
+        <td>
+        	<a onclick="CopyContent('otx-{{el.id}}','ttx-{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a>
+        	<a onclick="ClearContent('ttx-{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
         </td>
         <td>
-        <div id="tqi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
-        <textarea name="{{el.id}}">{{el.form}}</textarea>
+        <div id="otxi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
+        <textarea name="ttx-{{el.id}}" id="ttx-{{el.id}}" class="ckeditor">{{el.form}}</textarea>
         </td>
-        </tr>
-
+	</tr>
     {% endif %}
+    
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Task</td></tr>
+
     {% if el.tag == "task" %}
-        <tr>
-        <td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Task</td>
-        </tr>
+    <tr><!-- the task -->
         <td></td>
-        <td id="oq">
+        <td id="ott">
         {{el.data}}
         </td>
-        <td><a onclick="CopyContent('oq','tq')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('tq')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
+        <td>
+        	<a onclick="CopyContent('ott-{{el.id}}',ttt-{{el.id}})"><img src="/static/icons/copy.png" style="width: 30px;"></a>
+        	<a onclick="ClearContent('ttt-{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
         </td>
         <td>
-        <div id="tqi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
-        <input type="text" name="{{el.id}}" value="{{el.form}}" />
+        <div id="otai">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
+        <input type="text" name="ttt-{{el.id}}" id="ttt-{{el.id}}" value="{{el.form}}">
         </td>
-        </tr>
-
-
-
+    </tr>
     {% endif %}
+
+	<tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Answers</td></tr>
+
     {% if el.tag == "answerlist" %}
-        <tr>
-        <td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Answers</td>
+    {% for sub in el.data %}
+    	{% if sub.tag == "answersplit" %}
+		<tr><!-- answer choices true/false -->
+        	<td>Option</td>
+			<td id="oa-{{sub.id}}">
+			{{sub.data}}
+            </td>
+        	<td>
+        		<a onclick="CopyContent('oa-{{sub.id}}','ta-{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a>
+        		<a onclick="ClearContent('ta-{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
+        	</td>
+            <td>
+            <input type="text" name="ta-{{sub.id}}" id="ta-{{sub.id}}" value="{{sub.form}}">
+            </td>
         </tr>
-        Answer: <br/>
-        {% for sub in el.data %}
-            {% if sub.tag == "answersplit" %}
-                <tr> <!-- answers -->
-                <td>Option</td>
-                <td id="oa-{{sub.id}}">
-                {{sub.data}}
-                </td>
-                <td><a onclick="CopyContent('oa-{{sub.id}}','ta-{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ta-{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
-            <td><input type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"/></td>
-                </tr>
-            {% endif %}
-            {% if sub.tag == "choice" %}
-                <tr> <!-- answers -->
-                <td>Answer</td>
-                <td id="oa-{{sub.id}}">
-                {{sub.data}}
-                </td>
-                <td><a onclick="CopyContent('oa-{{sub.id}}','ta-{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ta-{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
-            <td><input type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"/></td>
-                </tr>
-            {% endif %}
-        {% endfor %}
+        {% endif %}
+        {% if sub.tag == "choice" %}
+        <tr><!-- answers -->
+        	<td>Answer</td>
+        	<td id="oa-{{sub.id}}">
+        	{{sub.data}}
+        	</td>
+       		<td>
+       			<a onclick="CopyContent('oa-{{sub.id}}','ta-{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a>
+       			<a onclick="ClearContent('ta-{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
+       		</td>
+        	<td>
+        	<input type="text" name="ta-{{sub.id}}" id="ta-{{sub.id}}" value="{{sub.form}}">
+        	</td>
+        </tr>
+        {% endif %}
+    {% endfor %}
     {% endif %}
+
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">List</td></tr>
+
     {% if el.tag == "list" %}
-        <tr>
-        <td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">List</td>
-        </tr>
-        <tr> <!-- possible image -->
-        <td></td>
-        <td>
-        </td>
-        <td></td>
-        <td>
-        </td>
-        </tr>
-        {% for sub in el.data %}
-            <tr> <!-- possible image -->
-            <td>{{sub.data}}</td>
-            <td>
-            </td>
-            <td><input type="text" id="{{sub.id}}" name="{{sub.id}}" value="{{sub.form}}" /></td>
-            <td>
-            </td>
-            </tr>
-        {% endfor %}
+    {% for sub in el.data %}
+    <tr><!-- possible list -->
+    	<td></td>
+    	<td>{{sub.data}}</td>
+    	<td>
+    		<a onclick="CopyContent('ol-{{sub.id}}','tl-{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a>
+    		<a onclick="ClearContent('tl-{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
+    	</td>
+    	<td>
+    	<input type="text" id="tl-{{sub.id}}" name="tl-{{sub.id}}" value="{{sub.form}}">
+    	</td>
+	</tr>
+    {% endfor %}
     {% endif %}
+
+    <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Image</td></tr>
+
     {% if el.tag == "figure" %}
-        <tr>
-        <td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Image</td>
-        </tr>
-        <tr> <!-- possible image -->
+    <tr><!-- possible image -->
         <td></td>
         <td>
         <img src="/staff/images/{{el.meta}}/{{question.id}}/1/{{versions.orig}}/" onclick="enlarge(this);">
@@ -164,13 +170,14 @@ Translated version {{versions.trans}}
         </td>
         </tr>
         {% for sub in el.data %}
-            <tr>
-            <td></td>
-            <td id="oi-{{sub.id}}">{{sub.data}}</td>
-            <td>
-            <a onclick="CopyContent('oi-{{sub.id}}','ti-{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ti-{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
+        <tr>
+        	<td></td>
+        	<td id="oi-{{sub.id}}">{{sub.data}}</td>
+        	<td>
+            	<a onclick="CopyContent('oi-{{sub.id}}','ti-{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a>
+            	<a onclick="ClearContent('ti-{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
             </td>
-            <td><input type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"/></td>
+            <td><input type="text" name="ti-{{sub.id}}" id="ti-{{sub.id}}" value="{{sub.form}}"/></td>
             </tr>
         {% endfor %}
     {% endif %}

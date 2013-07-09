@@ -399,7 +399,7 @@ def view_image(request,fname="",qid=None,lang_id=1,version=None):
         else:
             vn = q.versionnode_set.get(language=lang_id,version=version)
         search = ".//figure[@imagefile='{0}']/textarea".format(fname)
-        replace = et.fromstring(vn.text).findall(search)
+        replace = et.fromstring(vn.text.encode('utf-8')).findall(search)
     for r in replace:
         svg = svg.replace(hex(hash(r.attrib['ibotag'])),r.text)
 

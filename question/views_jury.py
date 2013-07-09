@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response,redirect
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from ibo2013.question.models import *
 from ibo2013.question.forms import *
@@ -6,7 +6,7 @@ from django.db.models import Count
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
-from ibo2013.question import qml
+from ibo2013.question.qml import *
 from ibo2013.question.views_common import *        
     
 @login_required
@@ -250,3 +250,146 @@ def students(request,lang_id=1,permissions=None):
         'lang_id':lang_id,
         'perms':permissions
         })
+
+
+
+@login_required
+@permission_check
+def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=None):
+    
+
+    try:
+        question_position = int(question_position)
+        target_language_id = int(lang_id)
+        exam_id = int(exam_id)
+        if request.user.is_staff:
+            exam = Exam.objects.get(id=exam_id)
+        else:
+            exam = Exam.objects.get(id=exam_id,staff_only=0)
+        language = Language.objects.get(id=target_language_id)
+    except: 
+        raise Http404()
+
+    question = Question.objects.get(exam__id=exam_id,examquestion__position=question_position)
+    if request.user.is_staff:
+        exams = Exam.objects.all()
+    else:
+        exams = Exam.objects.filter(staff_only=False)
+
+    original = question.versionnode_set.filter(language=question.primary_language_id).order_by('-timestamp')[0]
+
+    try:
+        translation = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[0]
+    except:
+        translation = None
+
+    if request.method == "POST":
+        #XXX omg this is dumb and ugly...
+        if "flag" in request.POST:
+            flg = request.POST["flag"]
+        else:
+            flg = False
+        if "checkout" in request.POST:
+            checkout = request.POST["checkout"]
+        else:
+            checkout = False
+        if "comment" in request.POST:
+            cmt = request.POST["comment"]
+        else:
+            cmt = False
+        #print request.POST
+        oxml = QMLquestion(original.text)
+        #print "ORIGINAL:\n",oxml.zackzack()
+        oxml.update(request.POST)
+        #print "MODIFIED:\n",oxml.zackzack()
+        if not translation:
+            vid = 1
+        else:
+            vid = translation.version+1
+
+        v = VersionNode(
+            question_id=question.id,
+            language_id=target_language_id,
+            version=vid,
+            text=oxml.zackzack(),
+            flag=flg,
+            checkout=checkout,
+            comment=cmt
+        )
+        v.save()
+
+        tr = Translation(
+            language=v.language,
+            origin=original,
+            target=v
+        )
+        tr.save()
+        return redirect(request.path + "?success") 
+   
+       #return HttpResponse("done") 
+        #versions = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[:1]
+
+
+    exam.load_question_status(target_language_id)
+    struct = make_xml_form(original,translation)
+    cmt = ""
+    tv = 0
+    if translation is not None:
+        cmt = translation.comment
+        tv = translation.version
+    return render_with_context(request,'jury_test.html',
+        {'exam':exam,
+        'lang_id':target_language_id,
+        'pos':question_position,
+        'status':exam.question_status,
+        'exams':exams,
+        'question':question,
+        'struct':struct,
+        'versions':{'orig':original.version,'trans':tv},
+        'comment':cmt,
+        'perms':permissions
+    })
+
+
+#puts together the text obtained from 
+def make_xml_form(original,translation):
+    oxml = QMLquestion(original.text)
+    texts = oxml.get_texts_nested()
+    if translation is not None:
+        print "translation is not none"
+        txml = QMLquestion(translation.text)
+        oxml.update(txml.get_data())
+        forms = oxml.get_texts_nested()
+    else:
+        print "translation is none"
+        oxml.update({})
+        forms = oxml.get_texts_nested()
+    #oxml.update(txml.get_data())
+    #forms = oxml.get_forms_nested()
+    print "txt",texts,"FOOOOOOOOOOOOR",forms
+    return zipem(texts,forms)
+    
+    
+def zipem(texts,forms):
+    try:
+        assert len(texts) == len(forms)
+    except:
+        print len(texts),len(forms)
+        print texts," UAUAUAUA", forms
+        raise Exception("yep")
+    rt = []
+    for i in xrange(len(texts)):
+        if not isinstance(texts[i]["data"],unicode) and not isinstance(texts[i]["data"],str): #it's a list
+            print type(texts[i]["data"])
+            data = zipem(texts[i]["data"],forms[i]["data"])
+            texts[i].update({"data":data})
+            rt.append(texts[i])
+        else:
+            texts[i].update({"form":forms[i]["data"]})
+            rt.append(texts[i])
+
+    return rt
+
+
+
+

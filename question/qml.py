@@ -7,7 +7,6 @@ import json
 class QMLobject():
 
     def __init__(self,xml):
-        self.form_element = None
         if type(xml) == str:
             root = et.fromstring(xml)
         elif type(xml) == unicode:
@@ -16,6 +15,8 @@ class QMLobject():
             root = xml
         
         self.xml = root
+        self.data = None
+        self.meta = None
 
         try:
             self.identifier = self.xml.attrib['id']
@@ -23,9 +24,11 @@ class QMLobject():
             if not self.__class__.__name__ in ["QMLanswerlist"]:
                 raise KeyError("id missing from QML element "+ self.xml.tag)
             self.identifier = "element has no identifier"
-            print "no ident: ",root.tag
         self.children = []
         self.parse(root)
+
+    def form_element(self):
+        return None
 
     def addChild(self,child):
         self.children.append(child)
@@ -77,18 +80,50 @@ class QMLobject():
     def make_ident(self,question_id,i):
         return str(question_id) + "_" + self.__class__.abbr + str(i)
 
+    def get_texts_nested(self):
+        if self.data is None:
+            sub = []
+            for c in self.children:
+                sub.extend(c.get_texts_nested())
+            rt = [{"id":self.identifier,"tag":self.xml.tag,"data":sub,"meta":self.meta}]
+        else:
+            rt = [{"id":self.identifier,"tag":self.xml.tag,"data":self.data,"meta":self.meta}]
+        
+        return rt
 
+    def get_data(self):
+        rt = {}
+        if self.data is not None:
+            rt = {self.identifier:self.data}
+        for c in self.children:
+            rt.update(c.get_data())
+
+        return rt
+
+    def get_forms_nested(self):
+        if self.form_element() is None:
+            sub = []
+            for c in self.children:
+                sub.extend(c.get_forms_nested())
+            rt = [{"id":self.identifier,"tag":self.xml.tag,"data":sub,"meta":self.meta}]
+        else:
+            rt = [{"id":self.identifier,"tag":self.xml.tag,"data":self.form_element(),"meta":self.meta}]
+
+        return rt
 
     #takes cleaned form data as input and updates its own values accordingly
     def update(self,cd):
+        #print self.xml.tag,self.identifier
         if self.identifier in cd:
             self.data = cd[self.identifier]
-            ##print self.__class__.__name__,"has data",self.data
-            self.apply_update()
+            #print self.__class__.__name__,"has data",self.data
         else:
-            pass
+            if self.data is not None:
+                self.data = '' #set fields to empty if not required and no data given
             #print "no data",self.__class__.__name__
 
+        self.apply_update()
+        
         for c in self.children:
             c.update(cd)
 
@@ -132,10 +167,10 @@ class QMLobject():
         return forms.CharField(label=self.__class__.__name__)
 
     def get_form_elements(self):
-        if self.form_element is None:
+        if self.form_element() is None:
             elems = []
         else:
-            elems = [(self.identifier,self.form_element)]
+            elems = [(self.identifier,self.form_element())]
         for c in self.children:
                 elems.extend(c.get_form_elements())
         return elems
@@ -157,7 +192,8 @@ class QMLquestion(QMLobject):
             elif child.tag == "figure":
                 self.addChild(QMLfigure(child))
             elif child.tag == "table":        
-                self.addChild(QMLtable(child))
+                raise QMLException("tables are not supported, use svg figure instead")
+                #self.addChild(QMLtable(child))
             elif child.tag == "list":
                 self.addChild(QMLlist(child))
             else:
@@ -184,12 +220,17 @@ class QMLquestion(QMLobject):
         return QMLobject(xml)
 
 
+    def update(self,cd):
+        for c in self.children:
+            c.update(cd)
+
 
 class QMLtext(QMLobject):
     abbr = "tx"
     def parse(self,elem):
-       self.form_element = forms.CharField(label="text",initial = elem.text,widget = forms.Textarea)
-
+       self.data = elem.text
+    def form_element(self):
+       return  forms.CharField(label="text",initial = self.data,widget = forms.Textarea) 
 
 class QMLtask(QMLtext):
     abbr = "ta"
@@ -215,10 +256,11 @@ class QMLfigure(QMLobject):
     def get_filename(self,elem):
         self.filename = self.xml.attrib["imagefile"]
 
-    def apply_update(self):
-        self.xml.attrib["imagefile"] = self.data
+    #def apply_update(self):
+    #    self.xml.attrib["imagefile"] = self.data
 
     def parse(self,elem):
+        self.meta = elem.attrib["imagefile"]
         for child in elem:
             if child.tag == "textarea":
                 self.addChild(QMLfigureText(child))
@@ -229,7 +271,11 @@ class QMLfigure(QMLobject):
 class QMLfigureText(QMLobject):
     abbr = "ft"
     def parse(self,elem):
-        self.form_element = forms.CharField(label=elem.attrib['ibotag'],initial=elem.text)
+        self.data = elem.text
+        self.meta = elem.attrib['ibotag']
+
+    def form_element(self):
+        return forms.CharField(label=self.meta,initial=self.data)
 
 class QMLtable(QMLobject):
     abbr = "tb"
@@ -244,8 +290,10 @@ class QMLtable(QMLobject):
                 rowz.append(ro)
             else:
                 raise QMLException("unknown QML tag: "+child.tag)
+        self.rowz = rowz
 
-        self.form_element = QMLTableField(rowz)
+    def form_element(self):
+       return QMLTableField(self.rowz)
 
     def apply_update(self):
         
@@ -278,16 +326,20 @@ class QMLtableCol(QMLobject):
 class QMLanswersplit(QMLobject):
     abbr = "sp"
     def parse(self,elem):
-        self.form_element = forms.CharField(label="answersplit",initial = elem.text)
-
+        self.data = elem.text
         for child in elem:
             raise QMLException("answersplit element cannot have children")
-        
+       
+    def form_element(self): 
+        return forms.CharField(label="answersplit",initial = self.data)
 
 class QMLchoice(QMLobject):
     abbr = "ch"
     def parse(self,elem):
-        self.form_element = forms.CharField(label="choice",initial = elem.text,widget=forms.Textarea)
+        self.data = elem.text
+
+    def form_element(self):
+        return forms.CharField(label="choice",initial = self.data,widget=forms.Textarea)
 
 class QMLlist(QMLobject):
     abbr = "ls"
@@ -302,7 +354,11 @@ class QMLlist(QMLobject):
 class QMLlistitem(QMLobject):
     abbr = "li"
     def parse(self,elem):
-        self.form_element = forms.CharField(label="item"+elem.attrib["id"],initial = elem.text)
+        self.data = elem.text
+        self.meta = elem.attrib['id']
+
+    def form_element(self):
+        return forms.CharField(label="item_"+self.meta,initial = self.data)
 
 class QMLException(Exception):
     pass

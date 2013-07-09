@@ -496,6 +496,15 @@ table tr:last-child td { border-bottom: 1px solid #999; }
     background: #5b266f;
 }
 
+textarea {
+    height:10em;
+    width:45em;
+}
+
+input[type=text]{
+    width:45em;
+}
+
 /* Settings page */
 /* NO LONGER USED
 .permissionslist table td { padding: 5px; font-size: 130%; }

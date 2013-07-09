@@ -377,7 +377,7 @@ def find_figure_tags(svg_el):
 class QMLParseError(Exception):
     pass
 
-@staff_member_required
+#@staff_member_required
 def view_image(request,fname="",qid=None,lang_id=1,version=None):
     try:
         print fname

@@ -66,6 +66,12 @@ p {
 	margin: 0.5em 0;
 }
 
+li {
+	font-size: 1.2em;
+	list-style-type: disc;
+	margin-left: 20px;
+}
+
 select {
 	font-weight: bold;
 	border: 1px solid #ccc;

@@ -22,7 +22,11 @@
     <div class="questionbox">
         <div>
             <a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate" class="{{q.status}}">{{q.target.position}}</a>
-            <a href="#"><img src="/static/icons/flagdark.png" title="Flag" alt="flag"></a>
+            {% if "flag" in q.status %}
+            <img src="/static/icons/flagdark.png" title="Flagged" alt="flagged">
+            {% else %}
+            <img src="/static/icons/flag.png" title="Not flagged" alt="not flagged">
+            {% endif %}
             <input type="checkbox" name="pdfselect" value="{{q.target.position}}">
         </div>
         <a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate">{{q.preview}}</a>

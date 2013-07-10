@@ -333,7 +333,7 @@ def upload_figure(request):
             except:
                 raise Http404()
 
-        return HttpResponseRedirect(request.path + "?success")
+            return HttpResponseRedirect(request.path + "?success")
 
 
         form = UploadFigureForm(request.POST, request.FILES)

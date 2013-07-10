@@ -304,9 +304,6 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
         #replace known tags
         #strip remaining html
  
-        rating = None
-        if "rating" in request.POST:
-            rating = request.POST["rating"]
 
         oxml = QMLquestion(original.text)
         clean_post = utils.iboclean(request.POST)
@@ -321,7 +318,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
             question_id=question.id,
             language_id=target_language_id,
             version=vid,
-            rating=rating,
+            rating=cd['rating'],
             text=oxml.zackzack(),
             flag=cd['flag'],
             checkout=cd['checkout'],
@@ -338,13 +335,14 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
         return redirect(request.path + "?success") 
    
     if translation is None:
-        initial = {'orig':original.id}
+        initial = {'orig':original.id,'rating':0}
     else:
         initial = {
             'text':'',
             'flag':translation.flag,
             'checkout':translation.checkout,
             'comment':translation.comment,
+            'rating':translation.rating,
             'orig':original.id
         }
     
@@ -370,6 +368,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
         'status':exam.question_status,
         'exams':exams,
         'form':form,
+        'rating':initial['rating'],
         'question':question,
         'struct':struct,
         'comment':original.comment,

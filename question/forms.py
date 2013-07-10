@@ -16,6 +16,7 @@ class JuryQuestionForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea,required=False)
     flag = forms.BooleanField(required=False)
     orig = forms.IntegerField(widget=forms.HiddenInput)
+    rating = forms.IntegerField(required=False)
     checkout = forms.BooleanField(required=False)
 
 #same as above, but readonly, can never be submitted

@@ -1,0 +1,40 @@
+﻿<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="target-densitydpi=device-dpi, initial-scale=1.0" />
+<title>IBO Exam Test</title>
+<link href="reset.css" rel="stylesheet" type="text/css">
+<link href="students.css" rel="stylesheet" type="text/css">
+<script src="students.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div id="header">
+<div class="title">Theoretical Exam 1</div>
+</div>
+
+<div id="main">
+<div id="overview">
+
+<div class="login" style="border: 2px solid #ddd; margin: 10em; text-align: center; padding: 2em 1em; background: #eee;">
+<p><strong>Start Exam</strong></p>
+<p>Welcome to the first part of the theoretical examination of the IBO!</p>
+<p>To start your exam, enter your personal student code and date of birth.</p>
+<p style="border: 1px solid #ddd; padding: 1em; width: 50%; margin: 1em auto;">
+	<strong>Student code:</strong> <input type="text" id="studentcode" name="studentcode" value=""><br>
+	<strong>Date of birth (D/M/Y):</strong> <input type="text" id="D" name="D" size="2"> <input type="text" id="M" name="M" size="2"> <input type="text" id="Y" name="Y" size="4"><br>
+	<input type="button" value="Start Exam" onclick="login()">
+</p>
+<p>Good luck!</p>
+</div>
+</div>
+
+<div id="footer"><a></a></div>
+
+<div class="ibologo" onclick="fullsize()"><img src="flags/IBO2013.gif"></div>
+
+</body>
+</html>
+
+<!-- copyright 2013 - ibo|suisse -->

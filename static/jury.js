@@ -139,4 +139,5 @@ function CheckChanges_Check() // on page exit
 	
 }
 
-window.onbeforeunload = CheckChanges_Check;
+// temporarily not used!
+//window.onbeforeunload = CheckChanges_Check;

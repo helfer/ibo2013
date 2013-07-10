@@ -14,7 +14,8 @@ CKEDITOR.editorConfig = function( config ) {
 	config.autoGrow_minHeight = 94;
 	config.autoGrow_maxHeight = 0;
 	config.autoGrow_onStartup = true;
-	config.width = '100%';
+	config.width = '90%';
+	config.resize_maxWidth = 750;
 };
 
 

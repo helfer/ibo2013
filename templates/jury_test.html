@@ -18,11 +18,31 @@
 	<strong>Difficulty:</strong>
 	Too easy
 	<fieldset class="rating">
+	{% if form.rating == '5' %}
+    <input type="radio" id="star5" name="rating" value="5" checked="checked"><label for="star5"></label>
+    {% else %}
     <input type="radio" id="star5" name="rating" value="5"><label for="star5"></label>
+    {% endif %}
+    {% if form.rating == '4' %}
+    <input type="radio" id="star4" name="rating" value="4" checked="checked"><label for="star4"></label>
+    {% else %}
     <input type="radio" id="star4" name="rating" value="4"><label for="star4"></label>
+    {% endif %}
+    {% if form.rating == '3' %}
+    <input type="radio" id="star3" name="rating" value="3" checked="checked"><label for="star3"></label>
+    {% else %}
     <input type="radio" id="star3" name="rating" value="3"><label for="star3"></label>
+    {% endif %}
+    {% if form.rating == '2' %}
+    <input type="radio" id="star2" name="rating" value="2" checked="checked"><label for="star2"></label>
+    {% else %}
     <input type="radio" id="star2" name="rating" value="2"><label for="star2"></label>
+    {% endif %}
+    {% if form.rating == '1' %}
+    <input type="radio" id="star1" name="rating" value="1" checked="checked"><label for="star1"></label>
+    {% else %}
     <input type="radio" id="star1" name="rating" value="1"><label for="star1"></label>
+    {% endif %}
 	</fieldset>
 	Too hard
 	<div style="width: 125px; display: inline-block"></div>

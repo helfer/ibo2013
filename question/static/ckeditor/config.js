@@ -11,7 +11,10 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removePlugins = 'elementspath';
 	config.resize_enabled = false;
 	config.extraPlugins = 'autogrow';
+	config.autoGrow_minHeight = 94;
 	config.autoGrow_maxHeight = 0;
+	config.autoGrow_onStartup = true;
+	config.width = '100%';
 };
 
 

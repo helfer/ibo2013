@@ -93,6 +93,10 @@ input[type=submit]:active {
 	border: 3px inset #ccc;
 }
 
+input[type=text] {
+	width: 100%;
+}
+
 table {
 	width: 100%;
 	font-size: 1.6em;
@@ -307,16 +311,16 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 	margin: 0 115px 0 0;
 }
 
-.questionbox div a.flag {
-	background-image: none;
-}
-
 .questionbox div a:hover {
 	background: #999;
 	color: #000;
 	cursor: pointer;
 	text-decoration: none;
 	border: 2px solid #999;
+}
+
+.questionbox div a.flag {
+	background-image: none;
 }
 
 .questionbox div img {
@@ -498,15 +502,6 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 .rating:not(:checked) > label:hover,
 .rating:not(:checked) > label:hover ~ label {
     background: #5b266f;
-}
-
-textarea {
-    height:10em;
-    width:45em;
-}
-
-input[type=text]{
-    width:45em;
 }
 
 /* Settings page */

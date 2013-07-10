@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from ibo2013.question import simplediff
 from xml.etree import ElementTree as et
 
+
+PRIMARY_LANG_ID=1
+
 def dictify(obj_list,key):
     ret = {}
     for obj in obj_list:
@@ -58,7 +61,9 @@ class VersionNode(models.Model):
     version = models.IntegerField()
     language = models.ForeignKey(Language)
     flag = models.BooleanField()
+    rating = models.IntegerField(null=True)
     checkout = models.BooleanField()
+    committed = models.BooleanField()
     timestamp = models.DateTimeField(auto_now_add=True)
     #committed = models.BooleanField(default=False)
     
@@ -157,7 +162,7 @@ class Exam(models.Model):
         #selects all the most recent english versions of questions from this exam
         query = """SELECT * FROM (
 
-            SELECT eq.*, vn.text, vn.version, vn.id as vid
+            SELECT eq.*, vn.text, vn.version, vn.id as vid, vn.flag, vn.checkout
             FROM question_examquestion eq
             LEFT OUTER JOIN (
                 SELECT *
@@ -169,7 +174,7 @@ class Exam(models.Model):
             ) AS t1
             GROUP BY position
             ORDER BY category_id,position"""
-        q1params = [1,self.id] #todo: english = 1 is hardcoded as primary language
+        q1params = [PRIMARY_LANG_ID,self.id] #todo: english = 1 is hardcoded as primary language
 
         primary_versions = ExamQuestion.objects.raw(query,q1params)
 
@@ -215,12 +220,23 @@ class Exam(models.Model):
                 questions[i]["status"] = "empt"
             elif tv[i].origin_id != pv[i].vid:
                 questions[i]["status"] = "updt"
-            elif tv[i].flag:
-                questions[i]["status"] = "flag"
             elif tv[i].checkout:
                 questions[i]["status"] = "done"
             else:
                 questions[i]["status"] = "need"
+            #flag is independent of others.
+            if tv[i].flag:
+                questions[i]["status"] += " flag"
+            
+            #primary lang is special case
+            if lang_id == PRIMARY_LANG_ID:
+                if pv[i].checkout:
+                    questions[i]["status"] = "done"
+                else:
+                    questions[i]["status"] = "need"
+                if pv[i].flag:
+                    questions[i]["status"] += " flag"
+            
  
         self.question_status = questions
 

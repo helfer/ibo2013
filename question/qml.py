@@ -155,6 +155,11 @@ class QMLobject():
     def parse(self,xml):
         pass
 
+    # makes the figures appear inline
+    def inline_image(self):
+        for c in self.children:
+            c.inline_image()
+
     def zackzack(self,pretty=False):
         txt = et.tostring(self.xml,'utf-8')
         if pretty:
@@ -255,11 +260,19 @@ class QMLfigure(QMLobject):
     abbr = "fi"
     def get_filename(self,elem):
         self.filename = self.xml.attrib["imagefile"]
-
+        return self.filename
     #def apply_update(self):
     #    self.xml.attrib["imagefile"] = self.data
 
+    def inline_image(self):
+        fig = Figure.objects.get(name=self.filename)
+        e1 = et.Element("svginline")
+        e = et.fromstring(fig.svg)
+        e1.append(e)
+        self.xml.append(e1)
+
     def parse(self,elem):
+        self.filename = self.xml.attrib["imagefile"]
         self.meta = elem.attrib["imagefile"]
         for child in elem:
             if child.tag == "textarea":

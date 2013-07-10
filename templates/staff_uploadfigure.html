@@ -17,7 +17,13 @@
     </form>
 <ul>
 {% for img in images %}
-    <li><a href="/staff/images/{{img.name}}">{{img.name}}</a>({{img.description}})</li>
+    <li>
+    <a href="/staff/images/{{img.name}}">{{img.name}}</a>({{img.description}})
+    <form action="" method="POST" onsubmit="return confirm('delete {{img.name}}?')">
+        <input type="hidden" name="img_id" value="{{img.id}}" />
+        <input type="submit" name="delete" value="delete {{img.name}}"  />
+    </form>
+    </li>
 {% endfor %}
 </ul>
 {% endblock %}

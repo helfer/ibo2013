@@ -8,7 +8,8 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from ibo2013.question.qml import *
 from ibo2013.question.views_common import *        
-    
+from ibo2013.question import utils   
+ 
 @login_required
 @permission_check
 def overview(request,lang_id=1,permissions=None):
@@ -174,7 +175,7 @@ def questionview(request,exam_id=1,question_position=1,lang_id=1,permissions=Non
 
             tr = Translation(
                 language=v.language,
-                origin=original[0],
+                origin_id=cd['orig'],
                 target=v
             )
             tr.save()
@@ -192,13 +193,14 @@ def questionview(request,exam_id=1,question_position=1,lang_id=1,permissions=Non
         compare = original[0].text
 
     if not versions:
-        initial = {}
+        initial = {"orig":original[0].id}
     else:
         initial = {
             'text':versions[0].text,
             'flag':versions[0].flag,
             'checkout':versions[0].checkout,
-            'comment':versions[0].comment
+            'comment':versions[0].comment,
+            'orig':original[0].id
         }
 
     if 'write' in permissions or 'admin' in permissions:
@@ -284,24 +286,32 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
         translation = None
 
     if request.method == "POST":
-        #XXX omg this is dumb and ugly...
-        if "flag" in request.POST:
-            flg = request.POST["flag"]
+
+        #request.POST = utils.iboclean(request.POST)
+        #print "cleaned!",request.POST
+
+        if not ('write' in permissions or 'admin' in permissions):
+            raise PermissionDenied()
+       
+        form=JuryQuestionForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            print cd 
         else:
-            flg = False
-        if "checkout" in request.POST:
-            checkout = request.POST["checkout"]
-        else:
-            checkout = False
-        if "comment" in request.POST:
-            cmt = request.POST["comment"]
-        else:
-            cmt = False
-        #print request.POST
+            print request.POST
+            print form.errors
+        #populate juryform
+        #replace known tags
+        #strip remaining html
+ 
+        rating = None
+        if "rating" in request.POST:
+            rating = request.POST["rating"]
+
         oxml = QMLquestion(original.text)
-        #print "ORIGINAL:\n",oxml.zackzack()
-        oxml.update(request.POST)
-        #print "MODIFIED:\n",oxml.zackzack()
+        clean_post = utils.iboclean(request.POST)
+        print "CLEAN",clean_post
+        oxml.update(clean_post)
         if not translation:
             vid = 1
         else:
@@ -311,26 +321,42 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
             question_id=question.id,
             language_id=target_language_id,
             version=vid,
+            rating=rating,
             text=oxml.zackzack(),
-            flag=flg,
-            checkout=checkout,
-            comment=cmt
+            flag=cd['flag'],
+            checkout=cd['checkout'],
+            comment=cd['comment']
         )
         v.save()
 
         tr = Translation(
             language=v.language,
-            origin=original,
+            origin_id=cd['orig'],
             target=v
         )
         tr.save()
         return redirect(request.path + "?success") 
    
-       #return HttpResponse("done") 
-        #versions = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[:1]
-
+    if translation is None:
+        initial = {'orig':original.id}
+    else:
+        initial = {
+            'text':'',
+            'flag':translation.flag,
+            'checkout':translation.checkout,
+            'comment':translation.comment,
+            'orig':original.id
+        }
+    
+    if 'write' in permissions or 'admin' in permissions:
+        form=JuryQuestionForm(initial=initial)
+        ro = ""
+    else:
+        form=ViewQuestionForm(initial=initial)
+        ro = "readonly"
 
     exam.load_question_status(target_language_id)
+
     struct = make_xml_form(original,translation)
     cmt = ""
     tv = 0
@@ -343,11 +369,13 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
         'pos':question_position,
         'status':exam.question_status,
         'exams':exams,
+        'form':form,
         'question':question,
         'struct':struct,
+        'comment':original.comment,
         'versions':{'orig':original.version,'trans':tv},
-        'comment':cmt,
-        'perms':permissions
+        'perms':permissions,
+        'readonly': ro
     })
 
 
@@ -380,12 +408,13 @@ def zipem(texts,forms):
     rt = []
     for i in xrange(len(texts)):
         if not isinstance(texts[i]["data"],unicode) and not isinstance(texts[i]["data"],str): #it's a list
-            print type(texts[i]["data"])
+            #print type(texts[i]["data"])
             data = zipem(texts[i]["data"],forms[i]["data"])
             texts[i].update({"data":data})
             rt.append(texts[i])
         else:
-            texts[i].update({"form":forms[i]["data"]})
+            texts[i].update({"form":utils.prep_for_display(forms[i]["data"])})
+            texts[i]["data"] = utils.prep_for_display(texts[i]["data"])
             rt.append(texts[i])
 
     return rt

@@ -126,13 +126,17 @@ def view_question(request,qid=None,mode="normal"):
         raise Http404()
 
     #todo: change this to include only the last version
-    versions = question.versionnode_set.filter(language=question.primary_language).order_by('-timestamp')[:1]
+    if "lang_id" in request.GET:
+        chosen_lang_id = request.GET["lang_id"]
+    else:
+        chosen_lang_id = question.primary_language_id
+    versions = question.versionnode_set.filter(language=chosen_lang_id).order_by('-timestamp')[:1]
 
     if request.method == 'POST':
         print request.POST
         if len(versions) == 0:
             vnum = 1
-            lang_id = question.primary_language_id
+            lang_id = chosen_lang_id
         else:
             vnum = versions[0].version + 1
             lang_id = versions[0].language_id            
@@ -172,7 +176,7 @@ def view_question(request,qid=None,mode="normal"):
                     cd = form.cleaned_data
                     if len(versions) == 0:
                         vnum = 1
-                        lang_id = question.primary_language_id
+                        lang_id = chosen_lang_id
                     else:
                         vnum = versions[0].version + 1
                         lang_id = versions[0].language_id            
@@ -183,7 +187,7 @@ def view_question(request,qid=None,mode="normal"):
                     xmlq.parse_figures() #inserts variable fields for figure
                     xmlq.assign_initial_id(question.id) #assigns unique id where id=""
 
-                    v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=xmlq.zackzack(pretty=False))
+                    v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=xmlq.zackzack(pretty=False),comment=cd['comment'],flag=cd['flag'],checkout=cd['checkout'])
                     v.save()
                     versions = list(versions)
                     versions.append(v)   
@@ -233,6 +237,7 @@ def view_question(request,qid=None,mode="normal"):
         'form':form,
         'compare':compare,
         'viewmode':mode,
+        'lang_id':chosen_lang_id,
         'fig_form':fig_form})
         
 @staff_member_required
@@ -321,6 +326,16 @@ def translate_categories(request,lang_id):
 @staff_member_required
 def upload_figure(request):
     if request.method == 'POST':
+        if "delete" in request.POST:
+            try:
+                f = Figure.objects.get(pk=int(request.POST["img_id"]))
+                f.delete()
+            except:
+                raise Http404()
+
+        return HttpResponseRedirect(request.path + "?success")
+
+
         form = UploadFigureForm(request.POST, request.FILES)
         if form.is_valid():
             cd = form.cleaned_data
@@ -404,5 +419,26 @@ def view_image(request,fname="",qid=None,lang_id=1,version=None):
         svg = svg.replace(hex(hash(r.attrib['ibotag'])),r.text)
 
     return HttpResponse(svg,mimetype="image/svg+xml")
+
+
+@staff_member_required
+def get_pdf(request,qid,lang_id):
+    #try:
+        question = Question.objects.get(id=qid)
+        vnode = question.versionnode_set.filter(language=lang_id).order_by('-timestamp')[0]
+    #except:
+        #raise Http404()
+
+
+        xmlq = qml.QMLquestion(vnode.text)
+        xmlq.inline_image()
+        return HttpResponse(xmlq.zackzack(),content_type="text/plain")
+
+
+    
+
+
+
+
 
 

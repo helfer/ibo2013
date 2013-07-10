@@ -12,9 +12,10 @@ class EditQuestionForm(forms.Form):
     checkout = forms.BooleanField(required=False)
 
 class JuryQuestionForm(forms.Form):
-    text = forms.CharField(widget=forms.Textarea(attrs={'id':'area51','rows':40,'cols':120}))
+    text = forms.CharField(required=False,widget=forms.Textarea(attrs={'id':'area51','rows':40,'cols':120}))
     comment = forms.CharField(widget=forms.Textarea,required=False)
     flag = forms.BooleanField(required=False)
+    orig = forms.IntegerField(widget=forms.HiddenInput)
     checkout = forms.BooleanField(required=False)
 
 #same as above, but readonly, can never be submitted

@@ -29,8 +29,11 @@ urlpatterns = patterns('',
     (r'^staff/question/(\d{1,9})/xml/$',staffview.view_question,{"mode":"xml"}),
     (r'^staff/question/(\d{1,9})/history/$',staffview.view_question_history),
     (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/question/(?P<question_position>\d{1,2})/translate/$',juryview.xmlquestionview),
+    #(r'^juryx/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/question/(?P<question_position>\d{1,2})/translate/$',juryview.questionview),
     (r'^accounts/login/$', 'django.contrib.auth.views.login',{'template_name': 'auth.html'}),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout',{'next_page': '/accounts/login'}),
+    (r'^staff/getpdf/(\d{1,9})/(\d{1,9})/$',staffview.get_pdf),
+    
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

@@ -13,6 +13,7 @@
 
 <br style="clear: both;">
 
+<form action="" method="post" id="questionform">
 <div class="infobarbig">
 	<strong>Difficulty:</strong>
 	Too easy
@@ -27,8 +28,8 @@
 	<div style="width: 125px; display: inline-block"></div>
 	{# TODO: make link to previous and next questions #}
 	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate/"><img src="/static/icons/prev.png" title="Goto previous" alt="previous"></a>
-	<input type="checkbox" id="id_flag" name="flag" value="" /><label for="id_flag" title="Flag for attention"></label>
-	<input type="checkbox" id="id_checkout" name="checkout" value="" /><label for="id_checkout" title="Check-out as final"></label>
+	{{form.flag}}<label for="id_flag" title="Flag for attention"></label>
+	{{form.checkout}}<label for="id_checkout" title="Check-out as final"></label>
 	{% if 'admin' in perms or 'write' in perms %}
 	<a href="#"><img src="/static/icons/save_old.png" title="Save" alt="save" onclick="document.getElementById('submitter').click();"></a>
 	<a href="#"><img src="/static/icons/savenext_old.png" title="Save and next" alt="savenext"></a>
@@ -38,7 +39,6 @@
 
 <h1>Question {{pos}} : {{question.name}}</h1>
 
-<form action="" method="post" id="questionform">
 <table class="translationtable">
 <tr>
 <td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px; border-bottom: 1px solid #999">Translation</td>
@@ -74,7 +74,7 @@ Translated version {{versions.trans}}
         </td>
         <td>
         <div id="tqi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
-        <textarea name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
+        <textarea {{readonly}} name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
         </td>
     </tr>
     {% endif %}
@@ -90,7 +90,7 @@ Translated version {{versions.trans}}
         </td>
         <td>
         <div id="tqi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
-        <input type="text" name="{{el.id}}" value="{{el.form}}" />
+        <input type="text" {{readonly}} name="{{el.id}}" value="{{el.form}}" />
         </td>
     </tr>
     {% endif %}
@@ -106,7 +106,7 @@ Translated version {{versions.trans}}
                 {{sub.data}}
                 </td>
                 <td><a onclick="CopyContent('oa-{{sub.id}}','ta-{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ta-{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
-            <td><input type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"/></td>
+            <td><input {{readonly}} type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"/></td>
                 </tr>
             {% endif %}
             {% if sub.tag == "choice" %}
@@ -116,7 +116,7 @@ Translated version {{versions.trans}}
                 {{sub.data}}
                 </td>
                 <td><a onclick="CopyContent('oa-{{sub.id}}','ta-{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ta-{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
-            <td><input type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"/></td>
+            <td><input {{readonly}} type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"/></td>
                 </tr>
             {% endif %}
         {% endfor %}
@@ -129,7 +129,7 @@ Translated version {{versions.trans}}
             <td></td>
             <td>{{sub.data}}</td>
             <td></td>
-            <td><input type="text" id="{{sub.id}}" name="{{sub.id}}" value="{{sub.form}}" /></td>
+            <td><input {{readonly}} type="text" id="{{sub.id}}" name="{{sub.id}}" value="{{sub.form}}" /></td>
         </tr>
         {% endfor %}
     {% endif %}
@@ -153,7 +153,7 @@ Translated version {{versions.trans}}
             <td>
             <a onclick="CopyContent('oi-{{sub.id}}','ti-{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('ti-{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
             </td>
-            <td><input type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"/></td>
+            <td><input {{readonly}} type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"/></td>
             </tr>
         {% endfor %}
     {% endif %}
@@ -166,15 +166,15 @@ Translated version {{versions.trans}}
 <tr>
 <td></td>
 <td>
-The correct answers are A, B, C and D. This is because ... and see reference here.
+{{comment|safe}}
 </td>
 <td></td>
 <td>
-<textarea name="comment" id="txtcomment">{{comment}}</textarea>
+{{form.comment}}
 </td>
 </tr>
 </table>
-
+{{form.orig}}
 <input type="submit" style="visibility:hidden" value="submit" id="submitter" name="submit" />
 </form>
 

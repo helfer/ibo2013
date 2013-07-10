@@ -1,3 +1,5 @@
+var OriginalValues = [];
+
 function gid(element) { return document.getElementById(element); }
 
 function enlarge(obj) {
@@ -44,17 +46,7 @@ function debugCK() {
 function CopyContent(id_source,id_dest) {
 	var m = gid(id_source);
 	var n = gid(id_dest);
-	
-	if (n.tagName == 'input')
-	{
-		n.value = m.innerHTML;
-		alert('I copied "'+m.innerHTML+'" from a div (id = '+id_source+', to an input field (id = '+id_dest+')');
-	}
-	if (n.tagName == 'textarea')
-	{
-		n.innerHTML = '<p>'+m.innerHTML+'</p>';
-		alert('I copied "'+m.innerHTML+'" from a div (id = '+id_source+', to a textarea (id = '+id_dest+')');
-	}
+	n.innerHTML = '<p>'+m.innerHTML+'</p>';
 }
 
 function CopyContentAll() {
@@ -76,7 +68,6 @@ function CopyContentAll() {
 function ClearContent(id_dest) {
 	var m = gid(id_dest);
 	m.innerHTML = '';
-	m.value = '';
 }
 
 function ClearContentAll() {
@@ -94,3 +85,58 @@ function ClearContentAll() {
 	ClearContent('ta3');
 	ClearContent('ta4');
 }
+
+function CheckChanges_StoreCurrent() // on page load
+{
+
+	// need to add check for rating
+	
+	var p = document.getElementsByTagName("textarea");
+	var q = document.getElementsByTagName("input");
+	OriginalValues.push(gid("id_flag").checked);
+	OriginalValues.push(gid("id_checkout").checked);
+	
+	for (i=0;i<p.length;i++)
+	{
+		OriginalValues.push(p[i].innerHTML);
+	}
+	for (i=0;i<q.length;i++)
+	{
+		OriginalValues.push(q[i].value);
+	}
+} 
+
+function CheckChanges_Check() // on page exit
+{
+	var changes = false;
+	
+	if (OriginalValues[0] != gid("id_flag").checked)
+		changes = true;
+	if (OriginalValues[1] != gid("id_checkout").checked)
+		changes = true;
+	
+	var p = document.getElementsByTagName("textarea");
+	var q = document.getElementsByTagName("input");
+	
+	for (i=0;i<p.length;i++)
+	{
+		if (OriginalValues[i+2] != p[i].innerHTML)
+		{
+			changes = true;
+		}
+	}
+	
+	for (i=0;i<q.length;i++)
+	{
+		if (OriginalValues[i+2+p.length] != q[i].value)
+		{
+			changes = true;
+		}
+	}
+	
+	if (changes)
+		confirm('You have unsaved changes on the page. Do you really want to leave?');
+	
+}
+
+window.onbeforeunload = CheckChanges_Check;

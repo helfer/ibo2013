@@ -1,10 +1,45 @@
 {% extends "ibo2013_staff.html" %}
 
 {% block scripts %}
+<script src="/static/jquery-1.10.2.min.js" type="text/javascript"></script>
 <script src="/static/staff.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block main %}
+
+<script type="text/javascript">
+//to update content every 2 seconds
+var iFrequency = 2000; // expressed in miliseconds
+
+
+function doSomething()
+{
+    if($('#do_sync').is(':checked')){
+        console.log("sync");
+        var self = $('#xmlform');
+        url = "/ajax/";
+        ajax_req = $.ajax({
+            url: url,
+            type: "POST",
+            data: {
+                vnode: self.find('#vnode_id').val(),
+                text: self.find("#area51").val()
+            },
+            success: function(data, textStatus, jqXHR) {
+                console.log(data);
+            },
+            error: function(data, textStatus, jqXHR) {
+                        console.log(data.responseText)
+                        console.log("ERROR: " + $.parseJSON(data.responseText));
+                }
+        });
+    }
+}
+
+myInterval = setInterval( "doSomething()", iFrequency );  // run
+</script>
+
+
 <a href="/staff/exam/1/">back to exam 1</a>
 <a href="/staff/exam/2/">back to exam 2</a>
 <a href="/staff/exam/3/">back to exam 3</a>
@@ -13,6 +48,7 @@
 <p>Question: <strong>{{ question.name }}</strong></p>
 
 [TODO: list in which exams this question is and how many points it is worth for that exam]
+
 
 {% if viewmode == "xml" %}
     <a href="..">Back to normal view</a>
@@ -46,7 +82,7 @@
     <p>No comparison</p>
 {% endif %}
 
-    <form action="" method="post">
+    <form id="xmlform" action="" method="post">
 <table>
 {% for error in form.non_field_errors %}
     <tr><td style="color:red">{{ error }}</td></tr>
@@ -61,6 +97,9 @@
 
 
             {% if viewmode == "xml" %}
+            {% if vnode.committed %}{% else %}
+            <input type="checkbox" id="do_sync" /><label for="do_sync">sync</label><br />
+            {% endif %}
             rows:<input type="text" class="short" id="nrows" value="2" />
             cols:<input type="text" class="short" id="ncols" value="3"/>
             <button onclick="return add_table();">add table</button>
@@ -70,6 +109,7 @@
             <button onclick="return add_list();">add list</button>
             {% endif %}
         </table>
+        <input type="hidden" id="vnode_id" name="vnode_id" value="{{vnode.id}}" />
         <input type="hidden" name="qid" id="question_id" value="{{question.id}}" />
         <input type="submit" value="Submit">
     </form>

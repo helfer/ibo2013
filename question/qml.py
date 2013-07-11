@@ -1,4 +1,5 @@
 from django import forms
+from ibo2013.question import utils
 from ibo2013.question.forms import QMLTableField
 from ibo2013.question.models import Figure
 from xml.etree import ElementTree as et
@@ -80,14 +81,17 @@ class QMLobject():
     def make_ident(self,question_id,i):
         return str(question_id) + "_" + self.__class__.abbr + str(i)
 
-    def get_texts_nested(self):
+    def get_texts_nested(self,prep=False):
         if self.data is None:
             sub = []
             for c in self.children:
-                sub.extend(c.get_texts_nested())
+                sub.extend(c.get_texts_nested(prep))
             rt = [{"id":self.identifier,"tag":self.xml.tag,"data":sub,"meta":self.meta}]
         else:
-            rt = [{"id":self.identifier,"tag":self.xml.tag,"data":self.data,"meta":self.meta}]
+            data = self.data
+            if prep:
+                data = utils.prep_for_display(data)
+            rt = [{"id":self.identifier,"tag":self.xml.tag,"data":data,"meta":self.meta}]
         
         return rt
 

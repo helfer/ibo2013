@@ -10,6 +10,7 @@ class EditQuestionForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea,required=False)
     flag = forms.BooleanField(required=False)
     checkout = forms.BooleanField(required=False)
+    commit = forms.BooleanField(required=False)
 
 class JuryQuestionForm(forms.Form):
     text = forms.CharField(required=False,widget=forms.Textarea(attrs={'id':'area51','rows':40,'cols':120}))

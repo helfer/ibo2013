@@ -322,7 +322,8 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
             text=oxml.zackzack(),
             flag=cd['flag'],
             checkout=cd['checkout'],
-            comment=cd['comment']
+            comment=cd['comment'],
+            committed=True
         )
         v.save()
 

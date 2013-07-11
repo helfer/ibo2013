@@ -1,6 +1,8 @@
 from django.conf.urls.defaults import *
 from ibo2013.question import views_jury as juryview
+from ibo2013.question import views_students as studentview
 from ibo2013.question import views_staff as staffview
+from ibo2013.question import views_ajax as ajaxview
 from django.views.generic.simple import redirect_to
 
 
@@ -19,8 +21,11 @@ urlpatterns = patterns('',
 #    (r'^ckeditor/', include('ckeditor.urls')),
     (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/$',juryview.examview),
     (r'^staff/question/(\d{1,9})/$',staffview.view_question),
+    (r'^staff/discussion/(\d{1,9})/(\d{1,9})/$',staffview.discussion),
+    (r'^students/question/(\d{1,9})/(\d{1,9})/(\d{1,9})/$',studentview.question),
     (r'^staff/categories/(\d{1,9})/$',staffview.translate_categories),
     (r'^staff/images/$',staffview.upload_figure),
+    (r'^ajax/$',ajaxview.ajax_update),
     (r'^staff/categories/$',staffview.view_categories),
     (r'^staff/images/(?P<fname>[^/]+)/$',staffview.view_image),
     (r'^staff/images/(?P<fname>[^/]+)/(?P<qid>\d{1,9})/$',staffview.view_image),

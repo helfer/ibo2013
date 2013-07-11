@@ -187,7 +187,7 @@ def view_question(request,qid=None,mode="normal"):
                     xmlq.parse_figures() #inserts variable fields for figure
                     xmlq.assign_initial_id(question.id) #assigns unique id where id=""
 
-                    v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=xmlq.zackzack(pretty=False),comment=cd['comment'],flag=cd['flag'],checkout=cd['checkout'])
+                    v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=xmlq.zackzack(pretty=False),comment=cd['comment'],flag=cd['flag'],checkout=cd['checkout'],committed=cd['commit'])
                     v.save()
                     versions = list(versions)
                     versions.append(v)   
@@ -234,6 +234,7 @@ def view_question(request,qid=None,mode="normal"):
     return render_to_response('staff_questionview.html',
         {'question':question,
         'versions':versions,
+        'vnode':versions[0],
         'form':form,
         'compare':compare,
         'viewmode':mode,
@@ -436,9 +437,21 @@ def get_pdf(request,qid,lang_id):
 
 
     
+#@staff_member_required
+def discussion(request,exam_id,question_position):
 
+    if not request.user.is_staff and int(exam_id) > 2:
+        raise PermissionDenied()
 
+    try:
+        question_position = int(question_position)
+        exam_id = int(exam_id)
+        question = Question.objects.get(exam__id=exam_id,examquestion__position=question_position)
+        vnode = question.versionnode_set.filter(language=1).order_by('-timestamp')[0]
+    except: 
+        raise Http404()
 
+    xmlq = qml.QMLquestion(vnode.text)
+    struct = xmlq.get_texts_nested(prep=True)
 
-
-
+    return render_to_response('staff_discussion.html',{'question':question,'vnode':vnode,'struct':struct})

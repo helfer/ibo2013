@@ -167,7 +167,7 @@ class Exam(models.Model):
             LEFT OUTER JOIN (
                 SELECT *
                 FROM question_versionnode
-                WHERE language_id ='%s'
+                WHERE language_id ='%s' AND committed = 1
             ) AS vn ON eq.question_id = vn.question_id
             WHERE eq.exam_id='%s'
             ORDER BY position, version DESC

@@ -24,12 +24,8 @@
 <div id="question">
 <p>{{exam.name}} | Question {{pos}} | {{question.name}}</p>
 <p>{{vnode}}</p>
-<p>
-{% for el in struct.data %}
-{{el.data}},&nbsp;
-{% endfor %}
-</p>
-{% for el in struct.data %}
+{% for q in struct %}
+{% for el in q.data %}
 
 	{% if el.tag == "text" %}
 	<p>{{el.data}}</p>
@@ -41,21 +37,25 @@
 	{% endif %}
 
 {% endfor %}
+{% endfor %}
 </div>
 
 <div id="answers">
-{% for el in struct %}
+{% for q in struct %}
+{% for el in q.data %}
 
 	{% if el.tag == "task" %}
 	<p>{{el.data}}</p>
 	{% endif %}
 	
 {% endfor %}
+{% endfor %}
 
 <table>
 <tr>
 	<th></th>
-	{% for el in struct %}
+	{% for q in struct %}
+	{% for el in q.data %}
 	{% if el.tag == "answerlist" %}
 	{% for sub in el.data %}
 	{% if sub.tag == "answersplit" %}
@@ -64,9 +64,11 @@
 	{% endfor %}
 	{% endif %}
 	{% endfor %}
+	{% endfor %}
 </tr>
 
-{% for el in struct %}
+{% for q in struct %}
+{% for el in q.data %}
 {% if el.tag == "answerlist" %}
 {% for sub in el.data %}
 	{% if sub.tag == "choice" %}
@@ -84,6 +86,7 @@
 	{% endif %}
 {% endfor %}
 {% endif %}
+{% endfor %}
 {% endfor %}
 
 {# TODO: flagging #}

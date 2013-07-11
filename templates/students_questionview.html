@@ -23,6 +23,7 @@
 <div id="main">
 <div id="question">
 <p>{{exam.name}} | Question {{pos}} | {{question.name}}</p>
+<p>{% vnode|pprint %}</p>
 {% for el in struct.data %}
 
 	{% if el.tag == "text" %}
@@ -83,18 +84,18 @@
 {# TODO: Make Previous & Next work #}
 </table>
 	<div id="answerbar">
-		<a href="/students/question/{{lang_id}}/{{exam_id}}/{{question_position|add:'-1'}}" class="prev"></a>
+		<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'-1'}}" class="prev"></a>
 		{{form.flag}}<label for="id_flag" title="Flag for attention"></label>
-		<a href="/students/question/{{lang_id}}/{{exam_id}}/{{question_position|add:'1'}}" class="next"></a>
+		<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'1'}}" class="next"></a>
 	</div>
 </div>
 </div>
 
 <div id="footer">
-<a href="/students/question/{{lang_id}}/{{exam_id}}/{{question_position|add:'-1'}}" class="prev"></a>
+<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'-1'}}" class="prev"></a>
 <a href="/students/overview/{{lang_id}}/{{exam_id}}" class="home"></a>
 <a href="#" class="font" onclick="zoomfont()"></a>
-<a href="/students/question/{{lang_id}}/{{exam_id}}/{{question_position|add:'1'}}" class="next"></a>
+<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'1'}}" class="next"></a>
 </div>
 
 <div class="ibologo" onclick="fullsize()"><img src="/static/icons/IBO2013.png"></div>

@@ -30,4 +30,12 @@ def question(request,language_id,exam_id,question_position):
     xmlq = qml.QMLquestion(vnode.text)
     struct = xmlq.get_texts_nested(prep=True)
 
-    return render_to_response('students_questionview.html',{'language':language,'question':question,'vnode':vnode,'struct':struct})
+    return render_to_response('students_questionview.html',
+        {'exam_id':exam_id,
+        'lang_id':language_id,
+        'pos':question_position,
+        'language':language,
+        'question':question,
+        'vnode':vnode,
+        'struct':struct
+    })

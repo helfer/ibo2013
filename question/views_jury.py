@@ -421,4 +421,28 @@ def zipem(texts,forms):
 
 
 
+@login_required
+@permission_check
+def practicals(request,lang_id=1,permissions=None):
+	# RB: this will surely need an update
+
+    try:
+        lang_id = int(lang_id)
+        language = Language.objects.get(id=lang_id)
+    except:
+        raise Http404()
+
+    if request.user.is_staff:
+        exams = Exam.objects.all()
+    else:
+        exams = Exam.objects.filter(staff_only=False)
+    
+    for e in exams:
+        e.load_question_status(lang_id)
+
+    return render_with_context(request,'jury_practicals.html',
+        {'exams':exams,
+        'lang_id':lang_id
+        })
+
 

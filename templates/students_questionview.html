@@ -25,7 +25,7 @@
 <p>{{exam.name}} | Question {{pos}} | {{question.name}}</p>
 <p>{{vnode}}</p>
 <p>
-{% for el in struct %}
+{% for el in struct.data %}
 {{el.data}},&nbsp;
 {% endfor %}
 </p>
@@ -44,7 +44,7 @@
 </div>
 
 <div id="answers">
-{% for el in struct.data %}
+{% for el in struct %}
 
 	{% if el.tag == "task" %}
 	<p>{{el.data}}</p>
@@ -55,7 +55,7 @@
 <table>
 <tr>
 	<th></th>
-	{% for el in struct.data %}
+	{% for el in struct %}
 	{% if el.tag == "answerlist" %}
 	{% for sub in el.data %}
 	{% if sub.tag == "answersplit" %}
@@ -66,7 +66,7 @@
 	{% endfor %}
 </tr>
 
-{% for el in struct.data %}
+{% for el in struct %}
 {% if el.tag == "answerlist" %}
 {% for sub in el.data %}
 	{% if sub.tag == "choice" %}
@@ -86,21 +86,29 @@
 {% endif %}
 {% endfor %}
 
-{# TODO: Make Previous & Next work #}
+{# TODO: flagging #}
 </table>
 	<div id="answerbar">
+		{% if pos|add:'-1' > 0 %}
 		<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'-1'}}" class="prev"></a>
+		{% endif %}
 		{{form.flag}}<label for="id_flag" title="Flag for attention"></label>
+		{% if pos|add:'1' < 51 %}
 		<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'1'}}" class="next"></a>
+		{% endif %}
 	</div>
 </div>
 </div>
 
 <div id="footer">
+{% if pos|add:'-1' > 0 %}
 <a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'-1'}}" class="prev"></a>
+{% endif %}
 <a href="/students/overview/{{lang_id}}/{{exam_id}}" class="home"></a>
 <a href="#" class="font" onclick="zoomfont()"></a>
+{% if pos|add:'1' < 51 %}
 <a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'1'}}" class="next"></a>
+{% endif %}
 </div>
 
 <div class="ibologo" onclick="fullsize()"><img src="/static/icons/IBO2013.png"></div>

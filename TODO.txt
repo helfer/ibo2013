@@ -1,0 +1,39 @@
+
+TODO
+
+sorted by priority:
+
+0. exam question printing with figures for Phaentu
+    - make one without namespaces for fabian
+
+1. Code cleanup, refactoring, find inefficient pages
+
+2. accounts/users/roles
+    - get all people in there according to group
+    - authentication: students only student view, jury only jury view
+
+3. IP filtering setup
+
+4. practicals pdf download and upload
+
+5. logging: make sure you could find out who did what and from where.
+
+6. jury view: 
+    - EN_official
+    - RU_official
+    - versions
+    - revamp page for giving edit/coordinator rights
+    - student page for assigning exams
+
+7. get hand translation to work (major overhaul)
+
+8. student views: 
+    - prefetch all images. 
+    - prefetch all questions? 
+    - ajax for every question submission? (must be secure!)
+    - complete logging of all actions on interface.
+
+9. jury practical correction view
+
+10. jury theoretical correction view
+

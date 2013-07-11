@@ -23,11 +23,7 @@
 <div id="main">
 <div id="question">
 <p>{{exam.name}} | Question {{pos}} | {{question.name}}</p>
-<p>
-{% for el in vnode %}
-{{el.data}},&nbsp;
-{% endfor %}
-</p>
+<p>{{vnode}}</p>
 <p>
 {% for el in struct %}
 {{el.data}},&nbsp;

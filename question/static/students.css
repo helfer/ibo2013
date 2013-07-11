@@ -334,7 +334,7 @@ body.zoom #answers.hide table {
 }
 
 /* Answer bar (mini-menu) */
-#answerbar {
+#answers #answerbar {
 	position: absolute;
 	bottom: 60px;
 	right: 0;
@@ -342,42 +342,59 @@ body.zoom #answers.hide table {
 	background: #ccc;
 	text-align: center;
 	width: 525px;
+	border-radius: 0;
+	border: 0;
+	cursor: auto;
 }
 
-#answerbar.hide {
+#answers #answerbar.hide {
 	bottom: 0;
 	padding-right: 150px;
 	width: 375px;
 }
 
-#answerbar li:first-child,
-#answerbar li:last-child {
+#answers #answerbar a:first-child,
+#answers #answerbar a:last-child {
 	display: none;
 }
 
-#answerbar.hide li:first-child,
-#answerbar.hide li:last-child {
+#answers #answerbar.hide a:first-child,
+#answers #answerbar.hide a:last-child {
 	display: inline-block;
 }
 
-#answerbar li {
+#answers #answerbar a {
 	display: inline-block;
 	height: 6em;
 	width: 10em;
 }
 
-#answerbar li.prev { background: url('icons/prev.png') center center no-repeat; }
-#answerbar li.next { background: url('icons/next.png') center center no-repeat; }
-#answerbar li#flag { background: url('icons/flag.png') center center no-repeat; }
+#answers #answerbar a.prev { background: url('icons/prev.png') center center no-repeat; }
+#answers #answerbar a.next { background: url('icons/next.png') center center no-repeat; }
 
-#answerbar li#flag.select:hover,
-#answerbar li#flag.select {
-	background-color: #d61d24;
-}
-#answerbar li#flag:hover,
-#answerbar li:hover {
+#answers #answerbar a:hover {
 	background-color: #555;
 	cursor: pointer;
+}
+
+#answers #answerbar input {
+	display: none;
+}
+#answers #answerbar label {
+	float: none;
+	display: inline-block;
+	cursor: pointer;
+	height: 6em;
+	width: 10em;
+}
+#answers #answerbar #id_flag + label {
+	background: url('icons/flag.png') no-repeat center;	
+}
+#answers #answerbar #id_flag + label:hover {
+	background-color: #555;
+}
+#answers #answerbar #id_flag:checked + label {
+	background: #eabf03 url('icons/flag.png') no-repeat center;
 }
 
 
@@ -423,7 +440,7 @@ body {
 	height: 1205px;
 }
 
-#answerbar.hide {
+#main #answers #answerbar {
 	padding-right: 0;
 	width: 100%;
 }

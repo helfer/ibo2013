@@ -4,115 +4,103 @@
 <meta charset="utf-8">
 <meta name="viewport" content="target-densitydpi=device-dpi, initial-scale=1.0" />
 <title>IBO Exam Test</title>
-<link href="reset.css" rel="stylesheet" type="text/css">
-<link href="students.css" rel="stylesheet" type="text/css">
-<script src="students.js" type="text/javascript"></script>
+<link href="/static/reset.css" rel="stylesheet" type="text/css">
+<link href="/static/students.css" rel="stylesheet" type="text/css">
+<script src="/static/students.js" type="text/javascript"></script>
 </head>
 <body>
 
 <div id="header">
 <div class="title">
-<select>
-	<option value="DUMMY"></option>
-	<option value="IBOENG" selected="selected">IBO Official (EN)</option>
-	<option value="IBORUS">IBO Official (RU)</option>
-	<option value="NLDBEL">Nederlands</option>
-	<option value="" disabled="disabled"></option>
-	<option value="BELFRA">Français</option>
-	<option value="GREECE">Ελληνικά</option>
-	<option value="GEORGIA">ქართული ენა</option>
-	<option value="THAI">ภาษาไทย</option>
-	<option value="SIGN">American Sign Language</option>
-	<option value="KLINGON">tlhIngan Hol</option>
-	<option value="QUENYA">Quenya</option>
-	<option value="MANYMORE">... and many more</option>
-</select>
+{{lang_picker.language}}
 </div>
 <div class="infobox">
-<strong>Francesca VAN TARTWIJK</strong> (The Netherlands)
+{# TODO: Delegation name? #}
+<strong>{{user}}</strong> (The Netherlands)
 </div>
 </div>
 
 <div id="main">
+{% block content %}
 <div id="question">
-<p>Part 1 | Question 10</p>
-<p>Male fiddler crabs use their enlarged claws chelipeds (major chelipeds) for signalling (e.g., fighting for burrows, waving at females, etc.).  A student studied male-female interactions by using mirrors to reflect two different-sized images of the same waving male crab to females.  Mirror combinations used in the experiment were: 10x : 3x (Treatment I), 3x : 1x (Treatment II) and 10x : 1x (Treatment III).  Ten waving males were presented to 20 females in three trials for each treatment.  She recorded the percentage of females (Graph A) and time taken by each female to approach each reflection (Graph B) for each treatment as well as whether the male was right or left-handed (Graph C).</p>
-<img src="images/test.jpg" onclick="enlarge(this);">
-<img src="images/test.jpg" onclick="enlarge(this);">
+<p>{{exam.name}} | Question {{pos}} | {{question.name}}</p>
+{% for el in struct.data %}
+
+	{% if el.tag == "text" %}
+	<p>{{el.data}}</p>
+	{% endif %}
+	
+	{% if el.tag == "figure" %}
+	{# TODO: The URL to the images will probably be a bit different! #}
+	<img src="/staff/images/{{el.meta}}//{{question.id}}/{{language.id}}/{{versions.trans}}/" onclick="enlarge(this);">
+	{% endif %}
+
+{% endfor %}
 </div>
 
 <div id="answers">
-<p>Indicate whether the following conclusions that can be drawn about the interactions between male and female crabs are true or false.</p>
+{% for el in struct.data %}
+
+	{% if el.tag == "task" %}
+	<p>{{el.data}}</p>
+	{% endif %}
+	
+{% endfor %}
 
 <table>
 <tr>
 	<th></th>
-	<th><p>True</p></th>
-	<th><p>False</p></th>
+	{% for el in struct.data %}
+	{% if el.tag == "answerlist" %}
+	{% for sub in el.data %}
+	{% if sub.tag == "answersplit" %}
+	<th><p>{{sub.data}}</p></th>
+	{% endif %}
+	{% endfor %}
+	{% endif %}
+	{% endfor %}
 </tr>
-<tr>
-	<td><p>Female fiddler crabs generally prefer larger males.</p></td>
+
+{% for el in struct.data %}
+{% if el.tag == "answerlist" %}
+{% for sub in el.data %}
+	{% if sub.tag == "choice" %}
+	<tr>
+	<td><p>{{sub.data}}</p></td>
 	<td>
-	<input type="radio" id="p1q1a1t" name="p1q1a1">
-		<label for="p1q1a1t" class="true"><div></div></label>
+	<input type="radio" id="{{sub.id}}t" name="{{sub.id}}" value="true" onclick="DoSomethingToStoreTheQuestion()">
+		<label for="{{sub.id}}t" class="true"><div></div></label>
 	</td>
 	<td>
-	<input type="radio" id="p1q1a1f" name="p1q1a1">
-		<label for="p1q1a1f" class="false"><div></div></label>
+	<input type="radio" id="{{sub.id}}f" name="{{sub.id}}" value="false" onclick="DoSomethingToStoreTheQuestion()">
+		<label for="{{sub.id}}f" class="false"><div></div></label>
 	</td>
-</tr>
-<tr>
-	<td><p>In mate-choice selection, male handedness is an important criterion.</p></td>
-	<td>
-	<input type="radio" id="p1q1a2t" name="p1q1a2">
-		<label for="p1q1a2t" class="true"><div></div></label>
-	</td>
-	<td>
-	<input type="radio" id="p1q1a2f" name="p1q1a2">
-		<label for="p1q1a2f" class="false"><div></div></label>
-	</td>
-</tr>
-<tr>
-	<td><p>Males that wave faster generally attracted more females.</p></td>
-	<td>
-	<input type="radio" id="p1q1a3t" name="p1q1a3">
-		<label for="p1q1a3t" class="true"><div></div></label>
-	</td>
-	<td>
-	<input type="radio" id="p1q1a3f" name="p1q1a3">
-		<label for="p1q1a3f" class="false"><div></div></label>
-	</td>
-</tr>
-<tr>
-	<td><p>An obvious difference in cheliped size of males may be necessary before females become more decisive.</p></td>
-	<td>
-	<input type="radio" id="p1q1a4t" name="p1q1a4">
-		<label for="p1q1a4t" class="true"><div></div></label>
-	</td><td>
-	<input type="radio" id="p1q1a4f" name="p1q1a4">
-		<label for="p1q1a4f" class="false"><div></div></label>
-	</td>
-</tr>
+	</tr>
+	{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+
+{# TODO: Make Previous & Next work #}
 </table>
-	<ul id="answerbar">
-		<li class="prev"></li>
-		<li id="flag" onclick="flag()"></li>
-		<li class="next"></li>
-	</ul>
+	<div id="answerbar">
+		<a href="/students/question/{{lang_id}}/{{exam_id}}/{{question_position|add:'-1'}}" class="prev"></a>
+		{{form.flag}}<label for="id_flag" title="Flag for attention"></label>
+		<a href="/students/question/{{lang_id}}/{{exam_id}}/{{question_position|add:'1'}}" class="next"></a>
+	</div>
 </div>
 </div>
 
 <div id="footer">
-<a href="#" class="prev"></a>
-<a href="#" onclick="window.location.href = 'studentshome.html'" class="home"></a>
-<a href="#" onclick="zoomfont()" class="font"></a>
-<a href="#" class="next"></a>
+<a href="/students/question/{{lang_id}}/{{exam_id}}/{{question_position|add:'-1'}}" class="prev"></a>
+<a href="/students/overview/{{lang_id}}/{{exam_id}}" class="home"></a>
+<a href="#" class="font" onclick="zoomfont()"></a>
+<a href="/students/question/{{lang_id}}/{{exam_id}}/{{question_position|add:'1'}}" class="next"></a>
 </div>
 
-<div class="ibologo" onclick="fullsize()"><img src="flags/IBO2013.gif"></div>
-<div id="clock">2:34</div>
+<div class="ibologo" onclick="fullsize()"><img src="/static/icons/IBO2013.png"></div>
+<div id="clock">{{countdown}}</div>
 
 </body>
 </html>
 
-<!-- copyright 2013 - ibo|2013 -->

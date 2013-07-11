@@ -411,7 +411,7 @@ def view_image(request,fname="",qid=None,lang_id=1,version=None):
             raise Http404()
 
         if version is None:
-            vn = q.versionnode_set.filter(language=lang_id).order_by('-timestamp')[0]
+            vn = q.versionnode_set.filter(committed=1,language=lang_id).order_by('-timestamp')[0]
         else:
             vn = q.versionnode_set.get(language=lang_id,version=version)
         search = ".//figure[@imagefile='{0}']/textarea".format(fname)
@@ -426,14 +426,16 @@ def view_image(request,fname="",qid=None,lang_id=1,version=None):
 def get_pdf(request,qid,lang_id):
     #try:
         question = Question.objects.get(id=qid)
-        vnode = question.versionnode_set.filter(language=lang_id).order_by('-timestamp')[0]
+        vnode = question.versionnode_set.filter(committed=1,language=lang_id).order_by('-timestamp')[0]
     #except:
         #raise Http404()
 
 
         xmlq = qml.QMLquestion(vnode.text)
         xmlq.inline_image()
-        return HttpResponse(xmlq.zackzack(),content_type="text/plain")
+        txt = xmlq.zackzack()
+        #txt = txt.replace("<ns0:","")#remove namespace hack 
+        return HttpResponse(txt,content_type="text/plain")
 
 
     

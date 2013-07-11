@@ -269,11 +269,16 @@ class QMLfigure(QMLobject):
     #    self.xml.attrib["imagefile"] = self.data
 
     def inline_image(self):
-        fig = Figure.objects.get(name=self.filename)
+        fig = Figure.objects.get(name=self.filename).svg
+        search = "textarea"
+        replace = self.xml.findall(search)
+        for r in replace:
+            fig = fig.replace(hex(hash(r.attrib['ibotag'])),r.text)
         e1 = et.Element("svginline")
-        e = et.fromstring(fig.svg)
+        e = et.fromstring(fig)
         e1.append(e)
         self.xml.append(e1)
+        
 
     def parse(self,elem):
         self.filename = self.xml.attrib["imagefile"]

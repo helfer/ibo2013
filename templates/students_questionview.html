@@ -22,8 +22,8 @@
 
 <div id="main">
 <div id="question">
-<p>{{exam.name}} | Question {{pos}} | {{question.name}}</p>
-<p>{{vnode}}</p>
+<p>{{language}} | Question {{pos}} | {{question.name}}</p>
+
 {% for q in struct %}
 {% for el in q.data %}
 
@@ -33,7 +33,7 @@
 	
 	{% if el.tag == "figure" %}
 	{# TODO: The URL to the images will probably be a bit different! #}
-	<img src="/staff/images/{{el.meta}}//{{question.id}}/{{language.id}}/{{versions.trans}}/" onclick="enlarge(this);">
+	<img src="/staff/images/{{el.meta}}/{{question.id}}/{{language.id}}/{{vnode.version}}/" onclick="enlarge(this);">
 	{% endif %}
 
 {% endfor %}
@@ -95,7 +95,7 @@
 		{% if pos|add:'-1' > 0 %}
 		<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'-1'}}" class="prev"></a>
 		{% endif %}
-		{{form.flag}}<label for="id_flag" title="Flag for attention"></label>
+		<input type="checkbox" id="id_flag" name="id_flag"><label for="id_flag" title="Flag for attention"></label>
 		{% if pos|add:'1' < 51 %}
 		<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'1'}}" class="next"></a>
 		{% endif %}

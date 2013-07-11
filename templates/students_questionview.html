@@ -23,7 +23,16 @@
 <div id="main">
 <div id="question">
 <p>{{exam.name}} | Question {{pos}} | {{question.name}}</p>
-<p>{% vnode|pprint %}</p>
+<p>
+{% for el in vnode %}
+{{el.data}},&nbsp;
+{% endif %}
+</p>
+<p>
+{% for el in struct %}
+{{el.data}},&nbsp;
+{% endif %}
+</p>
 {% for el in struct.data %}
 
 	{% if el.tag == "text" %}

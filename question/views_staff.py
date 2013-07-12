@@ -23,7 +23,6 @@ def view_exam(request,exam_id):
         raise Http404()
     
     if request.method == 'POST':
-        print request.POST
         if "up" in request.POST or "down" in request.POST or "delete" in request.POST:
             qid = int(request.POST["qid"])
             q1 = ExamQuestion.objects.get(id=qid)
@@ -134,7 +133,6 @@ def view_question(request,qid=None,mode="normal"):
     versions = question.versionnode_set.filter(language=chosen_lang_id).order_by('-timestamp')[:1]
 
     if request.method == 'POST':
-        print request.POST
         if len(versions) == 0:
             vnum = 1
             lang_id = chosen_lang_id
@@ -143,7 +141,6 @@ def view_question(request,qid=None,mode="normal"):
             lang_id = versions[0].language_id            
             
         if "reident" in request.POST:
-            print "newform"
             xmlq = qml.QMLquestion(versions[0].text)
             xmlq.reassign_identifiers(question.id) 
             v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=xmlq.zackzack())
@@ -152,12 +149,9 @@ def view_question(request,qid=None,mode="normal"):
 
         else:
             if mode == "normal":
-                print "newform"
                 xmlq = qml.QMLquestion(versions[0].text)
                 form = QMLform(request.POST,qml=xmlq)
                 if form.is_valid():
-                    print "isvalid"
-                    print form.cleaned_data
                     xmlq.update(form.cleaned_data)
                    
                     v = VersionNode(question_id=question.id,language_id=lang_id,version=vnum,text=xmlq.zackzack())
@@ -167,11 +161,8 @@ def view_question(request,qid=None,mode="normal"):
                     
                     return redirect(request.path) #POST,GET redirect for instant reload   
                 else:
-                    print "haserrors"
-                    print form.errors
-
+                    pass
             elif mode == "xml": 
-                print "legacy"
                 form = EditQuestionForm(request.POST)
                 if form.is_valid():
                     cd = form.cleaned_data
@@ -196,23 +187,18 @@ def view_question(request,qid=None,mode="normal"):
                     return redirect(request.path) #POST,GET redirect for instant reload   
             else:
                 raise ValueError("no such view mode: >" + str(mode)+"<")
-        #print versions[0].text   
         
     #request method is not POST, no form was submitted
     else:
         if len(versions) > 0 and mode == "normal":
-            print "xmlquestion"
             try:
                 xmlq = qml.QMLquestion(versions[0].text)
-                print xmlq.summary()
                 form = QMLform(qml=xmlq)
             except Exception as e:
-                print "exception"
             #    if versions[0].text.startswith('<question'):
             #        #this should probably be xml, raise exception
             #        raise e
             #    else:
-                print "redirect"
                 return redirect("/staff/question/"+str(question_id)+"/xml/")
             
         else:
@@ -230,7 +216,6 @@ def view_question(request,qid=None,mode="normal"):
     #    compare = versions[0].compare_with(versions[1])
 
     fig_form = FigureChoiceForm()
-    #print fig_form.figure
 
     return render_to_response('staff_questionview.html',
         {'question':question,
@@ -260,11 +245,9 @@ def view_categories(request):
                 cat.save()
                 return redirect("/staff/categories?success")
             else:
-                print "form contains errors"
+                pass
         if "update" in request.POST:
             try:
-                #insecure, but only staff have access
-                print "cat_id " + request.POST["cat_id"]
                 instance=QuestionCategory.objects.get(id=int(request.POST['cat_id']))
                 f = EditCategoryForm(request.POST,instance=instance)
                 if f.is_valid():
@@ -273,7 +256,7 @@ def view_categories(request):
                 else:
                     errors = form.errors
             except:
-                print "this category doesn't exist"
+                pass
     else:
         pass
     cats = []
@@ -310,7 +293,6 @@ def translate_categories(request,lang_id):
     objs = []
     for c in cats:
         trans = c.categorytranslation_set.filter(Q(language=language) | Q(language=english)).order_by('language')
-        print "len" + str(len(trans))
         orig = trans[0]
         if len(trans) == 1:
             frm = TranslateCategoryForm()
@@ -320,7 +302,6 @@ def translate_categories(request,lang_id):
         objs.append({"orig":orig,"form":frm})
 
 
-    print objs
 
     return render_to_response('staff_categories_trans.html',{'objs':objs})
 
@@ -342,9 +323,7 @@ def upload_figure(request):
         if form.is_valid():
             cd = form.cleaned_data
             if cd['name'] == "":
-                print "setname"
                 cd['name'] = request.FILES['imgfile'].name
-                print cd['name']
             process_uploaded_figure(request.FILES['imgfile'],cd['name'],cd['description'])
             return HttpResponseRedirect(request.path + "?success")
     else:
@@ -375,11 +354,9 @@ def find_figure_tags(svg_el):
             if len(svg_el) == 1:
                 if len(svg_el[0]) > 0:
                     raise QMLParseError("tspan Element shouldn't have any subelements  at " + sid + " " + et.tostring(svg_el))
-                print "tag found " + sid
                 rt.append((sid,svg_el[0].text))
                 svg_el[0].text = hex(hash(sid))
             elif len(svg_el) == 0:
-                print "tag found " + sid
                 rt.append((sid,svg_el.text))
                 svg_el.text = hex(hash(sid))
             else:
@@ -397,7 +374,6 @@ class QMLParseError(Exception):
 #@staff_member_required
 def view_image(request,fname="",qid=None,lang_id=1,version=None):
     try:
-        print fname
         img = Figure.objects.get(name=fname)
     except:
         raise Http404()
@@ -434,8 +410,6 @@ def get_pdf(request,exam_id,question_position,lang_id=1):
     except: 
         raise Http404()
 
-    print vnode.id
-    print vnode.text
     xmlq = qml.QMLquestion(vnode.text.encode("utf-8"))
     xmlq.inline_image()
     txt = xmlq.zackzack()

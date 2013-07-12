@@ -14,8 +14,9 @@ h1 { border-bottom: 1px solid #999;
 p { margin: 12px 0; }
 .coll,
 .colr {
-	width: 50%;
-	padding: 10px;
+	float: left;
+	width: 48%;
+	padding: 1%;
 }
 </style>
 {% endblock %}
@@ -33,6 +34,7 @@ p { margin: 12px 0; }
 
 <h1>Question: <strong>{{ question.name }}</strong> version {{vnode.version}}</h1>
 <input type="checkbox" id="do_sync" checked/><label for="do_sync">sync</label>
+<br style="clear: both;">
 
 <div class="coll">
 {% for q in struct %}
@@ -51,9 +53,12 @@ p { margin: 12px 0; }
 
     {% if el.tag == "figure" %}
         <img src="/staff/images/{{el.meta}}/{{question.id}}/1/{{vnode.version}}/">
+        <p><strong>Editable figure text</strong></p>
+        <ul>
         {% for sub in el.data %}
-            <p>{{sub.data}}</p>
+            <li><p>{{sub.data}}</p></li>
         {% endfor %}
+        </ul>
     {% endif %}
 
   {% endfor %}
@@ -66,6 +71,7 @@ p { margin: 12px 0; }
 
     {% if el.tag == "task" %}
         <p>{{el.data}}</p>
+        <hr>
     {% endif %}
   
     {% if el.tag == "answerlist" %}
@@ -73,6 +79,7 @@ p { margin: 12px 0; }
             {% if sub.tag == "answersplit" %}
                 <p>{{sub.data}}</p>
             {% endif %}
+            <hr>
             {% if sub.tag == "choice" %}
                 <p>{{sub.data}}</p>
             {% endif %}
@@ -81,5 +88,7 @@ p { margin: 12px 0; }
   {% endfor %}
 {% endfor %}
 </div>
+
+<br style="clear: both;">
 
 {% endblock %}

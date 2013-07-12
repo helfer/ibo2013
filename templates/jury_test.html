@@ -110,7 +110,7 @@ Translated version {{versions.trans}}
         </td>
         <td>
         <div id="tpi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
-        <textarea {{readonly}} name="{{el.id}}" value="{{el.form}}" class="ckeditor">{{el.form}}</textarea>
+        <textarea {{readonly}} name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
         </td>
     </tr>
     {% endif %}

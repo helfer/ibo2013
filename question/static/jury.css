@@ -407,6 +407,7 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 }
 .translationtable tr td:last-child { width: 47.4%; }
 
+.translationtable textarea + div { margin: -6px 0; }
 
 /* Info/buttons bar for translation screen */
 .infobarbig {

@@ -38,15 +38,18 @@ function DownloadPDF() {
 		alert('No questions selected!');
 }
 
-function debugCK() {
-	var l = gid("tq");
-	alert(l.innerHTML);
-}
-
 function CopyContent(id_source,id_dest) {
 	var m = gid(id_source);
 	var n = gid(id_dest);
-	n.innerHTML = '<p>'+m.innerHTML+'</p>';
+	
+	if (n.tagName == 'TEXTAREA')
+	{
+		CKEDITOR.instances[id_dest].setData('<p>'+m.innerHTML+'</p>');
+	}
+	else
+	{
+		n.value = m.innerHTML;
+	}
 }
 
 function CopyContentAll() {
@@ -67,7 +70,15 @@ function CopyContentAll() {
 
 function ClearContent(id_dest) {
 	var m = gid(id_dest);
-	m.innerHTML = '';
+	
+	if (n.tagName == 'TEXTAREA')
+	{
+		CKEDITOR.instances[id_dest].setData('');
+	}
+	else
+	{
+		m.value = '';
+	}
 }
 
 function ClearContentAll() {

@@ -8,7 +8,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.toolbar = [
     [ 'Bold', 'Italic', 'Subscript', 'Superscript' ]
 	];
-	config.toolbarPosition = 'bottom';
+	config.toolbarLocation = 'bottom';
 	config.removePlugins = 'elementspath';
 	config.resize_enabled = false;
 	config.extraPlugins = 'autogrow';

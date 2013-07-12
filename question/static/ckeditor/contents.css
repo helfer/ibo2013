@@ -17,6 +17,8 @@ body
 	padding: 0;
 }
 
+p { margin: 0; padding: 0; }
+
 .cke_editable
 {
 	font-size: 1.25em;

@@ -3,8 +3,16 @@ TODO
 
 sorted by priority:
 
+
 0. exam question printing with figures for Phaentu
-    - make one without namespaces for fabian
+    - position, nicht id
+    - comment in printout
+    - klicklick
+
+
+> undo non-committed button, commit automatically 
+
+0. diff for everyone
 
 1. Code cleanup, refactoring, find inefficient pages
 
@@ -12,7 +20,6 @@ sorted by priority:
     - get all people in there according to group
     - authentication: students only student view, jury only jury view
 
-3. IP filtering setup
 
 4. practicals pdf download and upload
 
@@ -21,6 +28,7 @@ sorted by priority:
 6. jury view: 
     - EN_official
     - RU_official
+    - translate categories and common phrases
     - versions
     - revamp page for giving edit/coordinator rights
     - student page for assigning exams
@@ -37,3 +45,12 @@ sorted by priority:
 
 10. jury theoretical correction view
 
+
+BUGS:
+* translation view: next question, previous question
+
+* student view: everything buggy
+
+FEATURES:
+* low priority: english update from translation page
+* 

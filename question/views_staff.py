@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from ibo2013.question import qml
 from django.db.models import Q
 from xml.etree import ElementTree as et
+import base64
 
 @login_required
 @staff_member_required
@@ -423,22 +424,51 @@ def view_image(request,fname="",qid=None,lang_id=1,version=None):
 
 
 @staff_member_required
-def get_pdf(request,qid,lang_id):
-    #try:
-        question = Question.objects.get(id=qid)
-        vnode = question.versionnode_set.filter(committed=1,language=lang_id).order_by('-timestamp')[0]
-    #except:
-        #raise Http404()
+def get_pdf(request,exam_id,question_position,lang_id=1):
+ 
+    try:
+        question_position = int(question_position)
+        exam_id = int(exam_id)
+        question = Question.objects.get(exam__id=exam_id,examquestion__position=question_position)
+        vnode = question.versionnode_set.filter(language=lang_id).order_by('-timestamp')[0]
+    except: 
+        raise Http404()
 
+    print vnode.id
+    print vnode.text
+    xmlq = qml.QMLquestion(vnode.text.encode("utf-8"))
+    xmlq.inline_image()
+    txt = xmlq.zackzack()
+    #for i in xrange(9): #ugly hack because TCPDF svg renderer is  incompetent
+    #    txt = txt.replace("ns{0}:".format(i),"")
+    #txt = txt.replace("rdf:","")
+    return HttpResponse(txt,content_type="text/plain")
 
-        xmlq = qml.QMLquestion(vnode.text)
+@staff_member_required
+def print_exam(request,exam_id,lang_id=1):
+    try:
+        exam = Exam.objects.get(id=int(exam_id))
+        language = Language.objects.get(id=int(lang_id))
+    except:
+        raise Http404()
+
+    root = et.Element("exam")
+
+    questions = ExamQuestion.objects.filter(exam=exam).order_by("position")
+    for q in questions:
+        vnode = q.question.versionnode_set.filter(language=lang_id).order_by('-timestamp')[0]
+        xmlq = qml.QMLquestion(vnode.text.encode("utf-8"))
         xmlq.inline_image()
-        txt = xmlq.zackzack()
-        #txt = txt.replace("<ns0:","")#remove namespace hack 
-        return HttpResponse(txt,content_type="text/plain")
+        xmlq.xml.attrib['position'] = str(q.position)
+        comment = et.Element("comment")
+        comment.text = base64.b64encode(vnode.comment)
+        xmlq.xml.append(comment)
+        root.append(xmlq.xml)
 
+    return HttpResponse(et.tostring(root),content_type='text/plain')
 
-    
+        
+
 #@staff_member_required
 def discussion(request,exam_id,question_position):
 

@@ -16,7 +16,7 @@ from xml.etree import ElementTree as et
 @login_required
 def question(request,language_id,exam_id,question_position):
 
-    if int(exam_id) not in [1,2]:
+    if not request.user.is_staff and (int(exam_id) not in [1,2]):
         raise PermissionDenied() #TODO: just a hack to keep people out
     try:
         question_position = int(question_position)

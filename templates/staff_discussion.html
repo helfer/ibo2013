@@ -53,7 +53,7 @@ p { margin: 12px 0; }
 
     {% if el.tag == "figure" %}
         <img src="/staff/images/{{el.meta}}/{{question.id}}/1/{{vnode.version}}/">
-        <p><strong>Editable figure text</strong></p>
+        <p><strong>Figure texts</strong></p>
         <ul>
         {% for sub in el.data %}
             <li><p>{{sub.data}}</p></li>
@@ -71,15 +71,31 @@ p { margin: 12px 0; }
 
     {% if el.tag == "task" %}
         <p>{{el.data}}</p>
-        <hr>
     {% endif %}
-  
+    
+  {% endfor %}
+{% endfor %}
+
+<hr>
+
+{% for q in struct %}
+  {% for el in q.data %} 
     {% if el.tag == "answerlist" %}
         {% for sub in el.data %}
             {% if sub.tag == "answersplit" %}
                 <p>{{sub.data}}</p>
             {% endif %}
-            <hr>
+        {% endfor %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+<hr>
+
+{% for q in struct %}
+  {% for el in q.data %} 
+    {% if el.tag == "answerlist" %}
+        {% for sub in el.data %}
             {% if sub.tag == "choice" %}
                 <p>{{sub.data}}</p>
             {% endif %}
@@ -90,5 +106,7 @@ p { margin: 12px 0; }
 </div>
 
 <br style="clear: both;">
+
+<hr>
 
 {% endblock %}

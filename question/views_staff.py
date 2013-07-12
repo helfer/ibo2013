@@ -350,7 +350,7 @@ def upload_figure(request):
     else:
         form = UploadFigureForm()
 
-    images = Figure.objects.all()
+    images = Figure.objects.all().order_by("name")
     return render_to_response('staff_uploadfigure.html',{'form':form,'images':images})
 
 def process_uploaded_figure(f,fname,descr):
@@ -461,7 +461,7 @@ def print_exam(request,exam_id,lang_id=1):
         xmlq.inline_image()
         xmlq.xml.attrib['position'] = str(q.position)
         comment = et.Element("comment")
-        comment.text = base64.b64encode(vnode.comment)
+        comment.text = base64.b64encode(vnode.comment.encode("utf-8"))
         xmlq.xml.append(comment)
         root.append(xmlq.xml)
 

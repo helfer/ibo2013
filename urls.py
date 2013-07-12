@@ -40,7 +40,7 @@ urlpatterns = patterns('',
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout',{'next_page': '/accounts/login'}),
     (r'^staff/getpdf/(\d{1,9})/(\d{1,9})/(\d{1,9})/$',staffview.get_pdf),
     (r'^staff/getpdf/(\d{1,9})/(\d{1,9})/$',staffview.get_pdf),
-    (r'^staff/print_exam/(\d{1,9})/(\d{1,9})/$',staffview.get_pdf),
+    (r'^staff/print_exam/(\d{1,9})/(\d{1,9})/$',staffview.print_exam),
     (r'^staff/print_exam/(\d{1,9})/$',staffview.print_exam),
     
 

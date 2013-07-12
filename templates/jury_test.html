@@ -6,7 +6,11 @@
 <div class="questionnavlist">
 <div class="inner">
 {% for q in status %}
+{% if q.primary.position == pos %}
+<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate/" class="{{q.status}} sel">{{q.primary.position}}</a>
+{% else %}
 <a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate/" class="{{q.status}}">{{q.primary.position}}</a>
+{% endif %}
 {% endfor %}
 </div>
 </div>
@@ -47,15 +51,19 @@
 	</fieldset>
 	Too hard
 	<div style="width: 125px; display: inline-block"></div>
-	{# TODO: make link to previous and next questions #}
-	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate/"><img src="/static/icons/prev.png" title="Goto previous" alt="previous"></a>
+	
+	{% if pos|add:'-1' > 0 %}
+	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{pos|add:'-1'}/translate/"><img src="/static/icons/prev.png" title="Goto previous" alt="previous"></a>
+	{% endif %}
 	{{form.flag}}<label for="id_flag" title="Flag for attention"></label>
 	{{form.checkout}}<label for="id_checkout" title="Check-out as final"></label>
 	{% if 'admin' in perms or 'write' in perms %}
 	<a href="#"><img src="/static/icons/save_old.png" title="Save" alt="save" onclick="document.getElementById('submitter').click();"></a>
 	<a href="#"><img src="/static/icons/savenext_old.png" title="Save and next" alt="savenext"></a>
 	{% endif %}
-	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate/"><img src="/static/icons/next.png" title="Goto next" alt="next"></a>
+	{% if pos|add:'1' <= status|length %}
+	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{pos|add:'-1'}/translate/"><img src="/static/icons/next.png" title="Goto next" alt="next"></a>
+	{% endif %}
 </div>
 
 <h1>Question {{pos}} : {{question.name}}</h1>
@@ -87,9 +95,7 @@ Translated version {{versions.trans}}
     <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Question text</td></tr>
     <tr> <!-- the question -->
         <td></td>
-        <td id="oq">
-        {{el.data}}
-        </td>
+        <td id="oq">{{el.data}}</td>
         <td><a onclick="CopyContent('oq','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
         </td>
         <td>
@@ -103,9 +109,7 @@ Translated version {{versions.trans}}
     <tr><td colspan="4" style="background: #e0e0e0; height: 10px; padding: 6px;">Task</td></tr>
     <tr> <!-- the task -->
         <td></td>
-        <td id="op">
-        {{el.data}}
-        </td>
+        <td id="op">{{el.data}}</td>
         <td><a onclick="CopyContent('op','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
         </td>
         <td>
@@ -122,9 +126,7 @@ Translated version {{versions.trans}}
             {% if sub.tag == "answersplit" %}
                 <tr> <!-- answer options -->
                 <td>Option</td>
-                <td id="o-{{sub.id}}">
-                {{sub.data}}
-                </td>
+                <td id="o-{{sub.id}}">{{sub.data}}</td>
                 <td><a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
             	<td><input {{readonly}} type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"></td>
                 </tr>
@@ -132,9 +134,7 @@ Translated version {{versions.trans}}
             {% if sub.tag == "choice" %}
                 <tr> <!-- answers -->
                 <td>Answer</td>
-                <td id="o-{{sub.id}}">
-                {{sub.data}}
-                </td>
+                <td id="o-{{sub.id}}">{{sub.data}}</td>
                 <td><a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
             	<td><textarea {{readonly}} name="{{sub.id}}" id="{{sub.id}}" class="ckeditor">{{sub.form}}</textarea></td>
                 </tr>

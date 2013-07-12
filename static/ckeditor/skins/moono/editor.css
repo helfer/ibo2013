@@ -76,6 +76,10 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 	box-shadow:0 0 3px rgba(0,0,0,.15);
 }
 
+.cke_chrome iframe {
+	max-width: 750px important!;
+}
+
 .cke_inner {
 	display:block;
 	-webkit-touch-callout:none;

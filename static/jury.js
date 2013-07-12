@@ -71,7 +71,7 @@ function CopyContentAll() {
 function ClearContent(id_dest) {
 	var m = gid(id_dest);
 	
-	if (n.tagName == 'TEXTAREA')
+	if (m.tagName == 'TEXTAREA')
 	{
 		CKEDITOR.instances[id_dest].setData('');
 	}

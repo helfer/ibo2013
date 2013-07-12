@@ -402,6 +402,8 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 
 .translationtable input[type=text] {
 	width: 100%;
+	font-size: 100%;
+	margin: -3px;
 }
 .translationtable tr td:last-child { width: 47.4%; }
 

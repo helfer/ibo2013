@@ -108,6 +108,12 @@ def examview(request,exam_id=1,lang_id=1,permissions=None):
     except:
         raise Http404()
 
+    if request.method == "POST":
+        print request.POST
+
+        return utils.print_questions(request.POST['pdfselect'],lang_id,exam_id)
+
+
     if request.user.is_staff:
         exams = Exam.objects.all()
     else:

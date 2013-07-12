@@ -137,14 +137,12 @@ class Exam(models.Model):
         current_cat = 0
         categories = CategoryTranslation.objects.filter(language=1).order_by('category')
         categories = dictify(categories,'category_id')
-        print categories
 
         cid = -1
         objs = []
         for q in self.question_status:
             if q['primary'].category_id != cid:
                 cid = q['primary'].category_id
-                print "cid " + str(cid)
                 objs.append({'cat':categories[cid],'questions':[]})
 
             objs[-1]['questions'].append(q)

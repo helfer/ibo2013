@@ -441,6 +441,9 @@ def print_exam(request,exam_id,lang_id=1):
 
     return HttpResponse(et.tostring(root),content_type='text/plain')
 
+
+def print_questions(qlist,lang_id=1,exam_id=3):
+    pass
         
 
 #@staff_member_required

@@ -73,7 +73,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 	padding:0;
 	-moz-box-shadow:0 0 3px rgba(0,0,0,.15);
 	-webkit-box-shadow:0 0 3px rgba(0,0,0,.15);
-	box-shadow:0 0 3px rgba(0,0,0,.15)
+	box-shadow:0 0 3px rgba(0,0,0,.15);
 }
 
 .cke_inner {
@@ -118,7 +118,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 }
 
 .cke_bottom {
-	padding:6px 8px 2px;
+	padding: 2px 2px 0 2px;
 	position:relative;
 	border-top:1px solid #bfbfbf;
 	-moz-box-shadow:0 1px 0 #fff inset;
@@ -372,7 +372,8 @@ a:hover.cke_colorauto,a:hover.cke_colormore,a:focus.cke_colorauto,a:focus.cke_co
 }
 
 .cke_toolbar {
-	float:left
+	float:left;
+	margin-bottom: -2px;
 }
 
 .cke_rtl .cke_toolbar {

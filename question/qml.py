@@ -269,7 +269,10 @@ class QMLfigure(QMLobject):
     #    self.xml.attrib["imagefile"] = self.data
 
     def inline_image(self):
-        fig = Figure.objects.get(name=self.filename).svg
+        try:
+            fig = Figure.objects.get(name=self.filename).svg
+        except:
+            raise QMLException("figure {0} not found".format(self.filename))
         search = "textarea"
         replace = self.xml.findall(search)
         for r in replace:

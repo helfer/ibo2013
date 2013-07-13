@@ -4,17 +4,17 @@ TODO
 sorted by priority:
 
 
-0. exam question printing with figures for Phaentu
+DONE: exam question printing with figures for Phaentu
     - position, nicht id
     - comment in printout
     - klicklick
 
 
-> undo non-committed button, commit automatically 
+DONE: undo non-committed button, commit automatically 
 
 0. diff for everyone
 
-1. Code cleanup, refactoring, find inefficient pages
+NO TIME. 1. Code cleanup, refactoring, find inefficient pages
 
 2. accounts/users/roles
     - get all people in there according to group
@@ -59,7 +59,6 @@ sorted by priority:
 
 
 BUGS:
-* student view: everything buggy
 
 FEATURES:
 * low priority: english update from translation page

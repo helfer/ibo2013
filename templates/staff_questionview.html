@@ -112,6 +112,9 @@ myInterval = setInterval( "doSomething()", iFrequency );  // run
         <input type="hidden" id="vnode_id" name="vnode_id" value="{{vnode.id}}" />
         <input type="hidden" name="qid" id="question_id" value="{{question.id}}" />
         <input type="submit" value="Submit">
+        {% if vnode.committed %}{% else %}
+        <input type="submit" name="revert" value="revert changes" onclick="return confirm('undo all changes since last commit?! Once deleted, they cannot be retrieved.');" />
+        {% endif %}
     </form>
 
 {% endblock %}

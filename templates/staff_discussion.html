@@ -23,9 +23,24 @@ p { margin: 12px 0; }
 
 {% block main %}
 <script type="text/javascript">
+
+//scroll to right position
+$(document).ready(function(){
+    var xpos = localStorage.getItem("scrollleft");
+    var ypos = localStorage.getItem("scrolltop");
+    console.log("now at " + ypos);
+    window.scrollTo(xpos, ypos);
+});
+
+
      function refresh() {
         if($('#do_sync').is(':checked')){
-         window.location.reload(true);
+         var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+         var scrollLeft = document.body.scrollLeft || document.documentElement.scrollLeft;
+         localStorage.setItem("scrolltop",scrollTop);
+         localStorage.setItem("scrollleft",scrollLeft);
+         console.log(localStorage.getItem("scrolltop"));
+         window.location.reload();
         }
      }
     reloadInterval = setInterval( "refresh()", 2000 );

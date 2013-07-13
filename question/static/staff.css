@@ -11,3 +11,15 @@ li.qli {
 input.short {
     width:3em;
 }
+
+del {
+    color:#F00;
+    font-weight:bold;
+}
+
+ins {
+    color:#00F;
+    font-weight:bold;
+    text-decoration:none;
+}
+

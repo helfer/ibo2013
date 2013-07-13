@@ -117,11 +117,13 @@ $(window).load(function(){
 {% for q in struct %}
   {% for el in q.data %} 
     {% if el.tag == "answerlist" %}
+    <ol>
         {% for sub in el.data %}
             {% if sub.tag == "choice" %}
-                <p>{{sub.data}}</p>
+                <li><p>{{sub.data}}</p></li>
             {% endif %}
         {% endfor %}
+    </ol>
     {% endif %}
   {% endfor %}
 {% endfor %}

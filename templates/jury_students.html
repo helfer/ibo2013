@@ -16,11 +16,12 @@
 
 <h1>Assign exam</h1>
 <p>Chose a default exam for each student</p>
-<table style="width: 600px">
+<table style="width: 800px">
 {# for s in students #}
 <tr>
 <td>{#{{s.name}}#}</td>
 <td>{{lang_picker.language}}</td>
+<td>
 </tr>
 {# endfor #}
 </table>
@@ -32,7 +33,7 @@
 <br><br>
 <h1>Exam preview</h1>
 
-<iframe src="../../../students/question/2/2/1/" style="width: 1280px; height: 728px; border: 8px outset #ccc; overflow: hidden;">
+<iframe src="../../../students/question/{{lang_id}}/1/1/" style="width: 1280px; height: 728px; border: 8px outset #ccc; overflow: hidden;">
 </iframe>
 
 {% endblock %}

@@ -23,3 +23,7 @@ ins {
     text-decoration:none;
 }
 
+ol {
+	list-style-type: upper-latin;
+}
+

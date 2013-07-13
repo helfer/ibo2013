@@ -13,19 +13,15 @@
 {% endblock %}
 
 {% block main %}
-
-	<h1>Permissions</h1>
-	<p>Current translation: <strong>{{language.name}}</strong>.</p>
-	<p>You can <strong>{% for p in perms %}{{p}} {% endfor %}</strong> this translation.</p>
-
     {% if 'admin' in perms %}
-    <h2>Edit access to {{language.name}}</h2>
+    <h1>Edit access to {{language.name}}</h1>
     <form method="POST">
-    <ul>
+    <ul style="font-size: 150%;">
     {{editform.as_ul}} {# I fear this list will become impractically long with 250+ jury members #}
     </ul>
     <p><input type="submit" value="Submit changes" name="editlanguage"></p>
     </form>
+    <br style="clear: both"><br>
     {% endif %}
     <!--<ul>
     {% for lang in languages %}
@@ -34,8 +30,7 @@
     </ul>-->
     
     {% if 'admin' in perms %}
-    <hr>
-    <h2>Create new translation</h2>
+    <h1>Create new translation</h1>
     <form method="POST">
     <ul>
     {{addform.as_ul}}
@@ -43,23 +38,20 @@
     <p><input type="submit" value="Add translation" name="addlanguage"></p>
     </form>
     {% endif %}
-    
-    {# RB: Should it be possible to remove/disable translations as well, or is this too dangerous? #}
 
-
-{% if 'admin' in perms %}
-<h1>Finalize exam</h1>
-<p>By clicking the button below, you confirm that the current version of the exam is the final version. The current version will be locked and presented to your students at the exam. This option is only available after the official IBO versions have been finalized. Every exam <strong>must</strong> be finalized, or it cannot be used. Only IBO-personnel can undo finalization.</p>
-<table style="width: 500px">
-{# for u in request.user.coordinator_set.all() #}
-<tr>
-<td>{{u.name}}</td>
-<td><input type="button" value="Finalize" name="{{u.name}}"></td>
-</tr>
-{# endfor #}
-</table>
-<br style="clear: both;">
-{% endif %}
+	{% if 'admin' in perms %}
+	<h1>Finalize exam</h1>
+	<p>By clicking the button below, you confirm that the current version of the exam is the final version. The current version will be locked and presented to your students at the exam. This option is only available after the official IBO versions have been finalized. Every exam <strong>must</strong> be finalized, or it cannot be used. Only IBO-personnel can undo finalization.</p>
+	<table style="width: 500px">
+	{# for u in request.user.coordinator_set.all() #}
+	<tr>
+	<td>{{u.name}}</td>
+	<td><input type="button" value="Finalize" name="{{u.name}}"></td>
+	</tr>
+	{# endfor #}
+	</table>
+	<br style="clear: both;">
+	{% endif %}
 
 
 {% endblock %}

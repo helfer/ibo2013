@@ -1,26 +1,6 @@
-﻿<!doctype html>
-<html lang="en-GB">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="target-densitydpi=device-dpi, initial-scale=1.0" />
-<title>IBO Exam Test</title>
-<link href="/static/reset.css" rel="stylesheet" type="text/css">
-<link href="/static/students.css" rel="stylesheet" type="text/css">
-<script src="/static/students.js" type="text/javascript"></script>
-</head>
-<body>
+﻿{% extends "students_base.html" %}
 
-<div id="header">
-<div class="title">
-{{lang_picker.language}}
-</div>
-<div class="infobox">
-{# TODO: Delegation name? #}
-<strong>{{user}}</strong> (The Netherlands)
-</div>
-</div>
-
-<div id="main">
+{% block main %}
 <div id="question">
 <p>{{language}} | Question {{pos}} | {{question.name}}</p>
 {% for q in struct %}
@@ -101,22 +81,5 @@
 		{% endif %}
 	</div>
 </div>
-</div>
-
-<div id="footer">
-{% if pos|add:'-1' > 0 %}
-<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'-1'}}" class="prev"></a>
-{% endif %}
-<a href="/students/overview/{{lang_id}}/{{exam_id}}" class="home"></a>
-<a href="#" class="font" onclick="zoomfont()"></a>
-{% if pos|add:'1' < 51 %}
-<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'1'}}" class="next"></a>
-{% endif %}
-</div>
-
-<div class="ibologo" onclick="fullsize()"><img src="/static/icons/IBO2013.png"></div>
-<div id="clock">{{countdown}}</div>
-
-</body>
-</html>
+{% endblock %}
 

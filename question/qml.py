@@ -3,6 +3,7 @@ from ibo2013.question import utils
 from ibo2013.question.forms import QMLTableField
 from ibo2013.question.models import Figure
 from xml.etree import ElementTree as et
+from ibo2013.question import simplediff
 #import lxml.etree as lxmltree
 import json
 class QMLobject():
@@ -81,14 +82,21 @@ class QMLobject():
     def make_ident(self,question_id,i):
         return str(question_id) + "_" + self.__class__.abbr + str(i)
 
-    def get_texts_nested(self,prep=False):
+    #compare_to is another qml object
+    def get_texts_nested(self,prep=False,compare_to=None):
         if self.data is None:
             sub = []
             for c in self.children:
-                sub.extend(c.get_texts_nested(prep))
+                sub.extend(c.get_texts_nested(prep,compare_to))
             rt = [{"id":self.identifier,"tag":self.xml.tag,"data":sub,"meta":self.meta}]
         else:
-            data = self.data
+            if compare_to is None:
+                data = self.data
+            else:
+                original = self.__class__(compare_to.xml.find(".//{0}[@id='{1}']".format(self.xml.tag,self.identifier)))
+                print "diffing"
+                data = simplediff.html_diff(original.data,self.data)
+
             if prep:
                 data = utils.prep_for_display(data)
             rt = [{"id":self.identifier,"tag":self.xml.tag,"data":data,"meta":self.meta}]

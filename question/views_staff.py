@@ -147,6 +147,16 @@ def view_question(request,qid=None,mode="normal"):
             v.save()
             return redirect(request.path) #POST,GET redirect for instant reload   
 
+        if "revert" in request.POST:
+            vnodes = VersionNode.objects.filter(question=question,language=chosen_lang_id).order_by('-timestamp')
+            print len(vnodes)
+            for v in vnodes:
+                if not v.committed:
+                    v.delete()
+                    print "deleted " ,v.timestamp, "(committed ",v.committed,")"
+                else:
+                    #we're done, return
+                    return redirect(request.path)
         else:
             if mode == "normal":
                 xmlq = qml.QMLquestion(versions[0].text)
@@ -441,9 +451,12 @@ def print_exam(request,exam_id,lang_id=1):
 
     return HttpResponse(et.tostring(root),content_type='text/plain')
 
+# don't call directly! use only through other view.
+def print_questions(qlist,lang_id=1,exam_id=3):
+    return HttpResponse("ok",content_type='text/plain')
         
 
-#@staff_member_required
+@staff_member_required
 def discussion(request,exam_id,question_position):
 
     if not request.user.is_staff and int(exam_id) > 2:
@@ -454,10 +467,12 @@ def discussion(request,exam_id,question_position):
         exam_id = int(exam_id)
         question = Question.objects.get(exam__id=exam_id,examquestion__position=question_position)
         vnode = question.versionnode_set.filter(language=1).order_by('-timestamp')[0]
+        orig = question.versionnode_set.filter(language=1,committed=1).order_by('-timestamp')[0]
     except: 
         raise Http404()
-
+    
+    original = qml.QMLquestion(orig.text)
     xmlq = qml.QMLquestion(vnode.text)
-    struct = xmlq.get_texts_nested(prep=True)
+    struct = xmlq.get_texts_nested(prep=True,compare_to=original)
 
     return render_to_response('staff_discussion.html',{'question':question,'vnode':vnode,'struct':struct})

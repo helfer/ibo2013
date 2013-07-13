@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from ibo2013.question.qml import *
 from ibo2013.question.views_common import *        
 from ibo2013.question import utils   
+from ibo2013.question import views_staff as staffview
+
  
 @login_required
 @permission_check
@@ -107,6 +109,12 @@ def examview(request,exam_id=1,lang_id=1,permissions=None):
             exam = Exam.objects.get(id=exam_id,staff_only=0)
     except:
         raise Http404()
+
+    if request.method == "POST":
+        print request.POST
+
+        return staffview.print_questions(request.POST['pdfselect'],lang_id,exam_id)
+
 
     if request.user.is_staff:
         exams = Exam.objects.all()

@@ -33,7 +33,7 @@ function DownloadPDF() {
 		}
 	}
 	if (c != 0)
-		confirm(s);
+		$('#submitbtn').click();
 	else
 		alert('No questions selected!');
 }

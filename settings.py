@@ -18,7 +18,7 @@ DATABASE_ENGINE = 'mysql' #'sqlite3'           # 'postgresql_psycopg2', 'postgre
 DATABASE_NAME = 'ibo2013-django'#'/var/www/django/ibo2013/sqlite.db'             # Or path to database file if using sqlite3.
 DATABASE_USER = 'ibo2013-django'             # Not used with sqlite3.
 DATABASE_PASSWORD = 'Znt5YEHJPW7CJt8n'         # Not used with sqlite3.
-DATABASE_HOST = ''#'/var/run/mysqld.sock'             # Set to empty string for localhost. Not used with sqlite3.
+DATABASE_HOST = '10.23.18.13'#'/var/run/mysqld.sock'             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 # Local time zone for this installation. Choices can be found here:

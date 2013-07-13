@@ -406,7 +406,9 @@ def view_image(request,fname="",qid=None,lang_id=1,version=None):
     for r in replace:
         svg = svg.replace(hex(hash(r.attrib['ibotag'])),r.text)
 
-    return HttpResponse(svg,mimetype="image/svg+xml")
+    resp = HttpResponse(svg,mimetype="image/svg+xml")
+    #resp['cache-control'] = 'private'
+    return resp
 
 
 @staff_member_required
@@ -456,7 +458,7 @@ def print_questions(qlist,lang_id=1,exam_id=3):
     return HttpResponse("ok",content_type='text/plain')
         
 
-@staff_member_required
+#@staff_member_required
 def discussion(request,exam_id,question_position):
 
     if not request.user.is_staff and int(exam_id) > 2:
@@ -475,4 +477,8 @@ def discussion(request,exam_id,question_position):
     xmlq = qml.QMLquestion(vnode.text)
     struct = xmlq.get_texts_nested(prep=True,compare_to=original)
 
-    return render_to_response('staff_discussion.html',{'question':question,'vnode':vnode,'struct':struct})
+    counter = 0
+    if "reload" in request.GET:
+        counter = request.GET['reload']
+
+    return render_to_response('staff_discussion.html',{'question':question,'question_position':question_position,'vnode':vnode,'struct':struct,'counter':counter})

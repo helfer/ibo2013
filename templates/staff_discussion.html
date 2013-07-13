@@ -25,6 +25,7 @@ p { margin: 12px 0; }
 <script type="text/javascript">
 
 //scroll to right position
+/*
 $(window).load(function(){
     var xpos = localStorage.getItem("scrollleft");
     var ypos = localStorage.getItem("scrolltop");
@@ -40,16 +41,22 @@ $(window).load(function(){
          localStorage.setItem("scrolltop",scrollTop);
          localStorage.setItem("scrollleft",scrollLeft);
          console.log(localStorage.getItem("scrolltop"));
-         window.location.reload();
+         window.location.assign("?reload={{counter|add:'1'}}");
+         var xpos = localStorage.getItem("scrollleft");
+         var ypos = localStorage.getItem("scrolltop");
+         window.scrollTo(xpos, ypos);
         }
      }
     reloadInterval = setInterval( "refresh()", 2000 );
+*/
 </script>
 
-
-<h1>Question: <strong>{{ question.name }}</strong> version {{vnode.version}}</h1>
+<div id="allpage"><link rel="prefetch" href="?reload={{counter|add:'1'}}" />
+<a href="../{{question_position|add:'-1'}}"> &lt;- previous question</a>
 <input type="checkbox" id="do_sync" checked/><label for="do_sync">sync</label>
+<a href="../{{ question_position|add:'1'}}">next question -&gt;</a>
 <br style="clear: both;">
+<h1>Question: <strong>{{ question.name }}</strong> version {{vnode.version}}</h1>
 
 <div class="coll">
 {% for q in struct %}
@@ -119,7 +126,7 @@ $(window).load(function(){
   {% endfor %}
 {% endfor %}
 </div>
-
+</div>
 <br style="clear: both;">
 
 <hr>

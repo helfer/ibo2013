@@ -49,7 +49,7 @@ NO TIME. 1. Code cleanup, refactoring, find inefficient pages
     - add max question numbers in questionview
 
 8b. student exam overview view
-      RB: I'll make a template
+      RB: I'll make a template -- done
 
 9. jury practical correction view
       RB: I'll make a template

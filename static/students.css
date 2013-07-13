@@ -220,7 +220,7 @@ body.zoom #answers.hide table {
 	background: #eee;
 }
 
-#overview a.done { color: #eee; background: url('icons/true.png') no-repeat right bottom #7fbe20; background-size: 35px; } /* done */
+#overview a.done { color: #eee; background: #03a0e1; background-size: 35px; } /* done */
 #overview a.need { color: #eee; background: url('icons/half.png') no-repeat right bottom #03a0e1; background-size: 35px; } /* half-done (maybe not needed?) */
 #overview a.flag { color: #eee; background: url('icons/flag.png') no-repeat right bottom #d61d24; background-size: 35px; } /* flagged question (need this?) */
 
@@ -331,12 +331,12 @@ body.zoom #answers.hide table {
 }
 
 #answers input:checked + label div {
-	background-image: url('icons/true.png');
+	background-image: url('icons/tick.png');
 	background-color: #999;
 }
 
 #answers td:last-child input:checked:first-child + label div {
-	background-image: url('icons/false.png');
+	background-image: url('icons/tick.png');
 	background-color: #999;
 }
 

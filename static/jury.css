@@ -409,6 +409,8 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 
 .translationtable textarea + div { margin: -6px 0; }
 
+.translationtable textarea + div iframe { max-width: 100%; }
+
 /* Info/buttons bar for translation screen */
 .infobarbig {
 	position: fixed;

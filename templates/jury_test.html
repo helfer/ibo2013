@@ -53,7 +53,7 @@
 	<div style="width: 125px; display: inline-block"></div>
 	
 	{% if pos|add:'-1' > 0 %}
-	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{pos|add:'-1'}/translate/"><img src="/static/icons/prev.png" title="Goto previous" alt="previous"></a>
+	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{pos|add:'-1'}}/translate/"><img src="/static/icons/prev.png" title="Goto previous" alt="previous"></a>
 	{% endif %}
 	{{form.flag}}<label for="id_flag" title="Flag for attention"></label>
 	{{form.checkout}}<label for="id_checkout" title="Check-out as final"></label>
@@ -62,7 +62,7 @@
 	<a href="#"><img src="/static/icons/savenext_old.png" title="Save and next" alt="savenext"></a>
 	{% endif %}
 	{% if pos|add:'1' <= status|length %}
-	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{pos|add:'-1'}/translate/"><img src="/static/icons/next.png" title="Goto next" alt="next"></a>
+	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{pos|add:'-1'}}/translate/"><img src="/static/icons/next.png" title="Goto next" alt="next"></a>
 	{% endif %}
 </div>
 

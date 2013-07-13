@@ -23,14 +23,11 @@
 <div id="main">
 <div id="question">
 <p>{{language}} | Question {{pos}} | {{question.name}}</p>
-
 {% for q in struct %}
 {% for el in q.data %}
-
 	{% if el.tag == "text" %}
 	<p>{{el.data}}</p>
 	{% endif %}
-	
     {% if el.tag == "list" %}
         <ul>
         {% for sub in el.data %}
@@ -38,12 +35,9 @@
         {% endfor %}
         </ul>
     {% endif %}
-	
 	{% if el.tag == "figure" %}
-	{# TODO: The URL to the images will probably be a bit different! #}
-	<img src="/staff/images/{{el.meta}}/{{question.id}}/{{language.id}}/{{vnode.version}}/" onclick="enlarge(this);">
+	<img src="/staff/images/{{el.meta}}/{{question.id}}/{{language.id}}/{{vnode.version}}/" onclick="enlarge(this);">{# TODO: The URL to the images will probably be a bit different! #}
 	{% endif %}
-
 {% endfor %}
 {% endfor %}
 </div>
@@ -51,11 +45,9 @@
 <div id="answers">
 {% for q in struct %}
 {% for el in q.data %}
-
 	{% if el.tag == "task" %}
 	<p>{{el.data}}</p>
 	{% endif %}
-	
 {% endfor %}
 {% endfor %}
 

@@ -92,6 +92,13 @@ select {
 	color: #000;
 }
 
+ul {
+	list-style: disc;
+	margin: 0 2em 0.7em 2em;
+	font-size: 1.7em;
+	line-height: 1.4em;
+}
+
 
 /* Header */
 #header {

@@ -20,7 +20,6 @@ sorted by priority:
     - get all people in there according to group
     - authentication: students only student view, jury only jury view
 
-
 4. practicals pdf download and upload
 
 5. logging: make sure you could find out who did what and from where.
@@ -29,28 +28,38 @@ sorted by priority:
     - EN_official
     - RU_official
     - translate categories and common phrases
+        RB: Idea to put this on the Profile page and make it only available for the coordinators/admins.
+        Could be just a big list of text fields, how easy is it to make this into a view?
     - versions
     - revamp page for giving edit/coordinator rights
     - student page for assigning exams
+        RB: the basics are already in the template
 
 7. get hand translation to work (major overhaul)
+    - tags <div> are already in the template, maybe need to be renamed
+    - make compatible in student questionview
 
 8. student views: 
     - prefetch all images. 
     - prefetch all questions? 
     - ajax for every question submission? (must be secure!)
     - complete logging of all actions on interface.
+    - countdown
+    - flagging
+    - add max question numbers in questionview
+
+8b. student exam overview view
+      RB: I'll make a template
 
 9. jury practical correction view
+      RB: I'll make a template
 
 10. jury theoretical correction view
+      RB: I'll make a template
 
 
 BUGS:
-* translation view: next question, previous question
-
 * student view: everything buggy
 
 FEATURES:
 * low priority: english update from translation page
-* 

@@ -93,9 +93,14 @@ class QMLobject():
             if compare_to is None:
                 data = self.data
             else:
-                original = self.__class__(compare_to.xml.find(".//{0}[@id='{1}']".format(self.xml.tag,self.identifier)))
                 print "diffing"
-                data = simplediff.html_diff(original.data,self.data)
+                el = compare_to.xml.find(".//{0}[@id='{1}']".format(self.xml.tag,self.identifier))
+                if(el is not None):
+                    original = self.__class__(el)
+                    data = simplediff.html_diff(original.data,self.data)
+                else:
+                    print "element not found"
+                    data = simplediff.html_diff("",self.data)
 
             if prep:
                 data = utils.prep_for_display(data)

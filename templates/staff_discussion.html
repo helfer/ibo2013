@@ -25,7 +25,7 @@ p { margin: 12px 0; }
 <script type="text/javascript">
 
 //scroll to right position
-$(document).ready(function(){
+$(window).load(function(){
     var xpos = localStorage.getItem("scrollleft");
     var ypos = localStorage.getItem("scrolltop");
     console.log("now at " + ypos);
@@ -67,7 +67,7 @@ $(document).ready(function(){
     {% endif %}
 
     {% if el.tag == "figure" %}
-        <img src="/staff/images/{{el.meta}}/{{question.id}}/1/{{vnode.version}}/">
+        <img src="/staff/images/{{el.meta}}/{{question.id}}/1/{{vnode.version}}/" style="width:100%">
         <p><strong>Figure texts</strong></p>
         <ul>
         {% for sub in el.data %}

@@ -152,7 +152,7 @@ def questionview(request,exam_id=1,question_position=1,lang_id=1,permissions=Non
     else:
         exams = Exam.objects.filter(staff_only=False)
 
-    original = question.versionnode_set.filter(language=question.primary_language_id).order_by('-timestamp')[:1]
+    original = question.versionnode_set.filter(language=question.primary_language_id,committed=1).order_by('-timestamp')[:1]
 
     versions = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[:1]
 

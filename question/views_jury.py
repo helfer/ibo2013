@@ -406,8 +406,16 @@ def practical(request,lang_id=1,permissions=None):
         if "upload" in request.POST:
             uploadform = UploadPracticalForm(request.POST,request.FILES)
             if uploadform.is_valid():
-                filename = delegation.name+"_"+request.FILES['pfile'].name
-                pe,created = PracticalExamFile.objects.get_or_create(name=request.FILES['pfile'].name,filename=filename,delegation=delegation)
+                name = uploadform.cleaned_data['name']
+                if len(name) < 3:
+                    name = request.FILES['pfile'].name
+                filename = delegation.name+"_"+name+"_"+request.FILES['pfile'].name
+                try:
+                    pe = PracticalExamFile.objects.get(name=name,delegation=delegation)
+                    pe.filename = filename
+                    pe.owner = request.user                
+                except:
+                    pe = PracticalExamFile(name=name,filename=filename,owner=request.user,delegation=delegation)
                 pe.save()
                 pe.handle_uploaded_file(request.FILES['pfile'])
                 return redirect(request.path+"?success")

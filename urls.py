@@ -14,23 +14,23 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Example:
     ('^$',redirect_to,{'url':'/jury/1/'}),
-    ('^accounts/profile/$',redirect_to,{'url':'/jury/1/'}),
-    (r'^staff/exam/(\d{1,9})/$',staffview.view_exam),
+    
     (r'^jury/(?P<lang_id>\d{1,9})/$',juryview.profile),
     (r'^jury/(?P<lang_id>\d{1,9})/practical$',juryview.practical),
     (r'^jury/(?P<lang_id>\d{1,9})/students/$',juryview.students),
     (r'^jury/(?P<lang_id>\d{1,9})/overview/$',juryview.overview),
     (r'^jury/(?P<lang_id>\d{1,9})/practical/$',juryview.practical),
     (r'^jury/files/(?P<fname>[^/]+)/$',views_common.secure_download),
-#    (r'^ckeditor/', include('ckeditor.urls')),
     (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/$',juryview.examview),
-    #(r'^staff/question/(\d{1,9})/$',staffview.view_question),
     (r'^jury/(?P<lang_id>\d{1,9})/vote/$',juryview.vote),
-    (r'^staff/discussion/(\d{1,9})/(\d{1,9})/$',staffview.discussion),
+    (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/question/(?P<question_position>\d{1,2})/translate/$',juryview.xmlquestionview),
+
     (r'^students/question/(\d{1,9})/(\d{1,9})/(\d{1,9})/$',studentview.question),
+    (r'^ajax/$',ajaxview.ajax_update),
+
+    (r'^staff/discussion/(\d{1,9})/(\d{1,9})/$',staffview.discussion),
     (r'^staff/categories/(\d{1,9})/$',staffview.translate_categories),
     (r'^staff/images/$',staffview.upload_figure),
-    (r'^ajax/$',ajaxview.ajax_update),
     (r'^staff/categories/$',staffview.view_categories),
     (r'^staff/images/(?P<fname>[^/]+)/$',staffview.view_image),
     (r'^staff/images/(?P<fname>[^/]+)/(?P<qid>\d{1,9})/$',staffview.view_image),
@@ -38,14 +38,16 @@ urlpatterns = patterns('',
     (r'^staff/images/(?P<fname>[^/]+)/(?P<qid>\d{1,9})/(?P<lang_id>\d{1,9})/(?P<version>\d{1,9})/$',staffview.view_image),
     (r'^staff/question/(\d{1,9})/$',staffview.view_question,{"mode":"xml"}),
     (r'^staff/question/(\d{1,9})/history/$',staffview.view_question_history),
-    (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/question/(?P<question_position>\d{1,2})/translate/$',juryview.xmlquestionview),
-    #(r'^juryx/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/question/(?P<question_position>\d{1,2})/translate/$',juryview.questionview),
-    (r'^accounts/login/$', 'django.contrib.auth.views.login',{'template_name': 'auth.html'}),
-    (r'^accounts/logout/$', 'django.contrib.auth.views.logout',{'next_page': '/accounts/login'}),
     (r'^staff/getpdf/(\d{1,9})/(\d{1,9})/(\d{1,9})/$',staffview.get_pdf),
     (r'^staff/getpdf/(\d{1,9})/(\d{1,9})/$',staffview.get_pdf),
     (r'^staff/print_exam/(\d{1,9})/(\d{1,9})/$',staffview.print_exam),
     (r'^staff/print_exam/(\d{1,9})/$',staffview.print_exam),
+    (r'^staff/exam/(\d{1,9})/$',staffview.view_exam),
+    
+    (r'^accounts/login/$', 'django.contrib.auth.views.login',{'template_name': 'auth.html'}),
+    (r'^accounts/logout/$', 'django.contrib.auth.views.logout',{'next_page': '/accounts/login'}),
+    ('^accounts/profile/$',redirect_to,{'url':'/jury/1/'}),
+    
     
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 

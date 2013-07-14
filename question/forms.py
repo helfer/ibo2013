@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from ibo2013.question.models import *
 from ibo2013.question.widgets import QMLTableWidget,QMLRowWidget
+from django.forms.util import ValidationError
 #from ckeditor.widgets import CKEditorWidget
 import json
 
@@ -172,8 +173,13 @@ class FigureChoiceForm(forms.Form):
 
 
 class UploadPracticalForm(forms.Form):
+    name = forms.CharField(max_length=100,required=False)
     pfile = forms.FileField()
    
+    def clean_pfile(self):
+        value = self.cleaned_data["pfile"]
+        if not value.name.endswith('.pdf'):
+            raise ValidationError("Please upload only files in pdf format")
 
 class AssignPracticalForm(forms.Form):
 

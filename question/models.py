@@ -65,7 +65,7 @@ class VersionNode(models.Model):
     rating = models.IntegerField(null=True)
     checkout = models.BooleanField()
     committed = models.BooleanField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now=True)
     #committed = models.BooleanField(default=False)
     
     def __unicode__(self):
@@ -291,6 +291,8 @@ class PracticalExamFile(models.Model):
     name = models.CharField(max_length=100)
     filename = models.CharField(unique=True,max_length=100) #this is the actual filenmame for serving
     delegation = models.ForeignKey(Delegation)
+    timestamp = models.DateTimeField(auto_now=True)
+    owner = models.ForeignKey(User)
 
 
     def __unicode__(self):

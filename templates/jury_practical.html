@@ -18,16 +18,14 @@
 
 <br style="clear: both;"><br>
 
-<!-- if you want people to see just the assignments without using the form in the finalized view, you can use the template variable assignments
-you'll need to do things like a.student.user.first_name, a.practical_exam.name,a.practical_exam_file.name to retrieve all the info you probably want to display.
- -->
+{% if finalized %}
 
-{% if finalized == false %}
 <h1>Assigned exams</h1>
 <table>
 {% for a in assignments %}
-<tr><td>{{a.student.user.first_name}}</td><td>{{a.practical_exam.name}}</td><td><a href="/jury/files/{{a.practical_exam_file.name}}">Download assigned version</a></td></tr>
+<tr><td>{{a.student.user.first_name}}</td><td>{{a.practical_exam.name}}</td><td><a href="/jury/files/{{a.exam_file.filename}}">Download assigned version</a></td></tr>
 {% endfor %}
+</table>
 
 {% else %}
 
@@ -42,6 +40,7 @@ you'll need to do things like a.student.user.first_name, a.practical_exam.name,a
 <br style="clear: both;"><br>
 
 <h1>Your uploaded translations</h1>
+{% if examfiles|length != 0 %}
 <table>
 {% for f in examfiles %}
 <tr>
@@ -57,6 +56,9 @@ you'll need to do things like a.student.user.first_name, a.practical_exam.name,a
 </tr>
 {% endfor %}
 </table>
+{% else %}
+<p>No uploads yet.</p>
+{% endif %}
 
 <br style="clear: both;"><br>
 

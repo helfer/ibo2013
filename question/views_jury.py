@@ -61,7 +61,6 @@ def profile(request,lang_id=1,permissions=None):
         if "editlanguage" in request.POST:
             if not 'admin' in permissions:
                 raise PermissionDenied()
-            print "in edit"
             form = EditLanguageForm(request.POST,instance=language)
             if form.is_valid():
                 lang = form.save()
@@ -114,7 +113,6 @@ def examview(request,exam_id=1,lang_id=1,permissions=None):
         raise Http404()
 
     if request.method == "POST":
-        print request.POST
 
         return staffview.print_questions(request.POST['pdfselect'],lang_id,exam_id)
 
@@ -257,7 +255,6 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
     if request.method == "POST":
 
         #request.POST = utils.iboclean(request.POST)
-        #print "cleaned!",request.POST
 
         if not ('write' in permissions or 'admin' in permissions):
             raise PermissionDenied()
@@ -265,18 +262,11 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
         form=JuryQuestionForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            print cd 
         else:
-            print request.POST
-            print form.errors
-        #populate juryform
-        #replace known tags
-        #strip remaining html
- 
+            pass 
 
         oxml = QMLquestion(original.text)
         clean_post = utils.iboclean(request.POST)
-        print "CLEAN",clean_post
         oxml.update(clean_post)
         if not translation:
             vid = 1
@@ -364,17 +354,14 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
 def make_xml_form(oxml,translation):
     texts = oxml.get_texts_nested()
     if translation is not None:
-        print "translation is not none"
         txml = QMLquestion(translation.text.encode('utf-8'))
         oxml.update(txml.get_data())
         forms = oxml.get_texts_nested()
     else:
-        print "translation is none"
         oxml.update({})
         forms = oxml.get_texts_nested()
     #oxml.update(txml.get_data())
     #forms = oxml.get_forms_nested()
-    print "txt",texts,"FOOOOOOOOOOOOR",forms
     return zipem(texts,forms)
     
     
@@ -382,13 +369,10 @@ def zipem(texts,forms):
     try:
         assert len(texts) == len(forms)
     except:
-        print len(texts),len(forms)
-        print texts," UAUAUAUA", forms
         raise Exception("yep")
     rt = []
     for i in xrange(len(texts)):
         if not isinstance(texts[i]["data"],unicode) and not isinstance(texts[i]["data"],str): #it's a list
-            #print type(texts[i]["data"])
             data = zipem(texts[i]["data"],forms[i]["data"])
             texts[i].update({"data":data})
             rt.append(texts[i])
@@ -419,7 +403,6 @@ def practical(request,lang_id=1,permissions=None):
     examfiles = PracticalExamFile.objects.filter(delegation=delegation)
 
     if request.method == 'POST':
-        print request.POST,request.FILES
         if "upload" in request.POST:
             uploadform = UploadPracticalForm(request.POST,request.FILES)
             if uploadform.is_valid():
@@ -442,11 +425,10 @@ def practical(request,lang_id=1,permissions=None):
                 cd = assignform.cleaned_data
                 for k in cd:
                     (s,p) = k.split("__")
-                    print k,s,p
                     assignment, created = PracticalAssignment.objects.get_or_create(student_id=s,practical_exam_id=p)
                     assignment.practical_exam_file_id = cd[k]
                     assignment.save()
-                    return redirect(request.path+"?success")
+                return redirect(request.path+"?success")
         else:
             raise Http404()
     else:

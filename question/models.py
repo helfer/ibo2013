@@ -311,11 +311,16 @@ class Student(models.Model):
     delegation = models.ForeignKey(Delegation)
     finalized = models.BooleanField(default=False)
 
+    def __unicode__(self):
+        return self.user.first_name + ' ' + self.user.last_name
+
 class PracticalAssignment(models.Model):
     student = models.ForeignKey(Student)
     practical_exam_file = models.ForeignKey(PracticalExamFile,null=True)
     practical_exam = models.ForeignKey(PracticalExam)
     
+    def __unicode__(self):
+        return "{0}-{1}-{2}".format(self.student_id,self.practical_exam_id,self.practical_exam_file_id)
 
 VOTECHOICE = (
     ('y', 'Yes'),

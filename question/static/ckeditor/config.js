@@ -17,6 +17,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.autoGrow_onStartup = true;
 	config.width = '100%';
 	config.resize_maxWidth = 750;
+	config.htmlEncodeOutput = false;
 };
 
 

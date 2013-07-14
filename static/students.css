@@ -318,12 +318,12 @@ body.zoom #overview a.done.flag {
 }
 
 #answers input:checked + label div {
-	background-image: url('icons/true.png');
+	background-image: url('icons/tick.png');
 	background-color: #999;
 }
 
 #answers td:last-child input:checked:first-child + label div {
-	background-image: url('icons/false.png');
+	background-image: url('icons/tick.png');
 	background-color: #999;
 }
 

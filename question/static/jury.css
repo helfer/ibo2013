@@ -13,7 +13,7 @@ body {
 	margin-bottom: 10px;
 	overflow: hidden;
 	clear: both;
-	background: rgba(255,255,255,0.7);
+	background: rgba(255,255,255,0.85);
 	background: white\9; /* IE8 hack */
 	box-shadow: rgba(0,0,0,0.4) 0.15em 0.15em 0.15em 0.10em;
 	border: 1px solid #aaa;
@@ -73,6 +73,11 @@ select {
 	vertical-align: middle;
 }
 
+input[type=file] {
+	font-size: 1em;
+	padding: 5px 20px;
+}
+
 input[type=button],
 input[type=submit] {
 	background: #5b266f;
@@ -103,6 +108,7 @@ table {
 table select {
 	font-size: 100%;
 	font-weight: bold;
+	background: #fff;
 }
 
 table th {
@@ -114,8 +120,8 @@ table th {
 }
 
 table td {
-	border-top: 1px solid #999;
-	padding: 9px 5px 20px 5px;
+	border-top: 1px solid #ccc;
+	padding: 9px 5px 9px 5px;
 	vertical-align: top;
 }
 
@@ -186,14 +192,14 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 }
 
 #menu a.select {
-	background: rgba(255,255,255,0.7);
+	background: rgba(255,255,255,0.85);
 	background: white\9; /* IE8 hack */
 	color: #000;
 	border-bottom: 12px solid #333;
 }
 
 #menu a:hover {
-	background: rgba(255,255,255,0.7);
+	background: rgba(255,255,255,0.85);
 	background: white\9; /* IE8 hack */
 	color: #000;
 	border-bottom: 12px solid #b9a4c2;
@@ -254,7 +260,7 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 	display: inline-block;
 	vertical-align: top;
 	position: relative;
-	background: rgba(255,255,255,0.7);
+	background: rgba(255,255,255,0.85);
 	border: 1px solid #999;
 	width: 256px;
 	padding: 0 0 38px 0;
@@ -366,16 +372,10 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 }
 
 /* Translation boxes */
-.translationtable th { height: 50px; }
-
-.translationtable td div[contenteditable=true] {
-	background: #fff;
-	border: 1px solid #999;
-	min-height: 3.5em;
-	padding: 0 10px;
-	margin: -9px 0;
-	font-size: 65%;
-	line-height: 1.95em;
+.translationtable th {
+	border-top: 1px solid #ccc; 
+	background: #e0e0e0;
+	padding: 10px 5px 5px 5px;
 }
 
 .translationtable img {
@@ -406,6 +406,8 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 	margin: -3px;
 }
 .translationtable tr td:last-child { width: 47.4%; }
+
+.translationtable textarea { width: 100%; }
 
 .translationtable textarea + div { margin: -6px 0; }
 
@@ -526,5 +528,78 @@ ins {
     color:#00F;
     font-weight:bold;
     text-decoration:none;
+
+/* Voting page */
+.proposal {
+	font-size: 3em;
+	font-weight: bold;
+	margin-bottom: 1em;
+}
+
+.proposal span {
+	font-weight: normal;
+}
+
+.voteresults li {
+	font-size: 2em;
+	width: 200px;
+	display: inline-block;
+	padding: 20px 0;
+}
+
+.voteoptions li {
+	display: inline-block;
+	font-size: 2.5em;
+	margin-right: 4em
+}
+
+.voteoverview td:first-child {
+	font-weight: normal;
+}
+
+.voteoverview input {
+	display: none;
+}
+
+.voteoverview label {
+	display: inline-block;
+	width: 120px;
+	height: 40px;
+	background: #ccc;
+	text-align: center;
+	padding: 30px 2px;
+	margin: 5px 2px 0 0;
+	border: 2px solid #999;
+	font-size: 1.75em;
+	vertical-align: top;
+}
+
+.voteoverview input:checked + label.yes {
+	background: #7fbe20;
+}
+
+.voteoverview input:checked + label.no {
+	background: #d61d24;
+}
+
+.voteoverview input:checked + label.abstain {
+	background: #555;
+}
+
+.voteoptions label {
+	width: 100px;
+	background: #ccc;
+	display: block;
+	text-align: center;
+	padding: 20px 0;
+	border: 2px solid #999;
+}
+
+.voteoptions input {
+	display: none;
+}
+
+.voteoptions input:checked + label {
+	background: #7fbe20;
 }
 

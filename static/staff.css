@@ -27,3 +27,49 @@ ol {
 	list-style-type: upper-latin;
 }
 
+/* Voting page */
+.proposal {
+	font-size: 2.5em;
+	font-weight: bold;
+	margin-bottom: 1em;
+}
+
+.proposal span {
+	font-weight: normal;
+}
+
+.voteresults li {
+	font-size: 2em;
+	width: 200px;
+	display: inline-block;
+	padding: 20px 0;
+}
+
+.voteoverview input {
+	display: none;
+}
+
+.voteoverview label {
+	display: inline-block;
+	width: 125px;
+	height: 70px;
+	background: #ccc;
+	text-align: center;
+	padding: 15px 2px;
+	margin: 5px 2px 0 0;
+	border: 2px solid #999;
+	font-size: 1.25em;
+	vertical-align: top;
+}
+
+.voteoverview input:checked + label.yes {
+	background: #7fbe20;
+}
+
+.voteoverview input:checked + label.no {
+	background: #d61d24;
+}
+
+.voteoverview input:checked + label.abstain {
+	background: #555;
+}

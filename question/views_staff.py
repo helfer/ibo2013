@@ -484,3 +484,16 @@ def discussion(request,exam_id,question_position):
         counter = request.GET['reload']
 
     return render_to_response('staff_discussion.html',{'question':question,'question_position':question_position,'vnode':vnode,'struct':struct,'counter':counter})
+
+
+
+@staff_member_required
+def practical(request):
+
+
+
+    return render_to_response('staff_practical.html',{
+        'practicals':practicals,
+        'fileform':fileform,
+        'filelist':filelist
+        })

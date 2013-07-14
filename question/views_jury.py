@@ -397,10 +397,17 @@ def practical(request,lang_id=1,permissions=None):
         exams = Exam.objects.all()
     else:
         exams = Exam.objects.filter(staff_only=False)
+    staffd = Delegation.objects.get(name='Exam_Staff')
+    official_files = PracticalExamFile.objects.filter(delegation=staffd)
     practicals = PracticalExam.objects.all().order_by('position')
     delegation = request.user.delegation_set.all()[0]
     students = Student.objects.filter(delegation=delegation)
     examfiles = PracticalExamFile.objects.filter(delegation=delegation)
+
+    finalized = False
+    for s in students:
+        if s.finalized:
+            finalized = True
 
     if request.method == 'POST':
         if "upload" in request.POST:
@@ -419,6 +426,12 @@ def practical(request,lang_id=1,permissions=None):
                 pe.save()
                 pe.handle_uploaded_file(request.FILES['pfile'])
                 return redirect(request.path+"?success")
+            else:
+                assignments = PracticalAssignment.objects.filter(student__in=students)
+                init = {}
+                for a in assignments:
+                    init["{0}__{1}".format(a.student_id,a.practical_exam_id)] = a.practical_exam_file_id
+                assignform = AssignPracticalForm(students=students,practicals=practicals,initial=init)
                 #create new PracticalExamFile, for this delegation
         elif "delete" in request.POST:
             pe = PracticalExamFile.objects.get(id=int(request.POST['file']))
@@ -437,6 +450,12 @@ def practical(request,lang_id=1,permissions=None):
                     assignment.practical_exam_file_id = cd[k]
                     assignment.save()
                 return redirect(request.path+"?success")
+
+        elif "finalize" in request.POST:
+            for s in students:
+                s.finalized = True
+                s.save()
+            return redirect(request.path+"?success")
         else:
             raise Http404()
     else:
@@ -449,10 +468,12 @@ def practical(request,lang_id=1,permissions=None):
 
     return render_with_context(request,'jury_practical.html',
         {'lang_id':lang_id,
+        'finalized':finalized,
         'uploadform':uploadform,
         'assignform':assignform,
         'exams':exams,
-        'practicals':practicals,
+        'practicals':official_files,
+        'assignments':assignments,
         'delegation':delegation,
         'students':students,
         'perms':permissions,

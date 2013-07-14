@@ -188,10 +188,10 @@ class AssignPracticalForm(forms.Form):
         students = kwargs.pop("students")
         practicals = kwargs.pop("practicals")
         super(AssignPracticalForm,self).__init__(*args,**kwargs)
-
+        staffd = Delegation.objects.get(name="Exam_Staff")
         for s in students:
             for p in practicals:
                 self.fields["{0}__{1}".format(s.id,p.id)] = forms.ModelChoiceField(
-                    queryset=PracticalExamFile.objects.filter(delegation=s.delegation),
+                    queryset=PracticalExamFile.objects.filter(delegation=s.delegation)|PracticalExamFile.objects.filter(delegation=staffd),
                     empty_label=None,
-                    label="{0} {1}: {2}".format(s.user.first_name.encode('utf-8'),s.user.last_name.encode('utf-8'),p.name))
+                    label="{0} {1} ({2})".format(s.user.first_name.encode('utf-8'),s.user.last_name.encode('utf-8'),p.name))

@@ -1,31 +1,49 @@
-﻿{% extends "ibo2013_base.html" %}
+{% extends "ibo2013_base.html" %}
 {% block title %}IBO Translation Interface{% endblock %}>
 {% block lead %}Voting{% endblock %}
 {% block menu %}
     <ul>
-        <li><a href="/jury/{{language.id}}/overview/" >Overview</a></li>
+        <li><a href="/jury/{{lang_id}}/overview/" >Overview</a></li>
         {% for e in exams %}
-        <li><a href="/jury/{{language.id}}/exam/{{e.id}}">{{e.name}}</a></li>
+        <li><a href="/jury/{{lang_id}}/exam/{{e.id}}">{{e.name}}</a></li>
         {% endfor %}
-        <li><a href="/jury/{{language.id}}/">Profile</a></li>
-        <li><a href="/jury/{{language.id}}/students/">Students</a></li>
-        <li><a href="/jury/{{language.id}}/voting/" class="select">Vote</a></li>
+        <li><a href="/jury/{{lang_id}}/">Profile</a></li>
+        <li><a href="/jury/{{lang_id}}/students/">Students</a></li>
+        <li><a href="/jury/{{lang_id}}/vote/" class="select">Vote</a></li>
     </ul>
 {% endblock %}
 
 {% block main %}
 
+{% if voteactive %}
 <p class="proposal"><span>Proposition</span>: The Swiss flag should be changed into purple and gold.</p>
-
-<p class="proposal"><span>Submitted vote:</span> yes</p>
-<form method="post" action="">
+{% if submitted %}
+<p class="proposal"><span>Submitted vote:</span> {{submitted}}</p>
+{% endif %}
+<form method="POST">
 <ul class="voteoptions">
+{% if submitted == 'yes' %}
+<li><input type="radio" name="vote" id="vote_yes" value="yes" checked="checked"><label for="vote_yes">Yes</label></li>
+{% else %}
 <li><input type="radio" name="vote" id="vote_yes" value="yes"><label for="vote_yes">Yes</label></li>
+{% endif %}
+{% if submitted == 'no' %}
+<li><input type="radio" name="vote" id="vote_no" value="no" checked="checked"><label for="vote_no">No</label></li>
+{% else %}
 <li><input type="radio" name="vote" id="vote_no" value="no"><label for="vote_no">No</label></li>
+{% endif %}
+{% if submitted == 'abstain' %}
+<li><input type="radio" name="vote" id="vote_abstain" value="abstain" checked="checked"><label for="vote_abstain">Abstain</label></li>
+{% else %}
 <li><input type="radio" name="vote" id="vote_abstain" value="abstain"><label for="vote_abstain">Abstain</label></li>
+{% endif %}
 <li><input type="submit" value="Submit vote" style="display: inline;"></li>
 </ul>
+<input type="hidden" name="delegation" value="{{delegation}}">
 </form>
 <br><br>
+{% else %}
+<p class="proposal"><span>There is currently no active vote.</span></p>
+{% endif %}
 
 {% endblock %}

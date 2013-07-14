@@ -185,6 +185,43 @@ def practical(request,lang_id=1,permissions=None):
 
 @login_required
 @permission_check
+def vote(request,lang_id=1,permissions=None):
+	# RB: this will surely need an update
+	# * Add delegation check (hidden parameter 'delegation' in template)
+	# * Add flag to know if there is an active vote going on ('voteactive' in template)
+	# * If something has already been submit, send it ('submitted' in template)
+	#
+	# Staff view needs to be made... with automatic update of votings
+	
+    try:
+        lang_id = int(lang_id)
+        language = Language.objects.get(id=lang_id)
+    except:
+        raise Http404()
+
+    if request.user.is_staff:
+        exams = Exam.objects.all()
+    else:
+        exams = Exam.objects.filter(staff_only=False)
+    
+    if request.method == "POST":
+        if "vote" in request.POST:
+        	# do something...
+        else:
+            #unknown form
+            raise Http404()
+            
+    languages = Language.objects.get(id=1).coordinators.all()
+    languages = request.user.coordinator_set.all() | request.user.editor_set.all()
+    return render_with_context(request,'jury_vote.html',
+        {'exams':exams,
+        'perms':permissions,
+        'languages':languages,
+        'lang_id':language.id
+        })
+
+@login_required
+@permission_check
 def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=None):
     
 

@@ -2,13 +2,24 @@
 
 {% block main %}
 
-<p class="proposal"><span>Proposition</span>: The Swiss flag should be changed into purple and gold.</p>
-<p><input type="checkbox" name="active" id="active" checked="checked"><label for="active">Voting active</label></p>
+<p class="proposal"><span>Proposition</span>: <input type="text" style="font-size: 2em;" value="The Swiss flag should be changed into purple and gold">.</p>
+{% if active %}
+<p>This vote is now active (vote ID = {{vote.id}})</p>
+{% else %}
+<p>This vote is now inactive</p>
+{% endif %}
+
+<p>This vote is now active/not active (vote ID = ..)</p>
+<p><input type="submit" name="Activate vote" value="activate"><input type="submit" name="Deactivate (end) vote" value="deactivate"></p>
+
+{% if active == false %}
 <ul class="voteresults">
 <li>Yes: <strong>45%</strong></li>
 <li>No: <strong>33%</strong></li>
 <li>Abstain: <strong>22%</strong></li>
 </ul>
+{% endif %}
+
 <br><br>
 
 <div class="voteoverview">

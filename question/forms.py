@@ -180,14 +180,11 @@ class AssignPracticalForm(forms.Form):
     def __init__(self,*args,**kwargs):
         print "init"
         students = kwargs.pop("students")
-        print students
         practicals = kwargs.pop("practicals")
-        print practicals
         super(AssignPracticalForm,self).__init__(*args,**kwargs)
 
         for s in students:
             for p in practicals:
-                print s.user.first_name,p.name
                 self.fields["{0}__{1}".format(s.id,p.id)] = forms.ModelChoiceField(
                     queryset=PracticalExamFile.objects.filter(delegation=s.delegation),
                     empty_label=None,

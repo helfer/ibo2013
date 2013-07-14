@@ -29,7 +29,7 @@
 <table>
 <td>
 {% for f in examfiles %}
-<p><a href="/jury/files/{{f.filename}}"><strong>{{f.name}}</strong></a> ({{p.timestamp}} | {{p.owner}})
+<p><a href="/jury/files/{{f.filename}}"><strong>{{f.name}}</strong></a> ({{f.timestamp}} | {{f.owner}})
 <form action="" method="POST">
 <input type="hidden" name="file" value="{{f.id}}">
 <input type="submit" name="delete" value="Delete" onclick="return confirm('Delete {{f.name}}?')">

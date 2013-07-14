@@ -8,7 +8,6 @@
 {% endblock %}
 
 {% block main %}
-{# p.timestamp p.owner #}
 
 <h1>Download official versions</h1>
 <ul>
@@ -17,36 +16,48 @@
 {% endfor %}
 </ul>
 
+<br style="clear: both;"><br>
+
 <h1>Upload translation</h1>
-<table>
+<table class="practicaltable">
 <form action="" method="POST" enctype="multipart/form-data">
 {{uploadform.as_table}}
-<input type="submit" name="upload" value="Upload">
+<tr><td></td><td><input type="submit" name="upload" value="Upload"></td></tr>
 </form>
 </table>
 
-<h1>Your uploaded exams</h1>
+<br style="clear: both;"><br>
+
+<h1>Your uploaded translations</h1>
 <table>
 <td>
 {% for f in examfiles %}
-<p><a href="/jury/files/{{f.filename}}"><strong>{{f.name}}</strong></a> ({{f.timestamp}} | {{f.owner}})
+<a href="/jury/files/{{f.filename}}"><strong>{{f.name}}</strong></a> ({{f.timestamp}} <em>by</em> {{f.owner}})
 <form action="" method="POST">
 <input type="hidden" name="file" value="{{f.id}}">
 <input type="submit" name="delete" value="Delete" onclick="return confirm('Delete {{f.name}}?')">
 </form>
-</p>
 {% endfor %}
 </td>
 </tr>
 </table>
 
+<br style="clear: both;"><br>
+
+<!-- if you want people to see just the assignments without using the form in the finalized view, you can use the template variable assignments
+you'll need to do things like a.student.user.first_name, a.practical_exam.name,a.practical_exam_file.name to retrieve all the info you probably want to display.
+ -->
+
 <h1>Assign exams</h1>
 <form action="" method="post">
 <table class="assignmenttable">
 {{assignform.as_table}}
+<tr><td></td><td><input type="submit" name="assign" value="Submit"></td>
 </table>
-<input type="submit" name="assign" value="Submit">
-<input type="submit" name="finalize" value="Finalize assignment">
+</form>
+
+<form action="" method="post">
+<p><input type="submit" name="finalize" value="Finalize assignment"></p>
 </form>
 
 {% endblock %}

@@ -125,8 +125,6 @@ table td {
 	vertical-align: top;
 }
 
-table tr td:first-child { font-weight: bold; }
-
 table tr:last-child td { border-bottom: 1px solid #999; }
 
 
@@ -372,6 +370,8 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 }
 
 /* Translation boxes */
+.translationtable tr td:first-child { font-weight: bold; }
+
 .translationtable th {
 	border-top: 1px solid #ccc; 
 	background: #e0e0e0;

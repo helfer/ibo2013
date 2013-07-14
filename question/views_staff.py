@@ -118,7 +118,8 @@ def view_question_history(request,question_id):
 
 @login_required
 @staff_member_required
-def view_question(request,qid=None,mode="normal"):
+def view_question(request,qid=None,mode="xml"):
+    mode="xml" #very nice...
     try:
         question_id = int(qid)
         question = Question.objects.get(id=question_id)

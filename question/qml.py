@@ -131,7 +131,7 @@ class QMLobject():
     #diff with a dictionary of elements
     def diff(self,other):
         if self.identifier in other:
-            self.data = simplediff.html_diff(self.data,other[self.identifier])
+            self.data = simplediff.html_diff(other[self.identifier],self.data)
         self.apply_update()
         for c in self.children:
             c.diff(other) 

@@ -254,13 +254,13 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
             committed=True
         )
         v.save()
-
-        tr = Translation(
-            language=v.language,
-            origin_id=cd['orig'],
-            target=v
-        )
-        tr.save()
+        if not v.language == question.primary_language_id:
+            tr = Translation(
+                language=v.language,
+                origin_id=cd['orig'],
+                target=v
+            )
+            tr.save()
         return redirect(request.path + "?success") 
    
     if translation is None:

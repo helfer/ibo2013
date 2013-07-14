@@ -1,8 +1,8 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="target-densitydpi=device-dpi, initial-scale=1.0" />
+<meta name="viewport" content="target-densitydpi=device-dpi, initial-scale=1.0">
 <title>{% block title %}IBO Theoretical Exam{% endblock %}</title>
 <link href="/static/reset.css" rel="stylesheet" type="text/css">
 <link href="/static/students.css" rel="stylesheet" type="text/css">
@@ -12,13 +12,8 @@
 
 <div id="header">
 {% block header %}
-<div class="title">
-{{lang_picker.language}}
-</div>
-<div class="infobox">
-{# TODO: Delegation name? #}
-<strong>{{user}}</strong> (The Netherlands)
-</div>
+<div class="title">{{lang_picker.language}}</div>
+<div class="infobox">{# TODO: Delegation name? #}<strong>{{user}}</strong> (The Netherlands)</div>
 {% endblock %}
 </div>
 

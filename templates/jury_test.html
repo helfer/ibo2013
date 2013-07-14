@@ -62,7 +62,7 @@
 	<a href="#"><img src="/static/icons/savenext_old.png" title="Save and next" alt="savenext"></a>
 	{% endif %}
 	{% if pos|add:'1' <= status|length %}
-	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{pos|add:'-1'}}/translate/"><img src="/static/icons/next.png" title="Goto next" alt="next"></a>
+	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{pos|add:'1'}}/translate/"><img src="/static/icons/next.png" title="Goto next" alt="next"></a>
 	{% endif %}
 </div>
 
@@ -91,11 +91,11 @@ Translated version {{versions.trans}}
     {% if el.tag == "text" %}
     <tr> <!-- the question -->
         <td>Question</td>
-        <td id="oq">{{el.data}}</td>
-        <td><a onclick="CopyContent('oq','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
+        <td id="o-{{el.id}}">{{el.data}}</td>
+        <td><a onclick="CopyContent('o-{{el.id}}','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
         </td>
         <td>
-        <div id="tqi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
+        <div id="i-{{el.id}}">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
         <textarea {{readonly}} name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
         </td>
     </tr>
@@ -104,11 +104,11 @@ Translated version {{versions.trans}}
     {% if el.tag == "task" %}
     <tr> <!-- the task -->
         <td>Task</td>
-        <td id="op">{{el.data}}</td>
-        <td><a onclick="CopyContent('op','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
+        <td id="o-{{el.id}}">{{el.data}}</td>
+        <td><a onclick="CopyContent('o-{{el.id}}','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
         </td>
         <td>
-        <div id="tpi">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
+        <div id="i-{{el.id}}">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
         <textarea {{readonly}} name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
         </td>
     </tr>

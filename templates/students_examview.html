@@ -3,7 +3,7 @@
 {% block main %}
 <div id="overview">
 {% for o in categories %}
-	<p>{{o.cat.text}}</p>
+	<h1>{{o.cat.text}}</h1>
 	<p>
 	{% for q in o.questions %}
 	<a href="students/question/{{lang_id}}/{{exam_id}}/{{q.position}}" class="{{q.status}}">{{q.pos}}</a>

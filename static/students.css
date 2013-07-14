@@ -1,8 +1,7 @@
-
 /* LAYOUT + GENERAL ATTRIBUTES ================================ */
 body {
 	width: 1280px;
-	height: 726px;
+	height: 762px;
 }
 
 #header,
@@ -17,7 +16,7 @@ body {
 }
 
 #main {
-	height: 606px; /* 726 - 2*60 = body height - #header height - #footer height */
+	height: 642px; /* 762 - 2*60 = body height - #header height - #footer height */
 }
 
 #question,
@@ -25,7 +24,7 @@ body {
 #overview {
 	float: left;
 	padding: 1.7em;
-	height: 572px;  /* 606 - 2*17 = #main height - #question padding */
+	height: 608px;  /* 642 - 2*17 = #main height - #question padding */
 }
 
 #question {	width: 720px; }
@@ -38,19 +37,19 @@ body {
 	height: 0;
 }
 #main.hide {
-	height: 726px; /* body height */
+	height: 762px; /* body height */
 }
 #main.hide #question,
 #main.hide #answers,
 #main.hide #overview {
-	height: 692px; /* 726 - 2*17 = body height - 2*#question padding */
+	height: 728px; /* 762 - 2*17 = body height - 2*#question padding */
 }
 
 
 /* MARKUP ===================================================== */
 /* general elements*/
 body {
-	font: 62.5%/1.0 Helvetica, Arial, Verdana, sans-serif;
+	font: 62.5%/1.0 myWoffFont, Helvetica, Arial, Verdana, sans-serif;
 	position: relative;
 	background: #fff;
 	margin: 0;
@@ -74,7 +73,11 @@ p { font-size: 1.7em;
 	line-height: 1.35em;
 	margin-bottom: 0.7em; }
 
+h1 { font-size: 2em;
+	margin: 0.5em 0 0.1em 0; }
+
 body.zoom p,
+body.zoom ul,
 body.zoom .log table td,
 body.zoom .log table th {
 	font-size: 2.0em;
@@ -209,6 +212,10 @@ body.zoom #answers.hide table {
 	overflow-y: scroll;
 }
 
+#overview p {
+	margin: 0;
+}
+
 #overview a {
 	font-size: 1.3em;
 	display: inline-block;
@@ -220,48 +227,28 @@ body.zoom #answers.hide table {
 	background: #eee;
 }
 
-#overview a.done { color: #eee; background: #03a0e1; background-size: 35px; } /* done */
-#overview a.need { color: #eee; background: url('icons/half.png') no-repeat right bottom #03a0e1; background-size: 35px; } /* half-done (maybe not needed?) */
-#overview a.flag { color: #eee; background: url('icons/flag.png') no-repeat right bottom #d61d24; background-size: 35px; } /* flagged question (need this?) */
+#overview a.done { color: #eee; background: #03a0e1; } /* done */
+#overview a.need { color: #000; background: url('icons/half.png') no-repeat right bottom #eee; background-size: 65px; }
 
-#overview a:hover {
+#overview a.done.flag { color: #eee; background: url('icons/flag.png') no-repeat right bottom #03a0e1; background-size: 35px; }
+#overview a.need.flag { color: #000; background: url('icons/halfflag.png') no-repeat right bottom #eee; background-size: 65px; }
+
+#overview a:hover,
+#overview a.done.flag:hover,
+#overview a.need.flag:hover {
 	background: #000;
 	color: #fff;
 }
 
-/* Log page */
-/*.log {
-	overflow-x: hidden;
-	overflow-y: hidden;
-	-moz-column-count: 3;
-	-webkit-column-count: 3;
-	column-count: 3;
-	-moz-column-rule: 1px solid #999;
-	-webkit-column-rule: 1px solid #999;
-	column-rule: 1px solid #999;
+body.zoom #overview a {
+	width: 35px;
 }
-
-.log table {
-	width: 100%;
-	font-size: 1.3em;
-	line-height: 1.3em;
+body.zoom #overview a.need {
+	background-size: 70px;
 }
-.log table td {
-	padding: 3px 5px;
+body.zoom #overview a.done.flag {
+	background-size: 37px;
 }
-
-.log table tr td:first-child {
-	width: 5%;
-}
-.log table tr td:last-child {
-	width: 20%;
-}
-
-.log table th {
-	font-weight: bold;
-	padding: 10px;
-	background: #ddd;
-}*/
 
 /* IBO logo */
 .ibologo {
@@ -331,12 +318,12 @@ body.zoom #answers.hide table {
 }
 
 #answers input:checked + label div {
-	background-image: url('icons/tick.png');
+	background-image: url('icons/true.png');
 	background-color: #999;
 }
 
 #answers td:last-child input:checked:first-child + label div {
-	background-image: url('icons/tick.png');
+	background-image: url('icons/false.png');
 	background-color: #999;
 }
 
@@ -409,11 +396,11 @@ body.zoom #answers.hide table {
 @media only screen and (orientation: portrait) {
 body {
 	width: 800px;
-	height: 1205px;
+	height: 1241px;
 }
 
 #main {
-	height: 1085px;
+	height: 1121px;
 }
 
 #question {
@@ -426,11 +413,11 @@ body {
 
 #answers {
 	width: 766px;
-	height: 386px;
+	height: 422px;
 }
 
 #answers table {
-	height: 330px;
+	height: 360px;
 }
 
 #answerbar {
@@ -438,13 +425,13 @@ body {
 }
 
 #overview {
-	height: 96.9%;
+	height: 1087px;
 	width: 766px;
 }
 
 /* hidden stuff */
 #main.hide {
-	height: 1205px;
+	height: 1181px;
 }
 
 #main #answers #answerbar {
@@ -453,7 +440,7 @@ body {
 }
 
 #main.hide #overview {
-	height: 1171px;
+	height: 1241px;
 }
 
 #main.hide #question {
@@ -461,17 +448,11 @@ body {
 }
 
 #main.hide #answers {
-	height: 446px;
+	height: 505px;
 }
 
 #main.hide #answers table {
 	height: 348px;
-}
-
-.log {
-	-moz-column-count:2; /* Firefox */
-	-webkit-column-count:2; /* Safari and Chrome */
-	column-count:2;
 }
 
 }

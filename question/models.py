@@ -1,5 +1,6 @@
+import os
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from ibo2013.question import simplediff
 from xml.etree import ElementTree as et
 
@@ -273,3 +274,60 @@ class Figure(models.Model):
 
     def __unicode__(self):
         return self.name
+
+class Delegation(models.Model):
+    name = models.CharField(unique=True,max_length=100)
+    group = models.ForeignKey(Group)
+    members = models.ManyToManyField(User)
+
+class PracticalExam(models.Model):
+    name = models.CharField(unique=True,max_length=100)
+    filename = models.CharField(unique=True,max_length=100)
+    position = models.IntegerField()
+    en_official = models.CharField(max_length=100)
+    ru_official = models.CharField(max_length=100)
+
+class PracticalExamFile(models.Model):
+    name = models.CharField(max_length=100)
+    filename = models.CharField(unique=True,max_length=100) #this is the actual filenmame for serving
+    delegation = models.ForeignKey(Delegation)
+
+
+    def __unicode__(self):
+        return self.name
+
+    def handle_uploaded_file(self,f):
+        with open('/var/www/django/ibo2013/uploaded_files/'+self.filename, 'wb+') as destination:
+            for chunk in f.chunks():
+                destination.write(chunk)
+
+    def delete_file(self):
+        os.remove('/var/www/django/ibo2013/uploaded_files/'+self.filename)
+
+
+class Student(models.Model):
+    user = models.ForeignKey(User)
+    examfile = models.ManyToManyField(PracticalExamFile,through='PracticalAssignment')
+    delegation = models.ForeignKey(Delegation)
+    finalized = models.BooleanField(default=False)
+
+class PracticalAssignment(models.Model):
+    student = models.ForeignKey(Student)
+    practical_exam_file = models.ForeignKey(PracticalExamFile,null=True)
+    practical_exam = models.ForeignKey(PracticalExam)
+    
+
+VOTECHOICE = (
+    ('y', 'Yes'),
+    ('n', 'No'),
+    ('a', 'Abstain'),
+)
+class Vote(models.Model):
+    answer = models.CharField(max_length=1,choices=VOTECHOICE)
+    delegation = models.ForeignKey(Delegation)
+
+
+class VotingRound(models.Model):
+    text = models.CharField(max_length=500)
+    active = models.BooleanField()
+    closed = models.BooleanField()

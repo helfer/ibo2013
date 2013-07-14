@@ -1,3 +1,6 @@
+from uuid import uuid4
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render_to_response,redirect
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from ibo2013.question.models import *
@@ -12,7 +15,7 @@ from ibo2013.question import utils
 from ibo2013.question import views_staff as staffview
 
  
-@login_required
+@permission_required('question.is_jury')
 @permission_check
 def overview(request,lang_id=1,permissions=None):
     try:
@@ -36,7 +39,7 @@ def overview(request,lang_id=1,permissions=None):
         'perms':permissions
         })
 
-@login_required
+@permission_required('question.is_jury')
 @permission_check
 def profile(request,lang_id=1,permissions=None):
 
@@ -97,7 +100,7 @@ def profile(request,lang_id=1,permissions=None):
         })
 
 
-@login_required
+@permission_required('question.is_jury')
 @permission_check
 def examview(request,exam_id=1,lang_id=1,permissions=None):
     try:
@@ -132,7 +135,7 @@ def examview(request,exam_id=1,lang_id=1,permissions=None):
         })
 
 
-@login_required
+@permission_required('question.is_jury')
 @permission_check
 def students(request,lang_id=1,permissions=None):
 	# RB: this will surely need an update
@@ -157,7 +160,7 @@ def students(request,lang_id=1,permissions=None):
         'perms':permissions
         })
 
-@login_required
+@permission_required('question.is_jury')
 @permission_check
 def practical(request,lang_id=1,permissions=None):
 	# RB: this will surely need an update
@@ -183,7 +186,7 @@ def practical(request,lang_id=1,permissions=None):
         })
 
 
-@login_required
+@permission_required('question.is_jury')
 @permission_check
 def vote(request,lang_id=1,permissions=None):
 	# RB: this will surely need an update
@@ -394,3 +397,76 @@ def zipem(texts,forms):
             rt.append(texts[i])
 
     return rt
+
+
+
+@permission_check
+@permission_required('question.is_jury')
+def practical(request,lang_id=1,permissions=None):
+    try:
+        language = Language.objects.get(id=lang_id)
+    except:
+        raise Http404()
+
+    if request.user.is_staff:
+        exams = Exam.objects.all()
+    else:
+        exams = Exam.objects.filter(staff_only=False)
+    practicals = PracticalExam.objects.all().order_by('position')
+    delegation = request.user.delegation_set.all()[0]
+    students = Student.objects.filter(delegation=delegation)
+    examfiles = PracticalExamFile.objects.filter(delegation=delegation)
+
+    if request.method == 'POST':
+        print request.POST,request.FILES
+        if "upload" in request.POST:
+            uploadform = UploadPracticalForm(request.POST,request.FILES)
+            if uploadform.is_valid():
+                filename = delegation.name+"_"+request.FILES['pfile'].name
+                pe,created = PracticalExamFile.objects.get_or_create(name=request.FILES['pfile'].name,filename=filename,delegation=delegation)
+                pe.save()
+                pe.handle_uploaded_file(request.FILES['pfile'])
+                return redirect(request.path+"?success")
+                #create new PracticalExamFile, for this delegation
+        elif "delete" in request.POST:
+            pe = PracticalExamFile.objects.get(id=int(request.POST['file']))
+            if pe.delegation == delegation:
+                pe.delete_file()
+                pe.delete()
+                return redirect(request.path+"?success")
+
+        elif "assign" in request.POST:
+            assignform = AssignPracticalForm(request.POST,students=students,practicals=practicals)
+            if assignform.is_valid():
+                cd = assignform.cleaned_data
+                for k in cd:
+                    (s,p) = k.split("__")
+                    print k,s,p
+                    assignment, created = PracticalAssignment.objects.get_or_create(student_id=s,practical_exam_id=p)
+                    assignment.practical_exam_file_id = cd[k]
+                    assignment.save()
+                    return redirect(request.path+"?success")
+        else:
+            raise Http404()
+    else:
+        assignments = PracticalAssignment.objects.filter(student__in=students)
+        init = {}
+        for a in assignments:
+            init["{0}__{1}".format(a.student_id,a.practical_exam_id)] = a.practical_exam_file_id
+        uploadform = UploadPracticalForm()
+        assignform = AssignPracticalForm(students=students,practicals=practicals,initial=init)
+
+    return render_with_context(request,'jury_practical.html',
+        {'lang_id':lang_id,
+        'uploadform':uploadform,
+        'assignform':assignform,
+        'exams':exams,
+        'practicals':practicals,
+        'delegation':delegation,
+        'students':students,
+        'perms':permissions,
+        'language':language,
+        'examfiles':examfiles})
+    
+
+

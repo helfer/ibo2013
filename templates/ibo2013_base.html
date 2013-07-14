@@ -16,7 +16,7 @@
 {{lang_picker.language}} | {% block lead %}Exam Translation{% endblock %}
 <div class="infobox">
 {% block infobox %}
-<strong>{{ user }}</strong> (The Netherlands) | <a href="/accounts/logout">Log out</a><br>
+<strong>{{ user }}</strong> {% for g in user.groups.all %}{{g.name}} {% endfor %} | <a href="/accounts/logout">Log out</a><br>
 You can <strong>{% for p in perms %}{{p}} {% endfor %}</strong> this translation.
 {% endblock %}
 </div>

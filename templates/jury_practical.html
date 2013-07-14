@@ -1,52 +1,49 @@
 {% extends "ibo2013_base.html" %}
-{% block title %}IBO Translation Interface{% endblock %}
-{% block lead %}Practical exams{% endblock %}
+{% block title %}IBO Translation Interface{% endblock %}>
+{% block lead %}User Profile{% endblock %}
 {% block menu %}
-	<ul>
-		<li><a href="/jury/{{lang_id}}/">Profile</a></li>
-		<li><a href="/jury/{{lang_id}}/practical/" class="select">Practical exams</a></li>
-	</ul>
+    <ul>
+        <li><a href="/jury/{{language.id}}/overview/" >Overview</a></li>
+        {% for e in exams %}
+        <li><a href="/jury/{{language.id}}/exam/{{e.id}}">{{e.name}}</a></li>
+        {% endfor %}
+        <li><a href="/jury/{{language.id}}/" class="select">Profile</a></li>
+        <li><a href="/jury/{{language.id}}/students/">Students</a></li>
+        <li><a href="/jury/{{language.id}}/practical/">Students</a></li>
+    </ul>
 {% endblock %}
 
 {% block main %}
 
-<h1>Translation</h1>
-<p>(<em>uploading is only available for admins</em>)</p>
-<table>
-<tr>
-<th colspan="2">Exam</th><th>Official versions</th><th>Translated versions</th><th>Upload</th>
-</tr>
+    <p>Download practical exams:</p>
+    <ul>
+    {% for p in practicals %}
+        <li>
+        <a href="{{p.filename}}">{{p.name}}</a>
+        </li>
+    {% endfor %}
+    </ul>
 
-{# for e in practicalexams #}
-<tr>
-<td>Part 1 - Ecology{# {{e.name}} #}</td>
-<td>
-<a href="#"><strong>Official (EN)</strong></a> (2013-07-14 12:22)<br>
-<a href="#"><strong>Official (RU)</strong></a> (2013-07-14 12:45)
-</td>
-<td>
-<em>No version uploaded yet</em>
-</td>
-<td><form method="POST" action="">
-<input type="file" name="p1q" value="Choose file">
-<input type="submit" value="Upload">
-</form>
-</td>
-</tr>
-{# endfor #}
-</table>
+    <p>Assign Exams</p>
+        <form action="" method="post">
+            {{assignform.as_table}}
+            <input type="submit" name="assign" value="submit" />
+        </form>
+    FINALIZE BUTTON
 
-<h1>Assign exams</h1>
-<p>Chose a default exam for each student.</p>
-<br>
-<table style="width: 1200px">
-{# for s in students #}
-<tr>
-<td>{{s.name}}</td>
-<td>{{lang_picker.language}}</td>
-<td><input type="submit" value="Assign" name="assign{{s.id}}"></td>
-</tr>
-{# endfor #}
-</table>
+   
+    <p>Upload translations:</p>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {{uploadform.as_table}}
+        <input type="submit" name="upload" value="upload" />
+    </form>
+    <p>Your exams:</p>
+    {% for f in examfiles %}
+        <a href="/jury/files/{{f.filename}}">{{f.name}}</a>
+        <form action="" method="POST">
+            <input type="hidden" name="file" value="{{f.id}}" />
+            <input type="submit" name = "delete" value="delete" onclick="return confirm('delete {{f.name}}?')" />
+        </form>
+    {% endfor %}
 
 {% endblock %}

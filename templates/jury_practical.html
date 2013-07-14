@@ -1,48 +1,54 @@
 {% extends "ibo2013_base.html" %}
 {% block title %}IBO Translation Interface{% endblock %}>
-{% block lead %}User Profile{% endblock %}
+{% block lead %}Practical exam{% endblock %}
 {% block menu %}
     <ul>
-        <li><a href="/jury/{{language.id}}/overview/" >Overview</a></li>
-        {% for e in exams %}
-        <li><a href="/jury/{{language.id}}/exam/{{e.id}}">{{e.name}}</a></li>
-        {% endfor %}
-        <li><a href="/jury/{{language.id}}/" class="select">Profile</a></li>
-        <li><a href="/jury/{{language.id}}/students/">Students</a></li>
-        <li><a href="/jury/{{language.id}}/practical/">Students</a></li>
+        <li><a href="/jury/{{language.id}}/practical/">Practical exam</a></li>
     </ul>
 {% endblock %}
 
 {% block main %}
+{# p.timestamp p.owner #}
 
-    <p>Download practical exams:</p>
-    <ul>
-    {% for p in practicals %}
-        <li>
-        <a href="{{p.filename}}">{{p.name}}</a>
-        </li>
-    {% endfor %}
-    </ul>
+<h1>Download official versions</h1>
+<ul>
+{% for p in practicals %}
+<li><p><a href="/jury/files/{{p.filename}}"><strong>{{p.name}}</strong> ({{p.timestamp}})</a></p></li>
+{% endfor %}
+</ul>
 
-    <p>Assign Exams</p>
-        <form action="" method="post">
-            {{assignform.as_table}}
-            <input type="submit" name="assign" value="submit" />
-        </form>
-    FINALIZE BUTTON
-   
-    <p>Upload translations:</p>
-    <form action="" method="POST" enctype="multipart/form-data">
-        {{uploadform.as_table}}
-        <input type="submit" name="upload" value="upload" />
-    </form>
-    <p>Your exams:</p>
-    {% for f in examfiles %}
-        <a href="/jury/files/{{f.filename}}">{{f.name}}</a>
-        <form action="" method="POST">
-            <input type="hidden" name="file" value="{{f.id}}" />
-            <input type="submit" name = "delete" value="delete" onclick="return confirm('delete {{f.name}}?')" />
-        </form>
-    {% endfor %}
+<table>
+<tr><th>Upload translation</th><th>Your exams</th></tr>
+<tr><td>
+<form action="" method="POST" enctype="multipart/form-data">
+{{uploadform.as_table}}
+<input type="submit" name="upload" value="upload">
+</form>
+</td>
+<td>
+{% for f in examfiles %}
+<p><a href="/jury/files/{{f.filename}}"><strong>{{f.name}}</strong></a> ({{p.timestamp}} | {{p.owner}})
+<form action="" method="POST">
+<input type="hidden" name="file" value="{{f.id}}">
+<input type="submit" name="delete" value="Delete" onclick="return confirm('Delete {{f.name}}?')">
+</form>
+</p>
+{% endfor %}
+</td>
+</tr>
+</table>
+
+<h1>Assign exams</h1>
+<form action="" method="post">
+<div class="assignmenttable">
+{{assignform.as_table}}
+</div>
+<input type="submit" name="assign" value="Submit">
+<input type="submit" name="finalize" value="Finalize assignment">
+</form>
+
+<div>
+{{assignform|pprint}}
+</div>
 
 {% endblock %}

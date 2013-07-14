@@ -603,3 +603,8 @@ ins {
 	background: #7fbe20;
 }
 
+
+/* Assignment table for Practical view */
+.assignmenttable label {
+	display: block;
+}

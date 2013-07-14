@@ -284,15 +284,15 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
 
     exam.load_question_status(target_language_id)
 
-    #try:
-    
-    tr_checkout = question.versionnode_set.filter(language=target_language_id,checkout=1).order_by('-timestamp')[0]
-    previous = tr_checkout.translation_target.all()[0].origin
-    pqml = QMLquestion(previous.text.encode('utf-8'))
     oqml = QMLquestion(original.text.encode('utf-8'))
-    #oqml.diff(pqml.get_data())
-    #except:
-    pass
+    try:
+    
+        tr_checkout = question.versionnode_set.filter(language=target_language_id,checkout=1).order_by('-timestamp')[0]
+        previous = tr_checkout.translation_target.all()[0].origin
+        pqml = QMLquestion(previous.text.encode('utf-8'))
+        oqml.diff(pqml.get_data())
+    except:
+        pass
 
 
     struct = make_xml_form(oqml,translation)

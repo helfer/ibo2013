@@ -3,7 +3,7 @@
 {% block lead %}Practical exam{% endblock %}
 {% block menu %}
     <ul>
-        <li><a href="/jury/{{language.id}}/practical/">Practical exam</a></li>
+        <li><a href="/jury/{{language.id}}/practical/" class="select">Practical exam</a></li>
     </ul>
 {% endblock %}
 
@@ -13,18 +13,20 @@
 <h1>Download official versions</h1>
 <ul>
 {% for p in practicals %}
-<li><p><a href="/jury/files/{{p.filename}}"><strong>{{p.name}}</strong> ({{p.timestamp}})</a></p></li>
+<li><p><a href="/jury/files/{{p.filename}}"><strong>{{p.name}}</strong></a> ({{p.timestamp}})</p></li>
 {% endfor %}
 </ul>
 
+<h1>Upload translation</h1>
 <table>
-<tr><th>Upload translation</th><th>Your exams</th></tr>
-<tr><td>
 <form action="" method="POST" enctype="multipart/form-data">
 {{uploadform.as_table}}
-<input type="submit" name="upload" value="upload">
+<input type="submit" name="upload" value="Upload">
 </form>
-</td>
+</table>
+
+<h1>Your uploaded exams</h1>
+<table>
 <td>
 {% for f in examfiles %}
 <p><a href="/jury/files/{{f.filename}}"><strong>{{f.name}}</strong></a> ({{p.timestamp}} | {{p.owner}})
@@ -40,15 +42,11 @@
 
 <h1>Assign exams</h1>
 <form action="" method="post">
-<div class="assignmenttable">
+<table class="assignmenttable">
 {{assignform.as_table}}
-</div>
+</table>
 <input type="submit" name="assign" value="Submit">
 <input type="submit" name="finalize" value="Finalize assignment">
 </form>
-
-<div>
-{{assignform|pprint}}
-</div>
 
 {% endblock %}

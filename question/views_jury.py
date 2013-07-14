@@ -131,108 +131,6 @@ def examview(request,exam_id=1,lang_id=1,permissions=None):
         'categories':categories
         })
 
-@login_required
-@permission_check
-def questionview(request,exam_id=1,question_position=1,lang_id=1,permissions=None):
-    try:
-        question_position = int(question_position)
-        target_language_id = int(lang_id)
-        exam_id = int(exam_id)
-        if request.user.is_staff:
-            exam = Exam.objects.get(id=exam_id)
-        else:
-            exam = Exam.objects.get(id=exam_id,staff_only=0)
-        language = Language.objects.get(id=target_language_id)
-    except: 
-        raise Http404()
-
-    question = Question.objects.get(exam__id=exam_id,examquestion__position=question_position)
-    if request.user.is_staff:
-        exams = Exam.objects.all()
-    else:
-        exams = Exam.objects.filter(staff_only=False)
-
-    original = question.versionnode_set.filter(language=question.primary_language_id,committed=1).order_by('-timestamp')[:1]
-
-    versions = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[:1]
-
-
-    if request.method == 'POST':
-        print request.POST
-        form=JuryQuestionForm(request.POST)
-        if not ('write' in permissions or 'admin' in permissions):
-            raise PermissionDenied()
-        if form.is_valid():
-            cd = form.cleaned_data
-            
-            if not versions:
-                vid = 1
-            else:
-                vid = versions[0].version+1
-
-            v = VersionNode(
-                question_id=question.id,
-                language_id=target_language_id,
-                version=vid,
-                text=cd['text'],
-                flag=cd['flag'],
-                checkout=cd['checkout'],
-                comment=cd['comment']
-            )
-            v.save()
-
-            tr = Translation(
-                language=v.language,
-                origin_id=cd['orig'],
-                target=v
-            )
-            tr.save()
-       
-            #return HttpResponse("done") 
-            versions = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[:1]
-        else: 
-            print "form contains errors"
-            print form.errors, form.is_valid(),form.is_bound
-            print "those were the errors"
-    try:
-        previous = versions[0].translation_target.all()[0].origin
-        compare = previous.compare_with(original[0])
-    except IndexError:
-        compare = original[0].text
-
-    if not versions:
-        initial = {"orig":original[0].id}
-    else:
-        initial = {
-            'text':versions[0].text,
-            'flag':versions[0].flag,
-            'checkout':versions[0].checkout,
-            'comment':versions[0].comment,
-            'orig':original[0].id
-        }
-
-    if 'write' in permissions or 'admin' in permissions:
-        form=JuryQuestionForm(initial=initial)
-    else:
-        form=ViewQuestionForm(initial=initial)
-
-    exam.load_question_status(target_language_id)
-    
-    if not original:
-        return HttpResponse("This question does not yet have a version in the primary language")
-
-    return render_with_context(request,'jury_questionview.html',
-        {'exam':exam,
-        'lang_id':target_language_id,
-        'pos':question_position,
-        'status':exam.question_status,
-        'exams':exams,
-        'original':original[0],
-        'question':question,
-        'compare':compare,
-        'form':form,
-        'perms':permissions
-    })
 
 @login_required
 @permission_check
@@ -253,8 +151,6 @@ def students(request,lang_id=1,permissions=None):
     for e in exams:
         e.load_question_status(lang_id)
        
-    #picker = PickLanguageForm(request.user,lang_id,request,initial={'language':request.path})
-
     return render_with_context(request,'jury_students.html',
         {'exams':exams,
         'lang_id':lang_id,
@@ -279,8 +175,6 @@ def practical(request,lang_id=1,permissions=None):
     
     for e in exams:
         e.load_question_status(lang_id)
-       
-    #picker = PickLanguageForm(request.user,lang_id,request,initial={'language':request.path})
 
     return render_with_context(request,'jury_practical.html',
         {'exams':exams,
@@ -312,7 +206,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
     else:
         exams = Exam.objects.filter(staff_only=False)
 
-    original = question.versionnode_set.filter(language=question.primary_language_id).order_by('-timestamp')[0]
+    original = question.versionnode_set.filter(language=question.primary_language_id,committed=1).order_by('-timestamp')[0]
 
     try:
         translation = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[0]
@@ -390,7 +284,18 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
 
     exam.load_question_status(target_language_id)
 
-    struct = make_xml_form(original,translation)
+    #try:
+    
+    tr_checkout = question.versionnode_set.filter(language=target_language_id,checkout=1).order_by('-timestamp')[0]
+    previous = tr_checkout.translation_target.all()[0].origin
+    pqml = QMLquestion(previous.text.encode('utf-8'))
+    oqml = QMLquestion(original.text.encode('utf-8'))
+    #oqml.diff(pqml.get_data())
+    #except:
+    pass
+
+
+    struct = make_xml_form(oqml,translation)
     cmt = ""
     tv = 0
     if translation is not None:
@@ -413,13 +318,12 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
     })
 
 
-#puts together the text obtained from 
-def make_xml_form(original,translation):
-    oxml = QMLquestion(original.text)
+#puts together the text obtained from original (as qml) and translation (Vnode)
+def make_xml_form(oxml,translation):
     texts = oxml.get_texts_nested()
     if translation is not None:
         print "translation is not none"
-        txml = QMLquestion(translation.text)
+        txml = QMLquestion(translation.text.encode('utf-8'))
         oxml.update(txml.get_data())
         forms = oxml.get_texts_nested()
     else:

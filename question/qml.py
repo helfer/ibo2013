@@ -128,6 +128,14 @@ class QMLobject():
 
         return rt
 
+    #diff with a dictionary of elements
+    def diff(self,other):
+        if self.identifier in other:
+            self.data = simplediff.html_diff(self.data,other[self.identifier])
+        self.apply_update()
+        for c in self.children:
+            c.diff(other) 
+
     #takes cleaned form data as input and updates its own values accordingly
     def update(self,cd):
         #print self.xml.tag,self.identifier
@@ -246,6 +254,9 @@ class QMLquestion(QMLobject):
         for c in self.children:
             c.update(cd)
 
+    def diff(self,other):
+        for c in self.children:
+            c.diff(other)
 
 class QMLtext(QMLobject):
     abbr = "tx"

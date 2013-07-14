@@ -24,6 +24,11 @@ NO TIME. 1. Code cleanup, refactoring, find inefficient pages
 
 5. logging: make sure you could find out who did what and from where.
 
+Voting
+
+
+
+
 6. jury view: 
     - EN_official
     - RU_official
@@ -49,7 +54,7 @@ NO TIME. 1. Code cleanup, refactoring, find inefficient pages
     - add max question numbers in questionview
 
 8b. student exam overview view
-      RB: I'll make a template -- done
+      RB: I'll make a template
 
 9. jury practical correction view
       RB: I'll make a template

@@ -516,3 +516,15 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 	height: 15px;
 	margin-right: 10px;
 } */
+
+del {
+    color:#F00;
+    font-weight:bold;
+}
+
+ins {
+    color:#00F;
+    font-weight:bold;
+    text-decoration:none;
+}
+

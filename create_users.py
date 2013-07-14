@@ -1,6 +1,10 @@
 from django.db import connection
-from django.contrib.auth.models import User,Group
+from django.contrib.auth.models import User,Group, Permission
 from django.db import transaction
+from django.contrib.contenttypes.models import ContentType
+from ibo2013.question.models import Question,Delegation,Student
+
+content_type = ContentType.objects.get_for_model(Question)
 
 cursor = connection.cursor()
 
@@ -30,10 +34,14 @@ def create_users():
     for c in countries:
         g, created = Group.objects.get_or_create(name=c['en'])
         g.save()
+        d, created = Delegation.objects.get_or_create(name=c['en'],group=g)
 
     for r in roles:
         g,created = Group.objects.get_or_create(name=r)
         g.save()
+
+    for p in [{'codename':'is_jury','name':"Jury permission"},{'codename':'is_student','name':'student permission'}]:
+        Permission.objects.get_or_create(content_type=content_type,**p)
 
     for u in users:
         if u['class'] in ['Student','Jury']:
@@ -43,6 +51,8 @@ def create_users():
             last_name=u['last_name'],
             )
         
+            d = Delegation.objects.get(name=u['en'])
+            d.members.add(new_user)
             if created:
                new_user.set_password(u['password'])
                cgroup = Group.objects.get(name=u['en'])
@@ -52,6 +62,12 @@ def create_users():
             else:
                 new_user.is_active = True           
                 new_user.email = u['email']
+                if u['class'] == "Jury":
+                    new_user.user_permissions.add(Permission.objects.get(codename="is_jury"))
+                if u['class'] == 'Student':
+                    new_user.user_permissions.add(Permission.objects.get(codename="is_student"))
+                    stu = Student.objects.get_or_create(user=new_user,delegation=d)
+
  
             new_user.save()
 

@@ -2,6 +2,7 @@ from django.conf.urls.defaults import *
 from ibo2013.question import views_jury as juryview
 from ibo2013.question import views_students as studentview
 from ibo2013.question import views_staff as staffview
+from ibo2013.question import views_common
 from ibo2013.question import views_ajax as ajaxview
 from django.views.generic.simple import redirect_to
 
@@ -16,9 +17,11 @@ urlpatterns = patterns('',
     ('^accounts/profile/$',redirect_to,{'url':'/jury/1/'}),
     (r'^staff/exam/(\d{1,9})/$',staffview.view_exam),
     (r'^jury/(?P<lang_id>\d{1,9})/$',juryview.profile),
+    (r'^jury/(?P<lang_id>\d{1,9})/practical$',juryview.practical),
     (r'^jury/(?P<lang_id>\d{1,9})/students/$',juryview.students),
     (r'^jury/(?P<lang_id>\d{1,9})/overview/$',juryview.overview),
     (r'^jury/(?P<lang_id>\d{1,9})/practical/$',juryview.practical),
+    (r'^jury/files/(?P<fname>[^/]+)/$',views_common.secure_download),
 #    (r'^ckeditor/', include('ckeditor.urls')),
     (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/$',juryview.examview),
     #(r'^staff/question/(\d{1,9})/$',staffview.view_question),

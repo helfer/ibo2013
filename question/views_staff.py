@@ -383,6 +383,7 @@ class QMLParseError(Exception):
     pass
 
 #@staff_member_required
+@login_required
 def view_image(request,fname="",qid=None,lang_id=1,version=None):
     try:
         img = Figure.objects.get(name=fname)

@@ -209,6 +209,7 @@ def vote(request,lang_id=1,permissions=None):
     
     if request.method == "POST":
         if "vote" in request.POST:
+            pass
         	# do something...
         else:
             #unknown form

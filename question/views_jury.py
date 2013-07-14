@@ -398,11 +398,14 @@ def practical(request,lang_id=1,permissions=None):
     else:
         exams = Exam.objects.filter(staff_only=False)
     staffd = Delegation.objects.get(name='Exam_Staff')
-    official_files = PracticalExamFile.objects.filter(delegation=staffd)
+    official_files = PracticalExamFile.objects.filter(delegation=staffd).order_by('name')
     practicals = PracticalExam.objects.all().order_by('position')
-    delegation = request.user.delegation_set.all()[0]
+    if request.user.is_staff or request.user.is_superuser:
+        delegation = Delegation.objects.get(name="Exam_Staff")
+    else:
+        delegation = request.user.delegation_set.all()[0]
     students = Student.objects.filter(delegation=delegation)
-    examfiles = PracticalExamFile.objects.filter(delegation=delegation)
+    examfiles = PracticalExamFile.objects.filter(delegation=delegation).order_by('-timestamp')
 
     finalized = False
     for s in students:

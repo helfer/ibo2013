@@ -190,7 +190,6 @@ function save_answer(qid,ans,ename) {
 // fix for images now showing up immediately
 window.onload = function() {
 	var v = document.getElementsByTagName('img');
-	alert(v.length);
 for (var i = 0; i < v.length; i++) {
 	v[i].style.display = 'none';
 	v[i].style.display = 'block';

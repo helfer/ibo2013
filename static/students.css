@@ -230,6 +230,7 @@ body.zoom #answers.hide table {
 #overview a.done { color: #eee; background: #03a0e1; } /* done */
 #overview a.need { color: #000; background: url('icons/half.png') no-repeat right bottom #eee; background-size: 65px; }
 
+#overview a.empt.flag { color: #000; background: url('icons/flagdark.png') no-repeat right bottom #eee; background-size: 35px; }
 #overview a.done.flag { color: #eee; background: url('icons/flag.png') no-repeat right bottom #03a0e1; background-size: 35px; }
 #overview a.need.flag { color: #000; background: url('icons/halfflag.png') no-repeat right bottom #eee; background-size: 65px; }
 

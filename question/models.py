@@ -361,5 +361,5 @@ class SimpleLog(models.Model):
     user = models.ForeignKey(User,null=True)
     path = models.CharField(max_length=200)
     ip = models.CharField(max_length=50)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now=True,null=True)
 

@@ -16,9 +16,9 @@
 {% block main %}
 
 {% if voteactive %}
-<p class="proposal"><span>Proposition</span>: The Swiss flag should be changed into purple and gold.</p>
+<p class="proposal"><strong>Proposition</strong>:{{ovo.text}}</p>
 {% if submitted %}
-<p class="proposal"><span>Submitted vote:</span> {{submitted}}</p>
+<p class="proposal"><strong>Submitted vote:</strong> {{submitted}}</p>
 {% endif %}
 <form method="POST">
 <ul class="voteoptions">
@@ -42,6 +42,7 @@
 <input type="hidden" name="delegation" value="{{delegation}}">
 </form>
 <br><br>
+<p>* Each delegation has one vote. Any member may vote. If more than one member votes, the last vote is counted.</p>
 {% else %}
 <p class="proposal"><span>There is currently no active vote.</span></p>
 {% endif %}

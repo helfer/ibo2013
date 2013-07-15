@@ -196,4 +196,6 @@ class AssignPracticalForm(forms.Form):
                     label="{0} {1} ({2})".format(s.user.first_name.encode('utf-8'),s.user.last_name.encode('utf-8'),p.name))
 
             
-         
+class StaffVoteForm(forms.ModelForm):
+     class Meta:
+        model = VotingRound

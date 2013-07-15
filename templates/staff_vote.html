@@ -1,89 +1,43 @@
 ﻿{% extends "ibo2013_staff.html" %}
-
+{% load ibotags %}
 {% block main %}
 
-<p class="proposal"><span>Proposition</span>: <input type="text" style="font-size: 2em;" value="The Swiss flag should be changed into purple and gold">.</p>
+<p class="proposal"><span>Proposition</span>:{{current.text}}</p>
 {% if active %}
-<p>This vote is now active (vote ID = {{vote.id}})</p>
+<p>This vote is now active</p>
 {% else %}
 <p>This vote is now inactive</p>
 {% endif %}
 
-<p>This vote is now active/not active (vote ID = ..)</p>
-<p><input type="submit" name="Activate vote" value="activate"><input type="submit" name="Deactivate (end) vote" value="deactivate"></p>
-
-{% if active == false %}
+{% if active|is_false %}
 <ul class="voteresults">
-<li>Yes: <strong>45%</strong></li>
-<li>No: <strong>33%</strong></li>
-<li>Abstain: <strong>22%</strong></li>
+<li>Yes: <strong>{{stats.yes}}</strong></li>
+<li>No: <strong>{{stats.no}}</strong></li>
+<li>Abstain: <strong>{{stats.abstain}}</strong></li>
+<li>No vote: <strong> {{stats.noanswer}}</strong></li>
 </ul>
 {% endif %}
 
 <br><br>
 
 <div class="voteoverview">
-<input type="checkbox" name="votes" id="ARE"><label for="ARE">United Arab Emirates</label>
-<input type="checkbox" name="votes" id="ARG"><label for="ARG">Argentina</label>
-<input type="checkbox" name="votes" id="ARM"><label for="ARM">Armenia</label>
-<input type="checkbox" name="votes" id="AUS"><label for="AUS">Australia</label>
-<input type="checkbox" name="votes" id="AZE"><label for="AZE">Azerbijan</label>
-<input type="checkbox" name="votes" id="BEL"><label for="BEL">Belgium</label>
-<input type="checkbox" name="votes" id="BGR"><label for="BGR">Bulgaria</label>
-<input type="checkbox" name="votes" id="BLR"><label for="BLR">Belarus</label>
-<input type="checkbox" name="votes" id="BRA"><label for="BRA">Brazil</label>
-<input type="checkbox" name="votes" id="CAN"><label for="CAN">Canada</label>
-<input type="checkbox" name="votes" id="CHE"><label for="CHE">Switzerland</label>
-<input type="checkbox" name="votes" id="CHN"><label for="CHN">China</label>
-<input type="checkbox" name="votes" id="CRI"><label for="CRI">Costa Rica</label>
-<input type="checkbox" name="votes" id="CYP"><label for="CYP">Cyprus</label>
-<input type="checkbox" name="votes" id="CZE"><label for="CZE">Czech Republic</label>
-<input type="checkbox" name="votes" id="DEU"><label for="DEU">Germany</label>
-<input type="checkbox" name="votes" id="DNK"><label for="DNK">Denmark</label>
-<input type="checkbox" name="votes" id="ESP"><label for="ESP">Spain</label>
-<input type="checkbox" name="votes" id="EST"><label for="EST">Estonia</label>
-<input type="checkbox" name="votes" id="FIN"><label for="FIN">Finland</label>
-<input type="checkbox" name="votes" id="FRA"><label for="FRA">France</label>
-<input type="checkbox" name="votes" id="GBR"><label for="GBR">United Kingdom</label>
-<input type="checkbox" name="votes" id="GEO"><label for="GEO">Georgia</label>
-<input type="checkbox" name="votes" id="GRC"><label for="GRC">Greece</label>
-<input type="checkbox" name="votes" id="HUN"><label for="HUN">Hungary</label>
-<input type="checkbox" name="votes" id="IDN"><label for="IDN">Indonesia</label>
-<input type="checkbox" name="votes" id="IND"><label for="IND">India</label>
-<input type="checkbox" name="votes" id="IRN"><label for="IRN">Iran</label>
-<input type="checkbox" name="votes" id="ITA"><label for="ITA">Italy</label>
-<input type="checkbox" name="votes" id="JPN"><label for="JPN">Japan</label>
-<input type="checkbox" name="votes" id="KAZ"><label for="KAZ">Kazakhstan</label>
-<input type="checkbox" name="votes" id="KGZ"><label for="KGZ">Kyrgyzstan</label>
-<input type="checkbox" name="votes" id="KOR"><label for="KOR">Republic of Korea</label>
-<input type="checkbox" name="votes" id="KWT"><label for="KWT">Kuwait</label>
-<input type="checkbox" name="votes" id="LIE"><label for="LIE">Liechtenstein</label>
-<input type="checkbox" name="votes" id="LKA"><label for="LKA">Sri Lanka</label>
-<input type="checkbox" name="votes" id="LTU"><label for="LTU">Lithuania</label>
-<input type="checkbox" name="votes" id="LVA"><label for="LVA">Latvia</label>
-<input type="checkbox" name="votes" id="MDA"><label for="MDA">Moldova</label>
-<input type="checkbox" name="votes" id="MEX"><label for="MEX">Mexico</label>
-<input type="checkbox" name="votes" id="MNE"><label for="MNE">Montenegro</label>
-<input type="checkbox" name="votes" id="MNG"><label for="MNG">Mongolia</label>
-<input type="checkbox" name="votes" id="NGA"><label for="NGA">Nigeria</label>
-<input type="checkbox" name="votes" id="NLD"><label for="NLD">Netherlands</label>
-<input type="checkbox" name="votes" id="NZL"><label for="NZL">New Zealand</label>
-<input type="checkbox" name="votes" id="PAK"><label for="PAK">Pakistan</label>
-<input type="checkbox" name="votes" id="POL"><label for="POL">Poland</label>
-<input type="checkbox" name="votes" id="ROM"><label for="ROM">Romania</label>
-<input type="checkbox" name="votes" id="RUS"><label for="RUS">Russia</label>
-<input type="checkbox" name="votes" id="SGP"><label for="SGP">Singapore</label>
-<input type="checkbox" name="votes" id="SVK"><label for="SVK">Slovakia</label>
-<input type="checkbox" name="votes" id="SVN"><label for="SVN">Slovenia</label>
-<input type="checkbox" name="votes" id="SWE"><label for="SWE">Sweden</label>
-<input type="checkbox" name="votes" id="THA"><label for="THA">Thailand</label>
-<input type="checkbox" name="votes" id="TJK"><label for="TJK">Tajikistan</label>
-<input type="checkbox" name="votes" id="TKM"><label for="TKM">Turkmenistan</label>
-<input type="checkbox" name="votes" id="TUR"><label for="TUR">Turkey</label>
-<input type="checkbox" name="votes" id="TWN"><label for="TWN">Taiwan (Chinese Taipei)</label>
-<input type="checkbox" name="votes" id="UKR"><label for="UKR">Ukraine</label>
-<input type="checkbox" name="votes" id="USA"><label for="USA">United States</label>
-<input type="checkbox" name="votes" id="VNM"><label for="VNM">Vietnam</label>
+{% for v in votes %}
+    <input type="checkbox" name="votes" id="{{v.v}}{{v.d.id}}" class="{{v.v}}" checked="checked"><label class="{{v.v}}" for="{{v.v}}{{v.d.id}}">{{v.d.name}}</label>
+{% endfor %}
 </div>
 
+<h2> Create new vote:</h2>
+<form action="" method="POST">
+    {{newform.as_table}}
+    <input type="submit" name="create" value="create" />
+</form>
+<hr></hr>
+<h2>Modify existing vote:</h2>
+{% for f in forms %}
+<form action="" method="POST">
+    {{f.frm.as_table}}
+    <input type="hidden" name="round" value="{{f.id}}"/>
+    <input type="submit" name="submit" value="submit"/>
+</form>
+{% endfor %}
 {% endblock %}

@@ -490,8 +490,6 @@ def discussion(request,exam_id,question_position):
 
 @staff_member_required
 def practical(request):
-
-
     if request.method == 'POST':
         finals = {}
         prints = {}
@@ -523,3 +521,56 @@ def practical(request):
         #'practicals':practicals,
         'assignments':assignments
         })
+
+
+@staff_member_required
+def vote(request):
+    if request.method == 'POST':
+        if "round" in request.POST:
+            r = VotingRound.objects.get(id=int(request.POST["round"])) 
+            form = StaffVoteForm(request.POST,instance=r)
+        else:
+            form = StaffVoteForm(request.POST)
+        if form.is_valid():
+            form.save()   
+            return redirect(request.path+'?success')
+ 
+    vr = VotingRound.objects.all().order_by('-id')
+    dl = Delegation.objects.all().order_by('name')
+    current = None
+    votes = None
+    if len(vr) > 0:
+        current = vr[0]
+
+        votes = Vote.objects.filter(vround=current.id).order_by('delegation')
+
+    stats = {'yes':0,'no':0,'abstain':0,'noanswer':dl.count()-votes.count()}
+    do = []
+    for d in dl:
+        if d.name == "Exam_Staff" or d.name == "Test country":
+            continue
+        a = ''
+        for v in votes:
+            if v.delegation == d:
+                a = v.answer
+                stats[v.answer] += 1
+                break;
+        do.append({'d':d,'v':a})
+
+    forms = []
+    for r in vr:
+        forms.append({'frm':StaffVoteForm(instance=r),'id':r.id})
+
+    newform = StaffVoteForm()
+
+    return render_to_response('staff_vote.html',{
+        'current':current,
+        'rounds':vr,
+        'votes':do,
+        'forms':forms,
+        'newform':newform,
+        'stats':stats,
+        'active':current.active and not current.closed
+    }
+)
+

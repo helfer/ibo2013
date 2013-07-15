@@ -327,20 +327,25 @@ class PracticalAssignment(models.Model):
     def __unicode__(self):
         return "{0}-{1}-{2}".format(self.student_id,self.practical_exam_id,self.practical_exam_file_id)
 
-VOTECHOICE = (
-    ('y', 'Yes'),
-    ('n', 'No'),
-    ('a', 'Abstain'),
-)
-class Vote(models.Model):
-    answer = models.CharField(max_length=1,choices=VOTECHOICE)
-    delegation = models.ForeignKey(Delegation)
 
 
 class VotingRound(models.Model):
     text = models.CharField(max_length=500)
     active = models.BooleanField()
     closed = models.BooleanField()
+
+class Vote(models.Model):
+    VOTECHOICE = (
+        ('y', 'yes'),
+        ('n', 'no'),
+        ('a', 'abstain'),
+    )
+    answer = models.CharField(max_length=20)
+    vround = models.ForeignKey(VotingRound)
+    delegation = models.ForeignKey(Delegation)
+
+    def __unicode__(self):
+        return self.delegation.name + str(self.vround.id) + self.answer
 
 # yeah, this is dumb
 class ExamAnswers(models.Model):

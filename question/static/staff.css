@@ -62,14 +62,14 @@ ol {
 	vertical-align: top;
 }
 
-.voteoverview input:checked + label.yes {
+label.yes {
 	background: #7fbe20;
 }
 
-.voteoverview input:checked + label.no {
+label.no {
 	background: #d61d24;
 }
 
-.voteoverview input:checked + label.abstain {
+label.abstain {
 	background: #555;
 }

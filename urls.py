@@ -50,6 +50,8 @@ urlpatterns = patterns('',
     (r'^staff/print_exam/(\d{1,9})/$',staffview.print_exam),
     (r'^staff/exam/(\d{1,9})/$',staffview.view_exam),
     (r'^staff/practical/$',staffview.practical),
+    (r'^staff/vote/$',staffview.vote),
+    
     
     (r'^accounts/login/$', 'django.contrib.auth.views.login',{'template_name': 'auth.html'}),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout',{'next_page': '/accounts/login'}),

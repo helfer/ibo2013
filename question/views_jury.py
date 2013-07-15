@@ -169,32 +169,50 @@ def vote(request,lang_id=1,permissions=None):
 	#
 	# Staff view needs to be made... with automatic update of votings
 	
-    try:
-        lang_id = int(lang_id)
-        language = Language.objects.get(id=lang_id)
-    except:
-        raise Http404()
-
-    if request.user.is_staff:
-        exams = Exam.objects.all()
+    if request.user.is_staff or request.user.is_superuser:
+        delegation = Delegation.objects.get(name="Exam_Staff")
     else:
-        exams = Exam.objects.filter(staff_only=False)
-    
+        delegation = request.user.delegation_set.all()[0]
+    voteactive=False 
+    ovo = VotingRound.objects.filter(active=True,closed=False).order_by('-id')
+    if len(ovo) > 0:
+        ovo = ovo[0]
+        voteactive=True
+
     if request.method == "POST":
+        print request.POST
         if "vote" in request.POST:
-            pass
-        	# do something...
+            v,c = Vote.objects.get_or_create(delegation=delegation,vround=ovo)
+            if not request.POST["vote"] in ['yes','no','abstain']:
+                raise Http404()#not really right, but hey...
+        	v.answer = request.POST['vote']
+            if request.POST['vote'] == "abstain":
+                v.answer = "abstain"
+            if request.POST['vote'] == "yes":
+                v.answer = "yes"
+            if request.POST['vote'] == "no":
+                v.answer = "no"
+            print 'answer ' + v.answer
+            v.save()
+
+            return redirect(request.path+"?success")
         else:
             #unknown form
             raise Http404()
-            
+    
+    v = Vote.objects.filter(delegation=delegation,vround=ovo)    
+    if v.count() > 0:
+        submitted = v[0].answer
+    else:
+        submitted = ''    
     languages = Language.objects.get(id=1).coordinators.all()
     languages = request.user.coordinator_set.all() | request.user.editor_set.all()
     return render_with_context(request,'jury_vote.html',
-        {'exams':exams,
+        {'voteactive':voteactive,
+        'ovo':ovo,
+        'submitted':submitted,
+        'lang_id':lang_id,
         'perms':permissions,
-        'languages':languages,
-        'lang_id':language.id
         })
 
 @login_required

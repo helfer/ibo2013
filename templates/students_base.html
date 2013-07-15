@@ -14,7 +14,10 @@
 
 <div id="header">
 {% block header %}
-<div class="title">switch language</div>
+<div class="title">
+<select id="title" name="title">
+ <option value="1" selected>English</option>
+</select></div>
 <div class="infobox"><strong>{{user.first_name}} {{user.last_name}}</strong>, {% for g in user.groups.all %}{{g.name}} {%endfor%}</div>
 {% endblock %}
 </div>

@@ -16,7 +16,7 @@ body {
 }
 
 #main {
-	height: 642px; /* 762 - 2*60 = body height - #header height - #footer height */
+	height: 632px; /* 752 - 2*60 = body height - #header height - #footer height */
 }
 
 #question,
@@ -24,7 +24,7 @@ body {
 #overview {
 	float: left;
 	padding: 1.7em;
-	height: 608px;  /* 642 - 2*17 = #main height - #question padding */
+	height: 598px;  /* 632 - 2*17 = #main height - #question padding */
 }
 
 #question {	width: 720px; }
@@ -37,12 +37,12 @@ body {
 	height: 0;
 }
 #main.hide {
-	height: 762px; /* body height */
+	height: 752px; /* body height */
 }
 #main.hide #question,
 #main.hide #answers,
 #main.hide #overview {
-	height: 728px; /* 762 - 2*17 = body height - 2*#question padding */
+	height: 718px; /* 752 - 2*17 = body height - 2*#question padding */
 }
 
 
@@ -233,8 +233,6 @@ body.zoom #answers.hide table {
 #overview a.empt.flag { color: #000; background: url('icons/flagdark.png') no-repeat right bottom #eee; background-size: 35px; }
 #overview a.done.flag { color: #eee; background: url('icons/flag.png') no-repeat right bottom #03a0e1; background-size: 35px; }
 #overview a.need.flag { color: #000; background: url('icons/halfflag.png') no-repeat right bottom #eee; background-size: 65px; }
-
-#overview a.empt.flag { color: #000; background: url('icons/halfflag.png') no-repeat right bottom #eee; background-size: 65px; }
 
 #overview a:hover,
 #overview a.done.flag:hover,
@@ -443,7 +441,7 @@ body {
 }
 
 #main.hide #overview {
-	height: 1241px;
+	height: 1207px;
 }
 
 #main.hide #question {

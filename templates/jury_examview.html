@@ -29,7 +29,7 @@
             {% else %}
             <img src="/static/icons/flag.png" title="Not flagged" alt="not flagged">
             {% endif %}
-            <input type="checkbox" name="pdfselect" value="{{q.target.position}}">
+            <input type="checkbox" name="pdfselect" value="{{q.primary.id}}">
         </div>
         <a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{q.primary.position}}/translate">{{q.preview}}</a>
     </div>

@@ -441,25 +441,43 @@ def print_exam(request,exam_id,lang_id=1):
     except:
         raise Http404()
 
-    root = et.Element("exam")
 
     questions = ExamQuestion.objects.filter(exam=exam).order_by("position")
+    return print_question_objects(questions,lang_id,exam_id)
+# don't call directly! use only through other view.
+def print_questions(qlist,lang_id=1,exam_id=3):
+    try:
+        exam = Exam.objects.get(id=int(exam_id))
+        language = Language.objects.get(id=int(lang_id))
+    except:
+        raise Http404()
+
+    questions = ExamQuestion.objects.filter(id__in=[int(x) for x in qlist]).order_by("position")
+    print questions
+    print qlist
+    return print_question_objects(questions,lang_id,exam_id)
+
+
+def print_question_objects(questions,lang_id=1,exam_id=3):        
+    root = et.Element("exam")
     for q in questions:
-        vnode = q.question.versionnode_set.filter(language=lang_id).order_by('-timestamp')[0]
-        xmlq = qml.QMLquestion(vnode.text.encode("utf-8"))
-        xmlq.inline_image()
-        xmlq.xml.attrib['position'] = str(q.position)
-        comment = et.Element("comment")
-        comment.text = base64.b64encode(vnode.comment.encode("utf-8"))
-        xmlq.xml.append(comment)
-        root.append(xmlq.xml)
+        #try:
+            print q.question.name
+            vnode = q.question.versionnode_set.filter(language=lang_id).order_by('-timestamp')[0]
+            vnode_en = q.question.versionnode_set.filter(language=1,committed=True).order_by('-timestamp')[0]
+            xmlq = qml.QMLquestion(vnode.text.encode("utf-8"))
+            xmlq.inline_image()
+            xmlq.xml.attrib["info"] = "{0}_{1}_L{2}".format(vnode_en.version,vnode.version,lang_id)
+            xmlq.xml.attrib['position'] = str(q.position)
+            comment = et.Element("comment")
+            comment.text = base64.b64encode(vnode.comment.encode("utf-8"))
+            xmlq.xml.append(comment)
+            root.append(xmlq.xml)
+        #except:
+            pass
 
     return HttpResponse(et.tostring(root),content_type='text/plain')
 
-# don't call directly! use only through other view.
-def print_questions(qlist,lang_id=1,exam_id=3):
-    return HttpResponse("ok",content_type='text/plain')
-        
 
 #@staff_member_required
 def discussion(request,exam_id,question_position):

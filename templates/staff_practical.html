@@ -14,7 +14,7 @@
 <table>
 <form action="" method="POST">
 {% for a in assignments %}
-<tr><td>{{a.student.delegation.name}}</td><td> {{a.student.user.first_name}}</td><td>{{a.practical_exam.name}}</td><td><a href="/jury/files/{{a.practical_exam_file.filename}}">Download assigned version {{a.practical_exam_file.name}}</a></td>
+<tr><td>{{a.student.delegation.name}}</td><td> {{a.student.user.first_name}} {{a.student.user.last_name}}</td><td>{{a.practical_exam.name}}</td><td><a href="/jury/files/{{a.practical_exam_file.filename}}">Download assigned version {{a.practical_exam_file.name}}</a></td>
 <td>finalized:<input type="hidden" name="finalized-{{a.id}}-hidden" value="0" /><input type="checkbox" name="finalized-{{a.id}}" value="1" {% if a.finalized %}checked{%endif%} /></td>
 <td>printed:<input type="checkbox" name="printed-{{a.id}}" value="1" {% if a.printed %}checked{%endif%}/><input type="hidden" name="printed-{{a.id}}-hidden" value="0" /></td>
 </tr>

@@ -113,8 +113,8 @@ def examview(request,exam_id=1,lang_id=1,permissions=None):
         raise Http404()
 
     if request.method == "POST":
-
-        return staffview.print_questions(request.POST['pdfselect'],lang_id,exam_id)
+        x = dict(request.POST.iterlists())
+        return staffview.print_questions(x['pdfselect'],lang_id,exam_id)
 
 
     if request.user.is_staff:

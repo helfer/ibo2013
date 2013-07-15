@@ -362,4 +362,5 @@ class SimpleLog(models.Model):
     path = models.CharField(max_length=200)
     ip = models.CharField(max_length=50)
     timestamp = models.DateTimeField(auto_now=True,null=True)
+    info = models.CharField(max_length=200)
 

@@ -10,7 +10,7 @@ class LoggingMiddleware(object):
         u = request.user
         if u.is_anonymous():
             u = None
-        l = SimpleLog(user=u, path=request.path,ip=self.get_client_ip(request))
+        l = SimpleLog(user=u, path=request.path,ip=self.get_client_ip(request),info=request.method)
         l.save()
 
     def get_client_ip(self,request):

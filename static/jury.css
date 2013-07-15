@@ -530,38 +530,38 @@ ins {
     text-decoration:none;
 
 /* Voting page */
-.proposal {
+#main .proposal {
 	font-size: 3em;
 	font-weight: bold;
 	margin-bottom: 1em;
 }
 
-.proposal span {
+#main .proposal span {
 	font-weight: normal;
 }
 
-.voteresults li {
+#main .voteresults li {
 	font-size: 2em;
 	width: 200px;
 	display: inline-block;
 	padding: 20px 0;
 }
 
-.voteoptions li {
+#main .voteoptions li {
 	display: inline-block;
 	font-size: 2.5em;
 	margin-right: 4em
 }
 
-.voteoverview td:first-child {
+#main .voteoverview td:first-child {
 	font-weight: normal;
 }
 
-.voteoverview input {
+#main .voteoverview input {
 	display: none;
 }
 
-.voteoverview label {
+#main .voteoverview label {
 	display: inline-block;
 	width: 120px;
 	height: 40px;
@@ -574,19 +574,19 @@ ins {
 	vertical-align: top;
 }
 
-.voteoverview input:checked + label.yes {
+#main .voteoverview input:checked + label.yes {
 	background: #7fbe20;
 }
 
-.voteoverview input:checked + label.no {
+#main .voteoverview input:checked + label.no {
 	background: #d61d24;
 }
 
-.voteoverview input:checked + label.abstain {
+#main .voteoverview input:checked + label.abstain {
 	background: #555;
 }
 
-.voteoptions label {
+#main .voteoptions label {
 	width: 100px;
 	background: #ccc;
 	display: block;
@@ -595,11 +595,11 @@ ins {
 	border: 2px solid #999;
 }
 
-.voteoptions input {
+#main .voteoptions input {
 	display: none;
 }
 
-.voteoptions input:checked + label {
+#main .voteoptions input:checked + label {
 	background: #7fbe20;
 }
 

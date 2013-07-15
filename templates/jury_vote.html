@@ -3,12 +3,6 @@
 {% block lead %}Voting{% endblock %}
 {% block menu %}
     <ul>
-        <li><a href="/jury/{{lang_id}}/overview/" >Overview</a></li>
-        {% for e in exams %}
-        <li><a href="/jury/{{lang_id}}/exam/{{e.id}}">{{e.name}}</a></li>
-        {% endfor %}
-        <li><a href="/jury/{{lang_id}}/">Profile</a></li>
-        <li><a href="/jury/{{lang_id}}/students/">Students</a></li>
         <li><a href="/jury/{{lang_id}}/vote/" class="select">Vote</a></li>
     </ul>
 {% endblock %}
@@ -16,9 +10,9 @@
 {% block main %}
 
 {% if voteactive %}
-<p class="proposal"><strong>Proposition</strong>:{{ovo.text}}</p>
+<p class="proposal"><span>Proposition</span>:{{ovo.text}}</p>
 {% if submitted %}
-<p class="proposal"><strong>Submitted vote:</strong> {{submitted}}</p>
+<p class="proposal"><span>Submitted vote:</span> {{submitted}}</p>
 {% endif %}
 <form method="POST">
 <ul class="voteoptions">

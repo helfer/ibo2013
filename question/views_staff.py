@@ -383,8 +383,8 @@ class QMLParseError(Exception):
 #@staff_member_required
 @login_required
 def view_image(request,fname="",qid=None,lang_id=1,version=None):
-    if (not request.user.is_staff) and (int(exam_id) not in [1,2]):
-        raise PermissionDenied() #TODO: just a hack to keep people out
+    #if (not request.user.is_staff) and (int(exam_id) not in [1,2]):
+    #    raise PermissionDenied() #TODO: just a hack to keep people out
     
     try:
         img = Figure.objects.get(name=fname)

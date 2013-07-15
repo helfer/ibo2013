@@ -41,31 +41,26 @@ function DownloadPDF() {
 function CopyContent(id_source,id_dest) {
 	var m = gid(id_source);
 	var n = gid(id_dest);
-	
+	var o = m.innerHTML.replace(/<del>[^>]*<\/del>/g, '').replace(/<ins>/g, '').replace(/<\/ins>/g,'');
 	if (n.tagName == 'TEXTAREA')
 	{
-		CKEDITOR.instances[id_dest].setData('<p>'+m.innerHTML+'</p>');
+		CKEDITOR.instances[id_dest].setData('<p>'+o+'</p>');
 	}
 	else
 	{
-		n.value = m.innerHTML;
+		n.value = o;
 	}
 }
 
 function CopyContentAll() {
-	CopyContent('oq','tq');
-	CopyContent('op','tp');
-	
-	// this should become a for-loop over all available fields
-	// -- not sure how make that into a dynamically sized loop though...
-	CopyContent('oi1','ti1');
-	CopyContent('oi2','ti2');
-	CopyContent('oi3','ti3');
-	
-	CopyContent('oa1','ta1');
-	CopyContent('oa2','ta2');
-	CopyContent('oa3','ta3');
-	CopyContent('oa4','ta4');
+	var allElements = document.getElementsByTagName('*');
+	for (var i = 0; i < allElements.length; i++) {
+		var m = allElements[i].getAttributeNode('onclick');
+		if (m) {
+			if (m.value.search("CopyContent\\(") !== -1)
+				eval(m.value);
+		}
+	}
 }
 
 function ClearContent(id_dest) {
@@ -82,19 +77,14 @@ function ClearContent(id_dest) {
 }
 
 function ClearContentAll() {
-	ClearContent('tq');
-	ClearContent('tp');
-	
-	// this should become a for-loop over all available fields
-	// -- not sure how make that into a dynamically sized loop though...
-	ClearContent('ti1');
-	ClearContent('ti2');
-	ClearContent('ti3');
-	
-	ClearContent('ta1');
-	ClearContent('ta2');
-	ClearContent('ta3');
-	ClearContent('ta4');
+	var allElements = document.getElementsByTagName('*');
+	for (var i = 0; i < allElements.length; i++) {
+		var m = allElements[i].getAttributeNode('onclick');
+		if (m) {
+			if (m.value.search("ClearContent\\(") !== -1)
+				eval(m.value);
+		}
+	}
 }
 
 function CheckChanges_StoreCurrent() // on page load

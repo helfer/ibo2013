@@ -177,3 +177,21 @@ function save_answer(qid,ans,ename) {
    //alert(qid + " " + ans + "  " + ename + " " + ck);
 }
 
+//$(document).ready(function() {
+//    setTimeout(function(){$('input[type=radio]').each(function(){
+//        console.log(this.name);
+//        if (this.name.indexOf("checked") > 0){
+//            this.checked = true;
+//        }
+//    });},100);
+//});
+
+
+// fix for images now showing up immediately
+window.onload = function() {
+	var v = document.getElementsByTagName('img');
+for (var i = 0; i < v.length; i++) {
+	v[i].style.display = 'none';
+	v[i].style.display = 'block';
+}
+}

@@ -510,15 +510,6 @@ table tr:last-child td { border-bottom: 1px solid #999; }
     background: #5b266f;
 }
 
-/* Settings page */
-/* NO LONGER USED
-.permissionslist table td { padding: 5px; font-size: 130%; }
-.permissionslist label { padding: 10px; }
-.permissionslist img {
-	height: 15px;
-	margin-right: 10px;
-} */
-
 del {
     color:#F00;
     font-weight:bold;
@@ -528,6 +519,7 @@ ins {
     color:#00F;
     font-weight:bold;
     text-decoration:none;
+}
 
 /* Voting page */
 .proposal {

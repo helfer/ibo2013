@@ -1,7 +1,7 @@
 /* LAYOUT + GENERAL ATTRIBUTES ================================ */
 body {
 	width: 1280px;
-	height: 752px;
+	height: 751px;
 }
 
 #header,
@@ -16,7 +16,7 @@ body {
 }
 
 #main {
-	height: 632px; /* 752 - 2*60 = body height - #header height - #footer height */
+	height: 632px; /* 751 - 2*60 + 1 = body height - #header height - #footer height */
 }
 
 #question,
@@ -27,8 +27,8 @@ body {
 	height: 598px;  /* 632 - 2*17 = #main height - #question padding */
 }
 
-#question {	width: 720px; }
-#answers { width: 491px; } /* 1280 - 720 - 4*17 - 1 = body width - #question width - 2*#question padding - 2*#answers padding - #question border-right */
+#question {	width: 690px; }
+#answers { width: 521px; } /* 1280 - 690 - 4*17 - 1 = body width - #question width - 2*#question padding - 2*#answers padding - #question border-right */
 #overview { width: 1246px; } /* 1280 - 2*17 - 1 = body width - 2*#overview padding */
 
 /* extended situation (no bars) */
@@ -37,19 +37,19 @@ body {
 	height: 0;
 }
 #main.hide {
-	height: 752px; /* body height */
+	height: 750px; /* body height - 1 */
 }
 #main.hide #question,
 #main.hide #answers,
 #main.hide #overview {
-	height: 718px; /* 752 - 2*17 = body height - 2*#question padding */
+	height: 716px; /* 750 - 2*17 = body height - 2*#question padding */
 }
 
 
 /* MARKUP ===================================================== */
 /* general elements*/
 body {
-	font: 62.5%/1.0 myWoffFont, Helvetica, Arial, Verdana, sans-serif;
+	font: 62.5%/1.0 Helvetica, Arial, Verdana, sans-serif;
 	position: relative;
 	background: #fff;
 	margin: 0;
@@ -176,7 +176,7 @@ ul {
 
 #answers table {
 	width: 100%;
-	height: 434px;
+	height: 454px;
 }
 
 #answers th {
@@ -336,7 +336,7 @@ body.zoom #overview a.done.flag {
 	height: 60px;
 	background: #ccc;
 	text-align: center;
-	width: 525px;
+	width: 555px;
 	border-radius: 0;
 	border: 0;
 	cursor: auto;
@@ -345,7 +345,7 @@ body.zoom #overview a.done.flag {
 #answers #answerbar.hide {
 	bottom: 0;
 	padding-right: 150px;
-	width: 375px;
+	width: 405px;
 }
 
 #answers #answerbar a:first-child,
@@ -397,16 +397,16 @@ body.zoom #overview a.done.flag {
 @media only screen and (orientation: portrait) {
 body {
 	width: 800px;
-	height: 1241px;
+	height: 1231px;
 }
 
 #main {
-	height: 1121px;
+	height: 1112px; /* body height - 120 + 1 */
 }
 
 #question {
-	width: 766px;
-	height: 570px;
+	width: 766px; /* body width - 34 */
+	height: 520px;
 	overflow-y: none;
 	border-right: none;
 	border-bottom: 1px solid #999;
@@ -414,11 +414,11 @@ body {
 
 #answers {
 	width: 766px;
-	height: 422px;
+	height: 462px;
 }
 
 #answers table {
-	height: 360px;
+	height: 404px;
 }
 
 #answerbar {
@@ -426,13 +426,13 @@ body {
 }
 
 #overview {
-	height: 1087px;
+	height: 1082px;
 	width: 766px;
 }
 
 /* hidden stuff */
 #main.hide {
-	height: 1181px;
+	height: 1235px;
 }
 
 #main #answers #answerbar {
@@ -441,19 +441,19 @@ body {
 }
 
 #main.hide #overview {
-	height: 1207px;
+	height: 1201px;
 }
 
 #main.hide #question {
-	height: 630px;
+	height: 580px;
 }
 
 #main.hide #answers {
-	height: 505px;
+	height: 522px;
 }
 
 #main.hide #answers table {
-	height: 348px;
+	height: 425px;
 }
 
 }

@@ -537,7 +537,7 @@ def vote(request):
  
     vr = VotingRound.objects.all().order_by('-id')
     dl = Delegation.objects.all().order_by('name')
-    current = None
+    current = {'active':False,'closed':False}
     votes = []
     vnum = 0
     if len(vr) > 0:

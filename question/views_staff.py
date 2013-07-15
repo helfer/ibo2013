@@ -537,7 +537,7 @@ def vote(request):
  
     vr = VotingRound.objects.all().order_by('-id')
     dl = Delegation.objects.all().order_by('name')
-    current = {'active':False,'closed':False}
+    current = None
     votes = []
     vnum = 0
     if len(vr) > 0:
@@ -572,7 +572,7 @@ def vote(request):
         'forms':forms,
         'newform':newform,
         'stats':stats,
-        'active':current.active and not current.closed
+        'active':(current is not None) and current.active and (not current.closed)
     }
 )
 

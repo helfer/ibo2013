@@ -55,11 +55,11 @@
 	<tr>
 	<td><p>{{sub.data}}</p></td>
 	<td>
-	<input autocomplete="off" type="radio" id="i{{sub.id}}t" name="n{{sub.id}}" value="true" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1 %}checked{%endif%}{%endif%}{%endfor%} onclick="save_answer({{eq.id}},{{forloop.counter}},'n{{sub.id}}')" />
+	<input autocomplete="off" type="radio" id="i{{sub.id}}t" name="n{{sub.id}}" value="true" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1 %}checked{%endif%}{%endif%}{%endfor%} onclick="save_answer({{eq.id}},{{forloop.counter}},'n{{sub.id}}')" >
 		<label for="i{{sub.id}}t" class="true"><div></div></label>
 	</td>
 	<td>
-	<input autocomplete="off" type="radio" id="i{{sub.id}}f" name="n{{sub.id}}" value="false" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1|is_false %}checked{%endif%}{%endif%}{%endfor%} onclick="save_answer({{eq.id}},{{forloop.counter}},'n{{sub.id}}')" />
+	<input autocomplete="off" type="radio" id="i{{sub.id}}f" name="n{{sub.id}}" value="false" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1|is_false %}checked{%endif%}{%endif%}{%endfor%} onclick="save_answer({{eq.id}},{{forloop.counter}},'n{{sub.id}}')">
 		<label for="i{{sub.id}}f" class="false"><div></div></label>
 	</td>
 	</tr>

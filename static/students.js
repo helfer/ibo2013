@@ -177,3 +177,14 @@ function save_answer(qid,ans,ename) {
    //alert(qid + " " + ans + "  " + ename + " " + ck);
 }
 
+//$(document).ready(function() {
+//    setTimeout(function(){$('input[type=radio]').each(function(){
+//        console.log(this.name);
+//        if (this.name.indexOf("checked") > 0){
+//            this.checked = true;
+//        }
+//    });},100);
+//});
+
+    
+

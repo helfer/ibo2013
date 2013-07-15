@@ -37,12 +37,12 @@ body {
 	height: 0;
 }
 #main.hide {
-	height: 751px; /* body height */
+	height: 750px; /* body height - 1 */
 }
 #main.hide #question,
 #main.hide #answers,
 #main.hide #overview {
-	height: 717px; /* 751 - 2*17 = body height - 2*#question padding */
+	height: 716px; /* 750 - 2*17 = body height - 2*#question padding */
 }
 
 
@@ -397,16 +397,16 @@ body.zoom #overview a.done.flag {
 @media only screen and (orientation: portrait) {
 body {
 	width: 800px;
-	height: 1241px;
+	height: 1236px;
 }
 
 #main {
-	height: 1121px;
+	height: 1117px; /* body height - 120 + 1 */
 }
 
 #question {
-	width: 766px;
-	height: 570px;
+	width: 766px; /* body width - 34 */
+	height: 520px;
 	overflow-y: none;
 	border-right: none;
 	border-bottom: 1px solid #999;
@@ -414,11 +414,11 @@ body {
 
 #answers {
 	width: 766px;
-	height: 422px;
+	height: 467px;
 }
 
 #answers table {
-	height: 360px;
+	height: 410px;
 }
 
 #answerbar {
@@ -426,13 +426,13 @@ body {
 }
 
 #overview {
-	height: 1087px;
+	height: 1083px;
 	width: 766px;
 }
 
 /* hidden stuff */
 #main.hide {
-	height: 1181px;
+	height: 1236px;
 }
 
 #main #answers #answerbar {
@@ -441,19 +441,19 @@ body {
 }
 
 #main.hide #overview {
-	height: 1207px;
+	height: 1202px;
 }
 
 #main.hide #question {
-	height: 630px;
+	height: 580px;
 }
 
 #main.hide #answers {
-	height: 505px;
+	height: 527px;
 }
 
 #main.hide #answers table {
-	height: 348px;
+	height: 430px;
 }
 
 }

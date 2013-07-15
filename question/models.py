@@ -354,3 +354,10 @@ class ExamAnswers(models.Model):
 class ExamFlags(models.Model):
     user = models.ForeignKey(User)
     question = models.ForeignKey(ExamQuestion)
+
+class SimpleLog(models.Model):
+    user = models.ForeignKey(User)
+    path = models.CharField(max_length=200)
+    ip = models.CharField(max_length=50)
+    timestamp = models.DateTimeField(auto_now=True)
+

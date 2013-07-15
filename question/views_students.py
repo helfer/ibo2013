@@ -34,12 +34,9 @@ def question(request,language_id,exam_id,question_position):
     except:
         this_answer = [(3,None),(4,None),(5,None),(6,None)]
 
-    print num_questions
     flag = ExamFlags.objects.filter(user=request.user,question=eq).count() > 0
     xmlq = qml.QMLquestion(vnode.text)
     struct = xmlq.get_texts_nested(prep=True)
-    print "answer",this_answer
-    print "flag",flag
     return render_with_context(request,'students_questionview.html',
         {'exam_id':exam_id,
         'lang_id':language_id,
@@ -70,7 +67,6 @@ def examview(request,language_id,exam_id):
 
     answers = ExamAnswers.objects.filter(user=request.user)
     flags = ExamFlags.objects.filter(user=request.user)
-    print flags
     questions = ExamQuestion.objects.filter(exam=exam).order_by('category','position')
     categories = CategoryTranslation.objects.filter(language=1).order_by('category')
     categories = dictify(categories,'category_id')
@@ -84,7 +80,6 @@ def examview(request,language_id,exam_id):
 
         flag = False
         for f in flags:
-            print f.question_id,q.id
             if f.question_id == q.id:
                 flag= True
                 break

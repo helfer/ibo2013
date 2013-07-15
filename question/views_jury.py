@@ -158,31 +158,6 @@ def students(request,lang_id=1,permissions=None):
         'perms':permissions
         })
 
-@permission_required('question.is_jury')
-@permission_check
-def practical(request,lang_id=1,permissions=None):
-	# RB: this will surely need an update
-
-    try:
-        lang_id = int(lang_id)
-        language = Language.objects.get(id=lang_id)
-    except:
-        raise Http404()
-
-    if request.user.is_staff:
-        exams = Exam.objects.all()
-    else:
-        exams = Exam.objects.filter(staff_only=False)
-    
-    for e in exams:
-        e.load_question_status(lang_id)
-
-    return render_with_context(request,'jury_practical.html',
-        {'exams':exams,
-        'lang_id':lang_id,
-        'perms':permissions
-        })
-
 
 @permission_required('question.is_jury')
 @permission_check
@@ -410,13 +385,14 @@ def practical(request,lang_id=1,permissions=None):
 
 
     finalized = True
+    if len(assignments) == 0:
+        finalized = False
     for a in assignments:
         if a.finalized == False:
             finalized=False
 
-    if request.user.is_staff:
-        finalized = True
-
+    if request.user.is_staff or request.user.is_superuser:
+        finalized = False
 
     if request.method == 'POST':
         if "upload" in request.POST:
@@ -461,7 +437,6 @@ def practical(request,lang_id=1,permissions=None):
 
         elif "finalize" in request.POST:
             pa = PracticalAssignment.objects.filter(student__in=students)
-            print len(students),pa.count(),PracticalExam.objects.all().count()
             if len(students)*PracticalExam.objects.all().count() == pa.count():
                 for s in pa:
                     s.finalized = True
@@ -478,7 +453,6 @@ def practical(request,lang_id=1,permissions=None):
         uploadform = UploadPracticalForm()
         assignform = AssignPracticalForm(students=students,practicals=practicals,initial=init)
 
-    print students,assignments
 
     return render_with_context(request,'jury_practical.html',
         {'lang_id':lang_id,

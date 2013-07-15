@@ -150,11 +150,9 @@ def view_question(request,qid=None,mode="xml"):
 
         if "revert" in request.POST:
             vnodes = VersionNode.objects.filter(question=question,language=chosen_lang_id).order_by('-timestamp')
-            print len(vnodes)
             for v in vnodes:
                 if not v.committed:
                     v.delete()
-                    print "deleted " ,v.timestamp, "(committed ",v.committed,")"
                 else:
                     #we're done, return
                     return redirect(request.path)
@@ -512,7 +510,6 @@ def practical(request):
         
             else:
                 pass
-        print finals,prints
         for f in finals:
             a = PracticalAssignment.objects.get(id=int(f))
             a.finalized = finals[f]

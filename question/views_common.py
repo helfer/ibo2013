@@ -33,7 +33,6 @@ def permission_check(f):
             if  Language.objects.get(id=lang_id).coordinators.filter(id=request.user.id).exists():
                 permissions.append('admin')
 
-        print args[0].user,kwargs,permissions
 
         res = f(*args,permissions=permissions,**kwargs)
 

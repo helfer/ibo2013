@@ -339,3 +339,18 @@ class VotingRound(models.Model):
     text = models.CharField(max_length=500)
     active = models.BooleanField()
     closed = models.BooleanField()
+
+# yeah, this is dumb
+class ExamAnswers(models.Model):
+    user = models.ForeignKey(User)
+    question = models.ForeignKey(ExamQuestion)
+    answer1 = models.NullBooleanField()
+    answer2 = models.NullBooleanField() 
+    answer3 = models.NullBooleanField() 
+    answer4 = models.NullBooleanField() 
+    timestamp = models.DateTimeField(auto_now=True)
+
+
+class ExamFlags(models.Model):
+    user = models.ForeignKey(User)
+    question = models.ForeignKey(ExamQuestion)

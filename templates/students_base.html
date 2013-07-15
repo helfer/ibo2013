@@ -1,10 +1,12 @@
 <!doctype html>
+{% load ibotags %}
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="target-densitydpi=device-dpi, initial-scale=1.0">
 <title>{% block title %}IBO Theoretical Exam{% endblock %}</title>
 <link href="/static/reset.css" rel="stylesheet" type="text/css">
+<script src="/static/jquery-1.10.2.min.js" type="text/javascript"></script>
 <link href="/static/students.css" rel="stylesheet" type="text/css">
 <script src="/static/students.js" type="text/javascript"></script>
 </head>
@@ -13,7 +15,7 @@
 <div id="header">
 {% block header %}
 <div class="title">{{lang_picker.language}}</div>
-<div class="infobox">{# TODO: Delegation name? #}<strong>{{user}}</strong> (The Netherlands)</div>
+<div class="infobox"><strong>{{user.first_name}} {{user.last_name}}</strong>, {% for g in user.groups.all %}{{g.name}} {%endfor%}</div>
 {% endblock %}
 </div>
 
@@ -25,18 +27,18 @@
 <div id="footer">
 {% block footer %}
 {% if pos|add:'-1' > 0 %}
-<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'-1'}}" class="prev"></a>
+<a href="/students/{{lang_id}}/question/{{exam_id}}/{{pos|add:'-1'}}" class="prev"></a>
 {% endif %}
-<a href="/students/overview/{{lang_id}}/{{exam_id}}" class="home"></a>
+<a href="/students/{{lang_id}}/overview/{{exam_id}}" class="home"></a>
 <a href="#" class="font" onclick="zoomfont()"></a>
-{% if pos|add:'1' < 51 %}
-<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'1'}}" class="next"></a>
+{% if pos < num_questions %}
+<a href="/students/{{lang_id}}/question/{{exam_id}}/{{pos|add:'1'}}" class="next"></a>
 {% endif %}
 {% endblock %}
 </div>
 
 <div class="ibologo" onclick="fullsize()"><img src="/static/icons/IBO2013.png"></div>
-<div id="clock">{{countdown}}</div>
+<div id="clock"></div>
 
 </body>
 </html>

@@ -25,8 +25,13 @@ urlpatterns = patterns('',
     (r'^jury/(?P<lang_id>\d{1,9})/vote/$',juryview.vote),
     (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/question/(?P<question_position>\d{1,2})/translate/$',juryview.xmlquestionview),
 
-    (r'^students/question/(\d{1,9})/(\d{1,9})/(\d{1,9})/$',studentview.question),
+    (r'^students/(\d{1,9})/question/(\d{1,9})/(\d{1,9})/$',studentview.question),
+    (r'^students/(\d{1,9})/overview/(\d{1,9})/$',studentview.examview),
+    
+
     (r'^ajax/$',ajaxview.ajax_update),
+    (r'^ajax/flag/$',ajaxview.ajax_flag),
+    (r'^ajax/answer/$',ajaxview.ajax_answer),
 
     (r'^staff/discussion/(\d{1,9})/(\d{1,9})/$',staffview.discussion),
     (r'^staff/categories/(\d{1,9})/$',staffview.translate_categories),

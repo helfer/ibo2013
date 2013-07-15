@@ -3,7 +3,7 @@
 {% block lead %}Practical exam{% endblock %}
 {% block menu %}
     <ul>
-        <li><a href="/jury/{{language.id}}/practical/" class="select">Practical exam</a></li>
+        <!--<li><a href="/jury/{{language.id}}/practical/" class="select">Practical exam</a></li>-->
     </ul>
 {% endblock %}
 
@@ -12,6 +12,7 @@
 {% if finalized %}
 
 <h1>Final exam assignments:</h1>
+<p>The following is a list of your final exam assignments. These final assignments will now be printed and can no longer be changed.</p>
 <table>
 {% for a in assignments %}
 <tr><td>{{a.student.user.first_name}}</td><td>{{a.practical_exam.name}}</td><td><a href="/jury/files/{{a.practical_exam_file.filename}}">Download assigned version {{a.practical_exam_file.name}}</a></td></tr>

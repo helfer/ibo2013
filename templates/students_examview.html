@@ -3,18 +3,20 @@
 {% block main %}
 <div id="overview">
 {% for o in categories %}
+    {% if o.questions|length > 0 %}
 	<h1>{{o.cat.text}}</h1>
 	<p>
 	{% for q in o.questions %}
-	<a href="students/question/{{lang_id}}/{{exam_id}}/{{q.position}}" class="{{q.status}}">{{q.pos}}</a>
+	<a href="/students/{{lang_id}}/question/{{exam_id}}/{{q.q.position}}" class="{{q.status}}">{{q.q.position}}</a>
 	{% endfor %}
 	</p>
+    {% endif %}
 {% endfor %}
 </div>
 {% endblock %}
 
 {% block footer %}
-<a href="students/overview/{{lang_id}}/{{exam_id}}" class="home"></a>
+<!-- <a href="students/overview/{{lang_id}}/{{exam_id}}" class="home"></a>-->
 <a href="#" onclick="zoomfont()" class="font"></a>
 {% endblock %}
 

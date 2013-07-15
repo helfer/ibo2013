@@ -233,6 +233,8 @@ body.zoom #answers.hide table {
 #overview a.done.flag { color: #eee; background: url('icons/flag.png') no-repeat right bottom #03a0e1; background-size: 35px; }
 #overview a.need.flag { color: #000; background: url('icons/halfflag.png') no-repeat right bottom #eee; background-size: 65px; }
 
+#overview a.empt.flag { color: #000; background: url('icons/halfflag.png') no-repeat right bottom #eee; background-size: 65px; }
+
 #overview a:hover,
 #overview a.done.flag:hover,
 #overview a.need.flag:hover {

@@ -56,7 +56,7 @@ def question(request,language_id,exam_id,question_position):
     })
 
 
-
+@login_required
 def examview(request,language_id,exam_id):
 
     try:

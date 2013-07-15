@@ -184,7 +184,6 @@ class UploadPracticalForm(forms.Form):
 class AssignPracticalForm(forms.Form):
 
     def __init__(self,*args,**kwargs):
-        print "init"
         students = kwargs.pop("students")
         practicals = kwargs.pop("practicals")
         super(AssignPracticalForm,self).__init__(*args,**kwargs)
@@ -195,3 +194,6 @@ class AssignPracticalForm(forms.Form):
                     queryset=PracticalExamFile.objects.filter(delegation=s.delegation)|PracticalExamFile.objects.filter(delegation=staffd),
                     empty_label=None,
                     label="{0} {1} ({2})".format(s.user.first_name.encode('utf-8'),s.user.last_name.encode('utf-8'),p.name))
+
+            
+         

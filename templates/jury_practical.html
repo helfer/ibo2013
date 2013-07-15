@@ -8,6 +8,16 @@
 {% endblock %}
 
 {% block main %}
+
+{% if finalized %}
+
+<h1>Final exam assignments:</h1>
+<table>
+{% for a in assignments %}
+<tr><td>{{a.student.user.first_name}}</td><td>{{a.practical_exam.name}}</td><td><a href="/jury/files/{{a.practical_exam_file.filename}}">Download assigned version {{a.practical_exam_file.name}}</a></td></tr>
+{% endfor %}
+</table>
+
 <h1>Download official versions</h1>
 <table>
 {% for p in practicals %}
@@ -16,17 +26,15 @@
 </table>
 
 <br style="clear: both;"><br>
-
-{% if finalized %}
-
-<h1>Assigned exams</h1>
+{% else %}
+<h1>Download official versions</h1>
 <table>
-{% for a in assignments %}
-<tr><td>{{a.student.user.first_name}}</td><td>{{a.practical_exam.name}}</td><td><a href="/jury/files/{{a.exam_file.filename}}">Download assigned version</a></td></tr>
+{% for p in practicals %}
+<tr><td><a href="/jury/files/{{p.filename}}"><strong>{{p.name}}</strong></a> ({{p.timestamp}})</td></tr>
 {% endfor %}
 </table>
 
-{% else %}
+<br style="clear: both;"><br>
 
 <h1>Upload translation</h1>
 <table>
@@ -70,7 +78,7 @@
 </form>
 
 <form action="" method="post">
-<p><input type="submit" name="finalize" value="Finalize assignment"></p>
+<p><input type="submit" name="finalize" value="Finalize assignment" onclick="return confirm('If you have made any changes recently, make sure to click on \'submit\' for the assignments before you finalize. Once finalized, the assignments can not be changed any more. Click \'OK\' to finalize or \'cancel\' to abort.')"></p>
 </form>
 
 {% endif %}

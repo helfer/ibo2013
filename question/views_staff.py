@@ -491,9 +491,35 @@ def discussion(request,exam_id,question_position):
 def practical(request):
 
 
+    if request.method == 'POST':
+        finals = {}
+        prints = {}
+        for k in request.POST:
+            sp = k.split('-')
+            if sp[0] == u"printed":
+                if len(sp) == 3 and "-".join(sp[:2]) not in request.POST:
+                    prints[sp[1]] = False
+                if len(sp) == 2:
+                    prints[sp[1]] = True
+            elif sp[0] == u"finalized":
+                if len(sp) == 3 and "-".join(sp[:2]) not in request.POST:
+                    finals[sp[1]] = False
+                if len(sp) == 2:
+                    finals[sp[1]] = True
+        
+            else:
+                pass
+        print finals,prints
+        for f in finals:
+            a = PracticalAssignment.objects.get(id=int(f))
+            a.finalized = finals[f]
+            a.printed = prints[f]
+            a.save()            
 
+        return redirect(request.path)
+    
+    assignments = PracticalAssignment.objects.all().order_by('printed','-finalized','student')
     return render_to_response('staff_practical.html',{
-        'practicals':practicals,
-        'fileform':fileform,
-        'filelist':filelist
+        #'practicals':practicals,
+        'assignments':assignments
         })

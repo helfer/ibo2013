@@ -1,0 +1,29 @@
+{% extends "ibo2013_base.html" %}
+{% block title %}IBO Translation Interface{% endblock %}>
+{% block lead %}Practical exam{% endblock %}
+{% block menu %}
+    <ul>
+        <li><a href="/staff/practical/" class="select">Practical exam</a></li>
+    </ul>
+{% endblock %}
+
+{% block main %}
+
+
+<h1>Final exam assignments:</h1>
+<table>
+<form action="" method="POST">
+{% for a in assignments %}
+<tr><td>{{a.student.user.first_name}}</td><td>{{a.practical_exam.name}}</td><td><a href="/jury/files/{{a.practical_exam_file.filename}}">Download assigned version {{a.practical_exam_file.name}}</a></td>
+<td>finalized:<input type="hidden" name="finalized-{{a.id}}-hidden" value="0" /><input type="checkbox" name="finalized-{{a.id}}" value="1" {% if a.finalized %}checked{%endif%} /></td>
+<td>printed:<input type="checkbox" name="printed-{{a.id}}" value="1" {% if a.printed %}checked{%endif%}/><input type="hidden" name="printed-{{a.id}}-hidden" value="0" /></td>
+</tr>
+{% endfor %}
+<tr><td>
+<input type="submit" value="submit" name="submit"/>
+</td></tr>
+</form>
+</table>
+
+
+{% endblock %}

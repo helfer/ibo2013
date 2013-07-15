@@ -406,11 +406,17 @@ def practical(request,lang_id=1,permissions=None):
         delegation = request.user.delegation_set.all()[0]
     students = Student.objects.filter(delegation=delegation)
     examfiles = PracticalExamFile.objects.filter(delegation=delegation).order_by('-timestamp')
+    assignments = PracticalAssignment.objects.filter(student__in=students)
 
-    finalized = False
-    for s in students:
-        if s.finalized:
-            finalized = True
+
+    finalized = True
+    for a in assignments:
+        if a.finalized == False:
+            finalized=False
+
+    if request.user.is_staff:
+        finalized = True
+
 
     if request.method == 'POST':
         if "upload" in request.POST:
@@ -430,7 +436,6 @@ def practical(request,lang_id=1,permissions=None):
                 pe.handle_uploaded_file(request.FILES['pfile'])
                 return redirect(request.path+"?success")
             else:
-                assignments = PracticalAssignment.objects.filter(student__in=students)
                 init = {}
                 for a in assignments:
                     init["{0}__{1}".format(a.student_id,a.practical_exam_id)] = a.practical_exam_file_id
@@ -455,19 +460,25 @@ def practical(request,lang_id=1,permissions=None):
                 return redirect(request.path+"?success")
 
         elif "finalize" in request.POST:
-            for s in students:
-                s.finalized = True
-                s.save()
+            pa = PracticalAssignment.objects.filter(student__in=students)
+            print len(students),pa.count(),PracticalExam.objects.all().count()
+            if len(students)*PracticalExam.objects.all().count() == pa.count():
+                for s in pa:
+                    s.finalized = True
+                    s.save()
+            else:
+                pass
             return redirect(request.path+"?success")
         else:
             raise Http404()
     else:
-        assignments = PracticalAssignment.objects.filter(student__in=students)
         init = {}
         for a in assignments:
             init["{0}__{1}".format(a.student_id,a.practical_exam_id)] = a.practical_exam_file_id
         uploadform = UploadPracticalForm()
         assignform = AssignPracticalForm(students=students,practicals=practicals,initial=init)
+
+    print students,assignments
 
     return render_with_context(request,'jury_practical.html',
         {'lang_id':lang_id,

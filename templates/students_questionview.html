@@ -75,11 +75,11 @@
 </table>
 	<div id="answerbar">
 		{% if pos|add:'-1' > 0 %}
-		<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'-1'}}" class="prev"></a>
+		<a href="/students/{{lang_id}}/question/{{exam_id}}/{{pos|add:'-1'}}" class="prev"></a>
 		{% endif %}
 		<input autocomplete="off" type="checkbox" id="id_flag" name="id_flag" {%if flag %}checked{% endif %} onclick="submit_flag({{eq.id}},{{user.id}});"><label for="id_flag" title="Flag for attention" ></label>
 		{% if pos < num_questions %}
-		<a href="/students/question/{{lang_id}}/{{exam_id}}/{{pos|add:'1'}}" class="next"></a>
+		<a href="/students/{{lang_id}}/question/{{exam_id}}/{{pos|add:'1'}}" class="next"></a>
 		{% endif %}
 	</div>
 </div>

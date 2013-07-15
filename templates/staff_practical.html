@@ -13,6 +13,7 @@
 <h1>Final exam assignments:</h1>
 <table>
 <form action="" method="POST">
+<input type="submit" value="submit" name="submit"/>
 {% for a in assignments %}
 <tr><td>{{a.student.delegation.name}}</td><td> {{a.student.user.first_name}} {{a.student.user.last_name}}</td><td>{{a.practical_exam.name}}</td><td><a href="/jury/files/{{a.practical_exam_file.filename}}">Download assigned version {{a.practical_exam_file.name}}</a></td>
 <td>finalized:<input type="hidden" name="finalized-{{a.id}}-hidden" value="0" /><input type="checkbox" name="finalized-{{a.id}}" value="1" {% if a.finalized %}checked{%endif%} /></td>

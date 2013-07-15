@@ -397,11 +397,11 @@ body.zoom #overview a.done.flag {
 @media only screen and (orientation: portrait) {
 body {
 	width: 800px;
-	height: 1232px;
+	height: 1231px;
 }
 
 #main {
-	height: 1113px; /* body height - 120 + 1 */
+	height: 1112px; /* body height - 120 + 1 */
 }
 
 #question {
@@ -414,11 +414,11 @@ body {
 
 #answers {
 	width: 766px;
-	height: 463px;
+	height: 462px;
 }
 
 #answers table {
-	height: 405px;
+	height: 404px;
 }
 
 #answerbar {
@@ -426,13 +426,13 @@ body {
 }
 
 #overview {
-	height: 1083px;
+	height: 1082px;
 	width: 766px;
 }
 
 /* hidden stuff */
 #main.hide {
-	height: 1236px;
+	height: 1235px;
 }
 
 #main #answers #answerbar {
@@ -441,7 +441,7 @@ body {
 }
 
 #main.hide #overview {
-	height: 1202px;
+	height: 1201px;
 }
 
 #main.hide #question {
@@ -449,7 +449,7 @@ body {
 }
 
 #main.hide #answers {
-	height: 523px;
+	height: 522px;
 }
 
 #main.hide #answers table {

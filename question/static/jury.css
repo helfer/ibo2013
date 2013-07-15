@@ -510,15 +510,6 @@ table tr:last-child td { border-bottom: 1px solid #999; }
     background: #5b266f;
 }
 
-/* Settings page */
-/* NO LONGER USED
-.permissionslist table td { padding: 5px; font-size: 130%; }
-.permissionslist label { padding: 10px; }
-.permissionslist img {
-	height: 15px;
-	margin-right: 10px;
-} */
-
 del {
     color:#F00;
     font-weight:bold;
@@ -528,40 +519,41 @@ ins {
     color:#00F;
     font-weight:bold;
     text-decoration:none;
+}
 
 /* Voting page */
-#main .proposal {
+.proposal {
 	font-size: 3em;
 	font-weight: bold;
 	margin-bottom: 1em;
 }
 
-#main .proposal span {
+.proposal span {
 	font-weight: normal;
 }
 
-#main .voteresults li {
+.voteresults li {
 	font-size: 2em;
 	width: 200px;
 	display: inline-block;
 	padding: 20px 0;
 }
 
-#main .voteoptions li {
+.voteoptions li {
 	display: inline-block;
 	font-size: 2.5em;
 	margin-right: 4em
 }
 
-#main .voteoverview td:first-child {
+.voteoverview td:first-child {
 	font-weight: normal;
 }
 
-#main .voteoverview input {
+.voteoverview input {
 	display: none;
 }
 
-#main .voteoverview label {
+.voteoverview label {
 	display: inline-block;
 	width: 120px;
 	height: 40px;
@@ -574,19 +566,19 @@ ins {
 	vertical-align: top;
 }
 
-#main .voteoverview input:checked + label.yes {
+.voteoverview input:checked + label.yes {
 	background: #7fbe20;
 }
 
-#main .voteoverview input:checked + label.no {
+.voteoverview input:checked + label.no {
 	background: #d61d24;
 }
 
-#main .voteoverview input:checked + label.abstain {
+.voteoverview input:checked + label.abstain {
 	background: #555;
 }
 
-#main .voteoptions label {
+.voteoptions label {
 	width: 100px;
 	background: #ccc;
 	display: block;
@@ -595,11 +587,11 @@ ins {
 	border: 2px solid #999;
 }
 
-#main .voteoptions input {
+.voteoptions input {
 	display: none;
 }
 
-#main .voteoptions input:checked + label {
+.voteoptions input:checked + label {
 	background: #7fbe20;
 }
 

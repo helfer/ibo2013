@@ -58,6 +58,9 @@ def question(request,language_id,exam_id,question_position):
 
 @login_required
 def examview(request,language_id,exam_id):
+    
+    if (not request.user.is_staff) and (int(exam_id) not in [1,2]):
+        raise PermissionDenied() #TODO: just a hack to keep people out
 
     try:
         exam = Exam.objects.get(id=exam_id)

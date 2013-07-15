@@ -410,6 +410,7 @@ def practical(request,lang_id=1,permissions=None):
                     pe = PracticalExamFile(name=name,filename=filename,owner=request.user,delegation=delegation)
                 pe.save()
                 pe.handle_uploaded_file(request.FILES['pfile'])
+                pe.save()
                 return redirect(request.path+"?success")
             else:
                 init = {}

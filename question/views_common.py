@@ -54,9 +54,14 @@ def secure_download(request,fname=None):
     if fname is None:
         raise Http404()
     #try:
+    pef = PracticalExamFile.objects.get(filename=fname)
     filename = '/var/www/django/ibo2013/uploaded_files/'+fname                                
+    if pef.content_type is None:
+        content_type = 'application/pdf'
+    else:
+        content_type = pef.content_type
     wrapper = FileWrapper(file(filename))
-    response = HttpResponse(wrapper,content_type="application/pdf")
+    response = HttpResponse(wrapper,content_type=content_type)
     response['Content-Length'] = os.path.getsize(filename)
     response['Content-Disposition'] = 'attachment; filename={0}'.format(fname)
     return response

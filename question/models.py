@@ -292,6 +292,7 @@ class PracticalExamFile(models.Model):
     filename = models.CharField(unique=True,max_length=100) #this is the actual filenmame for serving
     delegation = models.ForeignKey(Delegation)
     timestamp = models.DateTimeField(auto_now=True)
+    content_type = models.CharField(max_length=100,null=True)
     owner = models.ForeignKey(User)
 
 
@@ -299,6 +300,7 @@ class PracticalExamFile(models.Model):
         return self.name
 
     def handle_uploaded_file(self,f):
+        self.content_type = f.content_type
         with open('/var/www/django/ibo2013/uploaded_files/'+self.filename, 'wb+') as destination:
             for chunk in f.chunks():
                 destination.write(chunk)

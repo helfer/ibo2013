@@ -186,5 +186,10 @@ function save_answer(qid,ans,ename) {
 //    });},100);
 //});
 
-    
 
+// fix for images now showing up immediately
+var v = document.getElementsByTagName('img');
+for (var i = 0; i < v.length; i++) {
+	v[i].style.display = 'none';
+	v[i].style.display = 'block';
+}

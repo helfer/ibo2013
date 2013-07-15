@@ -538,13 +538,15 @@ def vote(request):
     vr = VotingRound.objects.all().order_by('-id')
     dl = Delegation.objects.all().order_by('name')
     current = None
-    votes = None
+    votes = []
+    vnum = 0
     if len(vr) > 0:
         current = vr[0]
 
         votes = Vote.objects.filter(vround=current.id).order_by('delegation')
+        vnum = votes.count()
 
-    stats = {'yes':0,'no':0,'abstain':0,'noanswer':dl.count()-votes.count()}
+    stats = {'yes':0,'no':0,'abstain':0,'noanswer':dl.count()-vnum}
     do = []
     for d in dl:
         if d.name == "Exam_Staff" or d.name == "Test country":

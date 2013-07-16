@@ -338,46 +338,44 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         form=JuryQuestionForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-
-            oxml = QMLquestion(original.text)
-            clean_post = utils.iboclean(request.POST)
-            oxml.update(clean_post)
-            if not translation:
-                vid = 1
-            else:
-                vid = translation.version+1
-
-            v = VersionNode(
-                question_id=question.id,
-                language_id=target_language_id,
-                version=vid,
-                rating=cd['rating'],
-                text=oxml.zackzack(),
-                flag=cd['flag'],
-                checkout=cd['checkout'],
-                comment=cd['comment'],
-                committed=True
-            )
-            v.save()
-            if not v.language == question.primary_language_id:
-                tr = Translation(
-                    language=v.language,
-                    origin_id=cd['orig'],
-                    target=v
-                )
-                tr.save()
-            if "nextsubmit" in request.POST:
-                ps = request.path.split("/")
-                ps[-3] = str(question_position + 1)
-                nextpath = "/".join(ps)
-                return redirect(nextpath)
-            else:
-                return redirect(request.path + "?success") 
         else:
-            print form.errors
-            #form is not valid...
-            pass      
- 
+            cd = {'flag':0,'checkout':0,'comment':'',rating:0}
+
+        oxml = QMLquestion(original.text)
+        clean_post = utils.iboclean(request.POST)
+        oxml.update(clean_post)
+        if not translation:
+            vid = 1
+        else:
+            vid = translation.version+1
+
+        v = VersionNode(
+            question_id=question.id,
+            language_id=target_language_id,
+            version=vid,
+            rating=cd['rating'],
+            text=oxml.zackzack(),
+            flag=cd['flag'],
+            checkout=cd['checkout'],
+            comment=cd['comment'],
+            committed=True
+        )
+        v.save()
+        if not v.language == question.primary_language_id:
+            tr = Translation(
+                language=v.language,
+                origin_id=cd['orig'],
+                target=v
+            )
+            tr.save()
+        if "nextsubmit" in request.POST:
+            ps = request.path.split("/")
+            ps[-3] = str(question_position + 1)
+            nextpath = "/".join(ps)
+            return redirect(nextpath)
+        else:
+            return redirect(request.path + "?success") 
+
     if translation is None:
         initial = {'orig':original.id,'rating':0}
     else:

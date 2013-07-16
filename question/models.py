@@ -221,6 +221,7 @@ class Exam(models.Model):
                 questions[i]["status"] = "empt"
             elif tv[i].origin_id != pv[i].vid:
                 questions[i]["status"] = "updt"
+                questions[i]["status"] = "need"
             elif tv[i].checkout:
                 questions[i]["status"] = "done"
             else:

@@ -18,6 +18,7 @@ class Language(models.Model):
     coordinators = models.ManyToManyField(User,related_name='coordinator_set')
     editors = models.ManyToManyField(User,related_name='editor_set')
     official = models.BooleanField(default=False)
+    hidden = models.BooleanField(default=False)
 
     def __unicode__(self):
         return u'%s' % (self.name)

@@ -85,7 +85,7 @@ class PickLanguageForm(forms.Form):
         if realpath is None:
             realpath = request.path
         if languages is None:
-            languages = Language.objects.all().order_by('-official','name')
+            languages = Language.objects.filter(hidden=False).order_by('-official','name')
         choices = []
         for l in languages:
             ps = realpath.split("/")

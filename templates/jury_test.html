@@ -78,7 +78,7 @@ Original version {{versions.orig}}
 <br/><span style="color:red">This version is not up to date with the official English version!!!</span>
 <script>setTimeout(function(){alert("This version is not up to date with the official English version. Please wait for an update or translate from the English version");},100)</script>
 {% endif %}
-</th><th style="width: 4%; min-width: 60px"><a onclick="CopyContentAll()"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContentAll()"><img src="/static/icons/empty.png" style="width: 30px;"></a>
+</th><th style="width: 4%; min-width: 60px">{% if not disabled %}<a onclick="CopyContentAll()"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContentAll()"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}
 </td></th><th style="width: 45%;">
 Translated version {{versions.trans}}
 <!--<select> {# TODO: Make this into Django -- latest x versions #}
@@ -95,7 +95,7 @@ Translated version {{versions.trans}}
     <tr> <!-- the question -->
         <td>Question</td>
         <td id="o-{{el.id}}">{{el.data}}</td>
-        <td><a onclick="CopyContent('o-{{el.id}}','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
+        <td>{% if not disabled %}<a onclick="CopyContent('o-{{el.id}}','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}
         </td>
         <td>
         <div id="i-{{el.id}}">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
@@ -112,7 +112,7 @@ Translated version {{versions.trans}}
     <tr> <!-- the task -->
         <td>Task</td>
         <td id="o-{{el.id}}">{{el.data}}</td>
-        <td><a onclick="CopyContent('o-{{el.id}}','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
+        <td>{% if not disabled %}<a onclick="CopyContent('o-{{el.id}}','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}
         </td>
         <td>
         <div id="i-{{el.id}}">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
@@ -131,7 +131,7 @@ Translated version {{versions.trans}}
                 <tr> <!-- answer options -->
                 <td>Option</td>
                 <td id="o-{{sub.id}}">{{sub.data}}</td>
-                <td><a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
+                <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}</td>
             	<td><input {{readonly}} type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"></td>
                 </tr>
             {% endif %}
@@ -139,7 +139,7 @@ Translated version {{versions.trans}}
                 <tr> <!-- answers -->
                 <td>Answer</td>
                 <td id="o-{{sub.id}}">{{sub.data}}</td>
-                <td><a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
+                <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}</td>
             <td>
                 {%if not disabled %}
                     <textarea {{readonly}}  name="{{sub.id}}" id="{{sub.id}}" class="ckeditor">{{sub.form}}</textarea>
@@ -157,7 +157,7 @@ Translated version {{versions.trans}}
         <tr> <!-- possible list -->
             <td></td>
             <td id="o-{{sub.id}}">{{sub.data}}</td>
-            <td><a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
+            <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}</td>
             <td>
         {%if not disabled %}
             <textarea {{readonly}}  name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{sub.form}}</textarea>
@@ -184,8 +184,7 @@ Translated version {{versions.trans}}
             <tr>
             <td></td>
             <td id="o-{{sub.id}}">{{sub.data}}</td>
-            <td>
-            <a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>
+            <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}
             </td>
             <td><input {{readonly}} type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"/></td>
             </tr>

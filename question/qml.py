@@ -99,7 +99,14 @@ class QMLobject():
                 el = compare_to.xml.find(".//{0}[@id='{1}']".format(self.xml.tag,self.identifier))
                 if(el is not None):
                     original = self.__class__(el)
-                    data = simplediff.html_diff(original.data,self.data)
+                    do = original.data
+                    if do == None:
+                        do = ""
+                    ds = self.data
+                    if ds == None:
+                        ds = ""         
+ 
+                    data = simplediff.html_diff(do,ds)
                 else:
                     print "element not found"
                     data = simplediff.html_diff("",self.data)

@@ -19,20 +19,20 @@ def run():
                 print "ERROR"
                 print vnode
                 tr = Translation(language=vnode.language,target=vnode,origin=eng)
-                tr.save()
+#                tr.save()
                 bad += 1
             if tr.origin != eng:
                 #print tr,"is not",eng
                 bad += 1
                 tr.origin = eng
-                tr.save()
+ #               tr.save()
             else:
                 good += 1
                 #print "tr okay"
         else:
             if vnode.committed == False:
                 vnode.committed = True
-                vnode.save()
+  #              vnode.save()
                 #print "committed English or Russian"            
                 noncom += 1
 

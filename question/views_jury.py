@@ -415,7 +415,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
             #need to do a little bit of magic here...
             previous = tr_checkout.translation_target.all()[0].translation_origin.filter(language=from_lang_id).order_by('-version')[0]
         pqml = QMLquestion(previous.text.encode('utf-8'))
-        #oqml.diff(pqml.get_data())
+        oqml.diff(pqml.get_data())
     except:
         pass
 

@@ -27,7 +27,7 @@ body {
 	height: 598px;  /* 632 - 2*17 = #main height - #question padding */
 }
 #answers {
-	height: 538px;
+	height: 537px;
 }
 
 #question {	width: 690px; }
@@ -181,8 +181,8 @@ ul {
 }
 
 #answers {
-	overflow-y: scroll;
-	overflow-x: hidden;
+	/*overflow-y: scroll;
+	overflow-x: hidden;*/
 }
 
 #answers > p { font-weight: bold; }
@@ -342,66 +342,64 @@ body.zoom #overview a.done.flag {
 }
 
 /* Answer bar (mini-menu) */
-#answers #answerbar {
-	position: fixed;
-	top: 631px;
-	left: 725px;
+#answerbar {
+	float: right;
+	width: 555px;
 	height: 60px;
 	background: #ccc;
 	text-align: center;
-	width: 555px;
 	border-radius: 0;
 	border: 0;
 	cursor: auto;
 }
 
-#answers #answerbar.hide {
+#answerbar.hide {
 	top: 691px;
 	padding-right: 150px;
 	width: 405px;
 }
 
-#answers #answerbar a:first-child,
-#answers #answerbar a:last-child {
+#answerbar a:first-child,
+#answerbar a:last-child {
 	display: none;
 }
 
-#answers #answerbar.hide a:first-child,
-#answers #answerbar.hide a:last-child {
+#answerbar.hide a:first-child,
+#answerbar.hide a:last-child {
 	display: inline-block;
 }
 
-#answers #answerbar a {
+#answerbar a {
 	display: inline-block;
 	height: 6em;
 	width: 10em;
 }
 
-#answers #answerbar a.prev { background: url('icons/prev.png') center center no-repeat; }
-#answers #answerbar a.next { background: url('icons/next.png') center center no-repeat; }
+#answerbar a.prev { background: url('icons/prev.png') center center no-repeat; }
+#answerbar a.next { background: url('icons/next.png') center center no-repeat; }
 
-#answers #answerbar a:hover {
+#answerbar a:hover {
 	background-color: #555;
 	cursor: pointer;
 }
 
-#answers #answerbar input {
+#answerbar input {
 	display: none;
 }
-#answers #answerbar label {
+#answerbar label {
 	float: none;
 	display: inline-block;
 	cursor: pointer;
 	height: 6em;
 	width: 10em;
 }
-#answers #answerbar #id_flag + label {
+#answerbar #id_flag + label {
 	background: url('icons/flag.png') no-repeat center;	
 }
-#answers #answerbar #id_flag + label:hover {
+#answerbar #id_flag + label:hover {
 	background-color: #555;
 }
-#answers #answerbar #id_flag:checked + label {
+#answerbar #id_flag:checked + label {
 	background: #eabf03 url('icons/flag.png') no-repeat center;
 }
 

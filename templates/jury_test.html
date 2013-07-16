@@ -65,25 +65,22 @@
 	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{pos|add:'1'}}/translate/"><img src="/static/icons/next.png" title="Goto next" alt="next"></a>
 	{% endif %}
 </div>
-
 <h1>Question {{pos}} : {{question.name}}</h1>
-
+{% if sorryaboutthat %}<h2>Sorry about that, the language you want to translate from does not seem to have any version of this question. Please use the official English or official Russian version.</h2>{{from_language_switch.language}}
+{% else %}
 <table class="translationtable">
 <tr><th style="width: 6%;"></th><th style="width: 45%;">
 Original version {{versions.orig}}
-<select> {# TODO: Make this into Django -- toggle between two official translations #}
-	<option value="IBOENG">IBO Official (EN)</option>
-	<option value="IBORUS">IBO Official (RU)</option>
-</select>
+{{from_language_switch.language}}
 </th><th style="width: 4%; min-width: 60px"><a onclick="CopyContentAll()"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContentAll()"><img src="/static/icons/empty.png" style="width: 30px;"></a>
 </td></th><th style="width: 45%;">
 Translated version {{versions.trans}}
-<select> {# TODO: Make this into Django -- latest x versions #}
+<!--<select> {# TODO: Make this into Django -- latest x versions #}
 	<option value="434">2013-07-15 14:55.18 (latest)</option>
 	<option value="433">2013-07-15 14:50.59</option>
 	<option value="432">2013-07-15 12:11.43</option>
 </select>
-<a href="#">Restore this version</a>
+<a href="#">Restore this version</a>-->
 </th></tr>
 
 {% for q in struct %}
@@ -187,7 +184,7 @@ Translated version {{versions.trans}}
 </table>
 <input type="submit" style="visibility:hidden" value="submit" id="submitter" name="submit" />
 </form>
-
+{% endif %}
 <br style="clear: both;">
 
 <ul class="examlegend">

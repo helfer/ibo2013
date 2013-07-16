@@ -180,7 +180,6 @@ def vote(request,lang_id=1,permissions=None):
         voteactive=True
 
     if request.method == "POST":
-        print request.POST
         if "vote" in request.POST:
             v,c = Vote.objects.get_or_create(delegation=delegation,vround=ovo)
             if not request.POST["vote"] in ['yes','no','abstain']:
@@ -192,7 +191,6 @@ def vote(request,lang_id=1,permissions=None):
                 v.answer = "yes"
             if request.POST['vote'] == "no":
                 v.answer = "no"
-            print 'answer ' + v.answer
             v.save()
 
             return redirect(request.path+"?success")
@@ -217,8 +215,14 @@ def vote(request,lang_id=1,permissions=None):
 
 @login_required
 @permission_check
-def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=None):
-    
+def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id=None,permissions=None):
+    actual_path = request.path 
+    if from_lang_id is None:
+        from_lang_id = request.session.get("from_lang_id",1)
+        actual_path = request.path+str(from_lang_id)+"/" 
+        print actual_path
+    else:
+        request.session["from_lang_id"] = int(from_lang_id)
 
     try:
         question_position = int(question_position)
@@ -229,6 +233,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
         else:
             exam = Exam.objects.get(id=exam_id,staff_only=0)
         language = Language.objects.get(id=target_language_id)
+        from_lang = Language.objects.get(id=int(from_lang_id))
     except: 
         raise Http404()
 
@@ -237,8 +242,35 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
         exams = Exam.objects.all()
     else:
         exams = Exam.objects.filter(staff_only=False)
+    
+    fls = PickLanguageForm(request.user,lang_id,request,
+            initial={'language':actual_path},
+            languages = Language.objects.filter(id__in=[1,25]),
+            realpath = actual_path,
+            pos = -2
+        )
 
-    original = question.versionnode_set.filter(language=question.primary_language_id,committed=1).order_by('-timestamp')[0]
+    try:
+        original = question.versionnode_set.filter(language=from_lang,committed=1).order_by('-timestamp')[0]
+    except:
+        exam.load_question_status(target_language_id)
+        return render_with_context(request,'jury_test.html',
+        {'sorryaboutthat':True,
+        'exam':exam,
+        'from_language_switch':fls,
+        'lang_id':target_language_id,
+        'pos':question_position,
+        'status':exam.question_status,
+        'exams':exams,
+        'question':question,
+        'perms':permissions,
+    })   
+    #not translating from english means we need to refer to the original english version
+    if from_lang.id != question.primary_language_id:
+        tr = Translation.objects.get(target=original)
+        root_original_version = tr.origin.version
+    else:
+        root_original_version = original.version
 
     try:
         translation = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[0]
@@ -327,17 +359,20 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,permissions=
         cmt = translation.comment
         tv = translation.version
     return render_with_context(request,'jury_test.html',
-        {'exam':exam,
+        {'sorryaboutthat':False,
+        'exam':exam,
         'lang_id':target_language_id,
         'pos':question_position,
         'status':exam.question_status,
         'exams':exams,
         'form':form,
+        'from_language_switch':fls,
+        'lang_id':target_language_id,
         'rating':initial['rating'],
         'question':question,
         'struct':struct,
         'comment':original.comment,
-        'versions':{'orig':original.version,'trans':tv},
+        'versions':{'orig':root_original_version,'trans':tv},
         'perms':permissions,
         'readonly': ro
     })

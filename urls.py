@@ -25,7 +25,7 @@ urlpatterns = patterns('',
     (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/$',juryview.examview),
     (r'^jury/(?P<lang_id>\d{1,9})/vote/$',juryview.vote),
     (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/question/(?P<question_position>\d{1,2})/translate/$',juryview.xmlquestionview),
-
+    (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/question/(?P<question_position>\d{1,2})/translate/(?P<from_lang_id>\d{1,2})/$',juryview.xmlquestionview),
     (r'^students/(\d{1,9})/question/(\d{1,9})/(\d{1,9})/$',studentview.question),
     (r'^students/(\d{1,9})/overview/(\d{1,9})/$',studentview.examview),
     

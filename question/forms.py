@@ -79,15 +79,18 @@ class EditLanguageForm(ModelForm):
 
 class PickLanguageForm(forms.Form):
 
-    def __init__(self,user,lang_id,request,*args,**kwargs):
+    def __init__(self,user,lang_id,request,languages=None,realpath=None,pos=2,*args,**kwargs):
         super(PickLanguageForm,self).__init__(*args,**kwargs)
         self.lang_id = lang_id
         self.user_id = user.id
-        languages = Language.objects.all().order_by('name')
+        if realpath is None:
+            realpath = request.path
+        if languages is None:
+            languages = Language.objects.all().order_by('name')
         choices = []
         for l in languages:
-            ps = request.path.split("/")
-            ps[2] = str(l.id)
+            ps = realpath.split("/")
+            ps[pos] = str(l.id)
             path = "/".join(ps)
             choices.append((path,l.name))
 

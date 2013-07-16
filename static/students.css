@@ -437,16 +437,13 @@ body {
 	width: 766px;
 }
 
+#answerbar {
+	width: 800px;
+}
+
 /* hidden stuff */
 #main.hide {
 	height: 1235px;
-}
-
-#main #answers #answerbar {
-	padding-right: 0;
-	width: 800px;
-	left: 0;
-	top: 840px;
 }
 
 #main.hide #overview {
@@ -463,10 +460,6 @@ body {
 
 #main.hide #answers table {
 	height: 425px;
-}
-
-#main.hide #answers #answerbar {
-	top: 900px;
 }
 
 }

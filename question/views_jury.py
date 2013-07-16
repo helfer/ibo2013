@@ -459,6 +459,9 @@ def make_xml_form(oxml,translation):
     
     
 def zipem(texts,forms):
+    print "texts=",texts
+    print "-----"
+    print "forms=",forms
     try:
         assert len(texts) == len(forms)
     except:
@@ -466,6 +469,7 @@ def zipem(texts,forms):
     rt = []
     for i in xrange(len(texts)):
         if not isinstance(texts[i]["data"],unicode) and not isinstance(texts[i]["data"],str): #it's a list
+            print "tags=",texts[i]['tag']," AND ",forms[i]['tag']
             data = zipem(texts[i]["data"],forms[i]["data"])
             texts[i].update({"data":data})
             rt.append(texts[i])

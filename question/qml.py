@@ -84,12 +84,14 @@ class QMLobject():
 
     #compare_to is another qml object
     def get_texts_nested(self,prep=False,compare_to=None):
-        if self.data is None:
+        if self.data is None and len(self.children) > 0 :
             sub = []
             for c in self.children:
                 sub.extend(c.get_texts_nested(prep,compare_to))
             rt = [{"id":self.identifier,"tag":self.xml.tag,"data":sub,"meta":self.meta}]
         else:
+            if self.data is None:
+                self.data = ''
             if compare_to is None:
                 data = self.data
             else:

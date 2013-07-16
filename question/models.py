@@ -41,7 +41,7 @@ class Question(models.Model):
 
 
     def get_newest_version():
-        return self.versionnode_set.order_by('-timestamp')[0]
+        return self.versionnode_set.order_by('-version')[0]
 
 class QuestionCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -71,7 +71,7 @@ class VersionNode(models.Model):
     #committed = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return u'VersionNode: %s (%s)[v%s]' % (self.question.name,self.language,self.version)
+        return u'VersionNode: %s (%s)[v%s] %s' % (self.question.name,self.language,self.version,self.committed)
 
     def compare_with(self,vn2):
         return simplediff.html_diff(self.text,vn2.text)
@@ -83,7 +83,7 @@ class Translation(models.Model):
     target = models.ForeignKey(VersionNode,unique=True,related_name='translation_target')        
     
     def __unicode__(self):
-        return u'Translation Object vnode %s to vnode %s lang %s' % (language,origin,target)
+        return u'Translation Object lang %s vnode %s to %s' % (self.language,self.origin,self.target)
 
 class Exam(models.Model):
     name = models.CharField(max_length=100)
@@ -226,8 +226,8 @@ class Exam(models.Model):
             else:
                 questions[i]["status"] = "need"
             #flag is independent of others.
-            if questions[i]["status"] == "updt":
-                questions[i]["status"] = "need"
+            #if questions[i]["status"] == "updt":
+            #    questions[i]["status"] = "need"
             if tv[i].flag:
                 questions[i]["status"] += " flag"
             

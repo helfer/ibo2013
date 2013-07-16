@@ -52,11 +52,9 @@ def profile(request,lang_id=1,permissions=None):
     add_form = AddLanguageForm()
     edit_form = EditLanguageForm()
     ctr = CategoryTranslation.objects.filter(language=language).order_by("category")
-    print ctr
     init = {}
     for c in ctr:
         init["f"+str(c.category_id)] = c.text
-    print init
     cf = CatTransForm(initial=init)
 
     if request.user.is_staff:
@@ -66,12 +64,9 @@ def profile(request,lang_id=1,permissions=None):
     
     if request.method == "POST":
         if "editlanguage" in request.POST:
-            print request.POST
-            print 'ok'
             if not 'admin' in permissions:
                 raise PermissionDenied()
             form = EditLanguageForm(request.POST)
-            print form.is_bound
             if form.is_valid():
                 cd = form.cleaned_data
                 dlg = cd['dlg']
@@ -269,7 +264,6 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
     if from_lang_id is None:
         from_lang_id = request.session.get("from_lang_id",1)
         actual_path = request.path+str(from_lang_id)+"/" 
-        print actual_path
     else:
         request.session["from_lang_id"] = int(from_lang_id)
 
@@ -294,13 +288,13 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
     
     fls = PickLanguageForm(request.user,lang_id,request,
             initial={'language':actual_path},
-            languages = Language.objects.filter(id__in=[1,25]),
+            languages = None,#Language.objects.filter(id__in=[1,25]),
             realpath = actual_path,
             pos = -2
         )
 
     try:
-        original = question.versionnode_set.filter(language=from_lang,committed=1).order_by('-timestamp')[0]
+        original = question.versionnode_set.filter(language=from_lang,committed=1).order_by('-version')[0]
     except:
         exam.load_question_status(target_language_id)
         return render_with_context(request,'jury_test.html',
@@ -318,19 +312,28 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
     outdated = False
     if from_lang.id != question.primary_language_id:
         tr = Translation.objects.get(target=original)
+        
         root_original_version = tr.origin.version
-        if tr.origin.version < question.versionnode_set.filter(language=1,committed=1).order_by('-timestamp')[0].version:
+        cv = question.versionnode_set.filter(language=1,committed=1).order_by('-version')[0]
+        if tr.origin.version <  cv.version:
             outdated = True
     else:
+        #cv = question.versionnode_set.filter(language=1,committed=1).order_by('-version')[0]
+        #translation = question.versionnode_set.filter(language=target_language_id).order_by('-version')[0]
+        #myo = Translation.objects.get(target=translation)
+        #trans_from_version = myo.origin.version
         root_original_version = original.version
     try:
-        translation = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[0]
+        translation = question.versionnode_set.filter(language=target_language_id).order_by('-version')[0]
+        myo = Translation.objects.get(target=translation)
+        trans_from_version = myo.origin.version
     except:
+        trans_from_version = "NA"
         translation = None
 
     if request.method == "POST":
-
         #request.POST = utils.iboclean(request.POST)
+        print request.POST
 
         if not ('write' in permissions or 'admin' in permissions):
             raise PermissionDenied()
@@ -339,7 +342,8 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         if form.is_valid():
             cd = form.cleaned_data
         else:
-            cd = {'flag':0,'checkout':0,'comment':'',rating:0}
+            cd = {'flag':0,'checkout':0,'comment':'',rating:0,'orig':1}
+
 
         oxml = QMLquestion(original.text)
         clean_post = utils.iboclean(request.POST)
@@ -348,7 +352,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
             vid = 1
         else:
             vid = translation.version+1
-
+        print oxml.zackzack()
         v = VersionNode(
             question_id=question.id,
             language_id=target_language_id,
@@ -362,9 +366,10 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         )
         v.save()
         if not v.language == question.primary_language_id:
+            ori_blaaaaah = VersionNode.objects.get(question=question,language=1,version=cd['orig'])
             tr = Translation(
                 language=v.language,
-                origin_id=cd['orig'],
+                origin=ori_blaaaaah,
                 target=v
             )
             tr.save()
@@ -377,7 +382,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
             return redirect(request.path + "?success") 
 
     if translation is None:
-        initial = {'orig':original.id,'rating':0}
+        initial = {'orig':root_original_version,'rating':0}
     else:
         initial = {
             'text':'',
@@ -403,14 +408,14 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
     try:
     
         #checkout = 1 or not??
-        tr_checkout = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[0]
+        tr_checkout = question.versionnode_set.filter(language=target_language_id).order_by('-version')[0]
         if from_lang_id == question.primary_language_id:
             previous = tr_checkout.translation_target.all()[0].origin
         else:
             #need to do a little bit of magic here...
-            previous = tr_checkout.translation_target.all()[0].translation_origin.filter(language=from_lang_id).order_by('timestamp')[0]
+            previous = tr_checkout.translation_target.all()[0].translation_origin.filter(language=from_lang_id).order_by('-version')[0]
         pqml = QMLquestion(previous.text.encode('utf-8'))
-        #oqml.diff(pqml.get_data())
+        oqml.diff(pqml.get_data())
     except:
         pass
 
@@ -439,7 +444,8 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         'perms':permissions,
         'readonly': ro,
         'disabled': dis,
-        'outdated':outdated
+        'outdated':outdated,
+        'trans_from_version':trans_from_version
     })
 
 
@@ -498,7 +504,7 @@ def practical(request,lang_id=1,permissions=None):
     else:
         delegation = request.user.delegation_set.all()[0]
     students = Student.objects.filter(delegation=delegation)
-    examfiles = PracticalExamFile.objects.filter(delegation=delegation).order_by('-timestamp')
+    examfiles = PracticalExamFile.objects.filter(delegation=delegation).order_by('-version')
     assignments = PracticalAssignment.objects.filter(student__in=students)
 
 
@@ -586,4 +592,7 @@ def practical(request,lang_id=1,permissions=None):
         'perms':permissions,
         'language':language,
         'examfiles':examfiles})
-    
+   
+
+    def find_real_origin():
+        pass 

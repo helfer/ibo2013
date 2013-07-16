@@ -68,7 +68,7 @@
 	{% endif %}
 </div>
 <h1>Question {{pos}} : {{question.name}}</h1>
-{% if sorryaboutthat %}<h2>Sorry about that, the language you want to translate from does not seem to have any version of this question. Please use the official English or official Russian version.</h2>{{from_language_switch.language}}
+{% if sorryaboutthat %}<h2>{{from_language_switch.language}} Sorry about that, the language you want to translate from does not seem to have any version of this question. Please use the official English or official Russian version</h2>
 {% else %}
 <table class="translationtable">
 <tr><th style="width: 6%;"></th><th style="width: 45%;">
@@ -80,7 +80,7 @@ Original version {{versions.orig}}
 {% endif %}
 </th><th style="width: 4%; min-width: 60px">{% if not disabled %}<a onclick="CopyContentAll()"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContentAll()"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}
 </td></th><th style="width: 45%;">
-Translated version {{versions.trans}}
+Translated version {{versions.trans}} ~ English v{{trans_from_version}}
 <!--<select> {# TODO: Make this into Django -- latest x versions #}
 	<option value="434">2013-07-15 14:55.18 (latest)</option>
 	<option value="433">2013-07-15 14:50.59</option>

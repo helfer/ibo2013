@@ -37,7 +37,7 @@ def question(request,language_id,exam_id,question_position):
         this_answer = [(3,None),(4,None),(5,None),(6,None)]
     
     try:
-        vnode = question.versionnode_set.filter(language=language.id).order_by('-timestamp')[0]
+        vnode = question.versionnode_set.filter(language=language.id).order_by('-version')[0]
         xmlq = qml.QMLquestion(vnode.text)
         struct = xmlq.get_texts_nested(prep=True)
     except: 

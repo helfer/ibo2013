@@ -13,7 +13,7 @@ def run():
             eng = VersionNode.objects.filter(language=1,question=vnode.question,committed=True).order_by('-timestamp')[0]
             #ru = VersionNode.objects.filter(language=2,question=vnode.question).order_by('-timestamp')[0]
         if vnode.language_id not in (1,2):
-	    try:
+            try:
                 tr = Translation.objects.get(target=vnode)
             except:
                 print "ERROR"

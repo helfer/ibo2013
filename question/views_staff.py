@@ -110,7 +110,7 @@ def view_question_history(request,question_id):
     except:
         raise Http404()
 
-    versions = question.versionnode_set.all().order_by('-timestamp')
+    versions = question.versionnode_set.all().order_by('-version')
     return render_to_response('question_overview.html',{'question':question,'versions':versions})
 
 
@@ -131,7 +131,7 @@ def view_question(request,qid=None,mode="xml"):
         chosen_lang_id = request.GET["lang_id"]
     else:
         chosen_lang_id = question.primary_language_id
-    versions = question.versionnode_set.filter(language=chosen_lang_id).order_by('-timestamp')[:1]
+    versions = question.versionnode_set.filter(language=chosen_lang_id).order_by('-version')[:1]
 
     if request.method == 'POST':
         if len(versions) == 0:
@@ -149,7 +149,7 @@ def view_question(request,qid=None,mode="xml"):
             return redirect(request.path) #POST,GET redirect for instant reload   
 
         if "revert" in request.POST:
-            vnodes = VersionNode.objects.filter(question=question,language=chosen_lang_id).order_by('-timestamp')
+            vnodes = VersionNode.objects.filter(question=question,language=chosen_lang_id).order_by('-version')
             for v in vnodes:
                 if not v.committed:
                     v.delete()
@@ -401,7 +401,7 @@ def view_image(request,fname="",qid=None,lang_id=1,version=None):
             raise Http404()
         try:
             if version is None:
-                vn = q.versionnode_set.filter(committed=1,language=lang_id).order_by('-timestamp')[0]
+                vn = q.versionnode_set.filter(committed=1,language=lang_id).order_by('-version')[0]
             else:
                 vn = q.versionnode_set.get(language=lang_id,version=version)
         except:
@@ -423,7 +423,7 @@ def get_pdf(request,exam_id,question_position,lang_id=1):
         question_position = int(question_position)
         exam_id = int(exam_id)
         question = Question.objects.get(exam__id=exam_id,examquestion__position=question_position)
-        vnode = question.versionnode_set.filter(language=lang_id).order_by('-timestamp')[0]
+        vnode = question.versionnode_set.filter(language=lang_id).order_by('-version')[0]
     except: 
         raise Http404()
 
@@ -466,11 +466,11 @@ def print_question_objects(questions,lang_id=1,exam_id=3):
     root = et.Element("exam")
     for q in questions:
         try:
-            vnode_t = q.question.versionnode_set.filter(language=lang_id).order_by('-timestamp')[0]
+            vnode_t = q.question.versionnode_set.filter(language=lang_id).order_by('-version')[0]
             target_vid = vnode.version
         except:
             target_vid = 0
-        vnode = q.question.versionnode_set.filter(language=1,committed=True).order_by('-timestamp')[0]
+        vnode = q.question.versionnode_set.filter(language=1,committed=True).order_by('-version')[0]
         xmlq = qml.QMLquestion(vnode.text.encode("utf-8"))
         xmlq.inline_image()
         xmlq.xml.attrib["info"] = "{0}_{1}_L{2}".format(vnode.version,target_vid,lang_id)
@@ -493,8 +493,8 @@ def discussion(request,exam_id,question_position):
         question_position = int(question_position)
         exam_id = int(exam_id)
         question = Question.objects.get(exam__id=exam_id,examquestion__position=question_position)
-        vnode = question.versionnode_set.filter(language=1).order_by('-timestamp')[0]
-        orig = question.versionnode_set.filter(language=1,committed=1).order_by('-timestamp')[0]
+        vnode = question.versionnode_set.filter(language=1).order_by('-version')[0]
+        orig = question.versionnode_set.filter(language=1,committed=1).order_by('-version')[0]
     except: 
         raise Http404()
     

@@ -20,6 +20,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.htmlEncodeOutput = false;
 	config.extraPlugins = 'bidi';
 	config.disableNativeSpellChecker = false;
+	config.browserContextMenuOnCtrl = false;
 };
 
 

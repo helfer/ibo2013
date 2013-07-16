@@ -6,7 +6,7 @@
 CKEDITOR.editorConfig = function( config ) {
 	config.forcePasteAsPlainText = true;
 	config.toolbar = [
-    [ 'Bold', 'Italic', 'Subscript', 'Superscript' ]
+    [ 'Bold', 'Italic', 'Subscript', 'Superscript','-','BidiLtr','BidiRtl' ]
 	];
 	config.toolbarLocation = 'bottom';
 	config.removePlugins = 'elementspath';

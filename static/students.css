@@ -343,9 +343,9 @@ body.zoom #overview a.done.flag {
 
 /* Answer bar (mini-menu) */
 #answers #answerbar {
-	position: absolute;
-	bottom: 60px;
-	right: 0;
+	position: fixed;
+	top: 631px;
+	left: 725px;
 	height: 60px;
 	background: #ccc;
 	text-align: center;
@@ -356,7 +356,7 @@ body.zoom #overview a.done.flag {
 }
 
 #answers #answerbar.hide {
-	bottom: 0;
+	top: 691px;
 	padding-right: 150px;
 	width: 405px;
 }
@@ -434,10 +434,6 @@ body {
 	height: 404px;
 }
 
-#answerbar {
-	width: 100%;
-}
-
 #overview {
 	height: 1082px;
 	width: 766px;
@@ -450,7 +446,9 @@ body {
 
 #main #answers #answerbar {
 	padding-right: 0;
-	width: 100%;
+	width: 800px;
+	left: 0;
+	top: 840px;
 }
 
 #main.hide #overview {
@@ -467,6 +465,10 @@ body {
 
 #main.hide #answers table {
 	height: 425px;
+}
+
+#main.hide #answers #answerbar {
+	top: 900px;
 }
 
 }

@@ -52,11 +52,9 @@ def profile(request,lang_id=1,permissions=None):
     add_form = AddLanguageForm()
     edit_form = EditLanguageForm()
     ctr = CategoryTranslation.objects.filter(language=language).order_by("category")
-    #print ctr
     init = {}
     for c in ctr:
         init["f"+str(c.category_id)] = c.text
-    #print init
     cf = CatTransForm(initial=init)
 
     if request.user.is_staff:
@@ -66,12 +64,9 @@ def profile(request,lang_id=1,permissions=None):
     
     if request.method == "POST":
         if "editlanguage" in request.POST:
-            #print request.POST
-            #print 'ok'
             if not 'admin' in permissions:
                 raise PermissionDenied()
             form = EditLanguageForm(request.POST)
-            #print form.is_bound
             if form.is_valid():
                 cd = form.cleaned_data
                 dlg = cd['dlg']
@@ -269,7 +264,6 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
     if from_lang_id is None:
         from_lang_id = request.session.get("from_lang_id",1)
         actual_path = request.path+str(from_lang_id)+"/" 
-        #print actual_path
     else:
         request.session["from_lang_id"] = int(from_lang_id)
 
@@ -323,16 +317,10 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         cv = question.versionnode_set.filter(language=1,committed=1).order_by('-version')[0]
         if tr.origin.version <  cv.version:
             outdated = True
-            #print tr.target
-            #print cv
-            #print cv,">",tr.origin
     else:
-        #print "original",original
         #cv = question.versionnode_set.filter(language=1,committed=1).order_by('-version')[0]
-        #print "current",cv
         #translation = question.versionnode_set.filter(language=target_language_id).order_by('-version')[0]
         #myo = Translation.objects.get(target=translation)
-        #print "my original",myo
         #trans_from_version = myo.origin.version
         root_original_version = original.version
     try:
@@ -344,8 +332,8 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         translation = None
 
     if request.method == "POST":
-
         #request.POST = utils.iboclean(request.POST)
+        print request.POST
 
         if not ('write' in permissions or 'admin' in permissions):
             raise PermissionDenied()
@@ -356,8 +344,6 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         else:
             cd = {'flag':0,'checkout':0,'comment':'',rating:0,'orig':1}
 
-        #print "formvalid",form.is_valid()
-        #print "cd",form.cleaned_data
 
         oxml = QMLquestion(original.text)
         clean_post = utils.iboclean(request.POST)
@@ -366,7 +352,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
             vid = 1
         else:
             vid = translation.version+1
-
+        print oxml.zackzack()
         v = VersionNode(
             question_id=question.id,
             language_id=target_language_id,
@@ -387,7 +373,6 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
                 target=v
             )
             tr.save()
-            #print "tr",tr
         if "nextsubmit" in request.POST:
             ps = request.path.split("/")
             ps[-3] = str(question_position + 1)
@@ -397,7 +382,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
             return redirect(request.path + "?success") 
 
     if translation is None:
-        initial = {'orig':original.id,'rating':0}
+        initial = {'orig':root_original_version,'rating':0}
     else:
         initial = {
             'text':'',
@@ -441,7 +426,6 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
     if translation is not None:
         cmt = translation.comment
         tv = translation.version
-    #print "root original version",root_original_version
     return render_with_context(request,'jury_test.html',
         {'sorryaboutthat':False,
         'exam':exam,
@@ -481,9 +465,6 @@ def make_xml_form(oxml,translation):
     
     
 def zipem(texts,forms):
-    #print "texts=",texts
-    #print "-----"
-    #print "forms=",forms
     try:
         assert len(texts) == len(forms)
     except:
@@ -491,7 +472,6 @@ def zipem(texts,forms):
     rt = []
     for i in xrange(len(texts)):
         if not isinstance(texts[i]["data"],unicode) and not isinstance(texts[i]["data"],str): #it's a list
-            print "tags=",texts[i]['tag']," AND ",forms[i]['tag']
             data = zipem(texts[i]["data"],forms[i]["data"])
             texts[i].update({"data":data})
             rt.append(texts[i])

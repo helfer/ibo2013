@@ -18,15 +18,15 @@
         <h1>Give others the right to edit {{language.name}}</h1>
         <p><strong>Please note that once access is given, it cannot be taken away again. Every delegation can read your translation, so only give access to other delegations who need to be able to <em>edit</em> your translation.</strong></p>
         <form method="POST">
-        <ul style="font-size: 150%;">
-        {{editform.as_ul}} {# I fear this list will become impractically long with 250+ jury members #}
+        <ul style="font-size: 175%;">
+        {{editform.as_ul}}
         </ul>
         <p><input type="submit" value="Give edit rights" name="editlanguage"></p>
         </form>
         <br style="clear: both"><br>
     {% endif %}
     <h2>The following people can edit {{language.name}}:</h2>
-    <ul>
+    <ul style="font-size: 175%; list-style-type: disc;">
     {% for a in access %}
         <li>{{a.first_name}} {{a.last_name}} ({{a.username}})</li>
     {% endfor %}
@@ -44,7 +44,7 @@
     
     <h1>Create new translation</h1>
     <form method="POST">
-    <ul>
+    <ul style="font-size: 175%;">
     {{addform.as_ul}}
     </ul>
     <p><input type="submit" value="Add translation" name="addlanguage"></p>

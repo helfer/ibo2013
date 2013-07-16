@@ -181,8 +181,8 @@ ul {
 }
 
 #answers {
-	/*overflow-y: scroll;
-	overflow-x: hidden;*/
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 #answers > p { font-weight: bold; }

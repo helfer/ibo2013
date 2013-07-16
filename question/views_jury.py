@@ -266,12 +266,14 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         'perms':permissions,
     })   
     #not translating from english means we need to refer to the original english version
+    outdated = False
     if from_lang.id != question.primary_language_id:
         tr = Translation.objects.get(target=original)
         root_original_version = tr.origin.version
+        if tr.origin.version < question.versionnode_set.filter(language=1,committed=1).order_by('-timestamp')[0].version:
+            outdated = True
     else:
         root_original_version = original.version
-
     try:
         translation = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[0]
     except:
@@ -378,7 +380,8 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         'comment':original.comment,
         'versions':{'orig':root_original_version,'trans':tv},
         'perms':permissions,
-        'readonly': ro
+        'readonly': ro,
+        'outdated':outdated
     })
 
 

@@ -221,12 +221,13 @@ class Exam(models.Model):
                 questions[i]["status"] = "empt"
             elif tv[i].origin_id != pv[i].vid:
                 questions[i]["status"] = "updt"
-                questions[i]["status"] = "need"
             elif tv[i].checkout:
                 questions[i]["status"] = "done"
             else:
                 questions[i]["status"] = "need"
             #flag is independent of others.
+            if questions[i]["status"] == "updt":
+                questions[i]["status"] = "need"
             if tv[i].flag:
                 questions[i]["status"] += " flag"
             

@@ -462,4 +462,8 @@ body {
 	height: 425px;
 }
 
+#main.hide #answerbar {
+	width: 800px;
+}
+
 }

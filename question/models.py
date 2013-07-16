@@ -17,6 +17,7 @@ class Language(models.Model):
     name = models.CharField(max_length=100,unique=True)
     coordinators = models.ManyToManyField(User,related_name='coordinator_set')
     editors = models.ManyToManyField(User,related_name='editor_set')
+    official = models.BooleanField(default=False)
 
     def __unicode__(self):
         return u'%s' % (self.name)
@@ -280,6 +281,9 @@ class Delegation(models.Model):
     group = models.ForeignKey(Group)
     members = models.ManyToManyField(User)
 
+    def __unicode__(self):
+        return self.name
+
 class PracticalExam(models.Model):
     name = models.CharField(unique=True,max_length=100)
     filename = models.CharField(unique=True,max_length=100)
@@ -289,7 +293,7 @@ class PracticalExam(models.Model):
 
 class PracticalExamFile(models.Model):
     name = models.CharField(max_length=100)
-    filename = models.CharField(unique=True,max_length=100) #this is the actual filenmame for serving
+    filename = models.CharField(unique=True,max_length=200) #this is the actual filenmame for serving
     delegation = models.ForeignKey(Delegation)
     timestamp = models.DateTimeField(auto_now=True)
     content_type = models.CharField(max_length=100,null=True)

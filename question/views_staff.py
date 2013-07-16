@@ -399,11 +399,13 @@ def view_image(request,fname="",qid=None,lang_id=1,version=None):
             q = Question.objects.get(id=int(qid))
         except:
             raise Http404()
-
-        if version is None:
-            vn = q.versionnode_set.filter(committed=1,language=lang_id).order_by('-timestamp')[0]
-        else:
-            vn = q.versionnode_set.get(language=lang_id,version=version)
+        try:
+            if version is None:
+                vn = q.versionnode_set.filter(committed=1,language=lang_id).order_by('-timestamp')[0]
+            else:
+                vn = q.versionnode_set.get(language=lang_id,version=version)
+        except:
+            raise Http404()
         search = ".//figure[@imagefile='{0}']/textarea".format(fname)
         replace = et.fromstring(vn.text.encode('utf-8')).findall(search)
     for r in replace:
@@ -457,6 +459,10 @@ def print_questions(qlist,lang_id=1,exam_id=3):
 
 
 def print_question_objects(questions,lang_id=1,exam_id=3):        
+
+    return HttpResponse("Sorry, this feature is not working at the moment. We hope to have it working again soon!",content_type="text/plain")
+
+
     root = et.Element("exam")
     for q in questions:
         try:

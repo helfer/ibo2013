@@ -71,10 +71,9 @@ class SwapQuestionForm(forms.Form):
 class AddLanguageForm(forms.Form):
     name = forms.CharField(label="Language name:")
 
-class EditLanguageForm(ModelForm):
-    class Meta:
-        model = Language
-        fields = ['coordinators','editors']
+class EditLanguageForm(forms.Form):
+    dlg = forms.ModelChoiceField(queryset=Delegation.objects.all(),label="Give access to")
+    
 
 
 class PickLanguageForm(forms.Form):
@@ -86,7 +85,7 @@ class PickLanguageForm(forms.Form):
         if realpath is None:
             realpath = request.path
         if languages is None:
-            languages = Language.objects.all().order_by('name')
+            languages = Language.objects.all().order_by('-official','name')
         choices = []
         for l in languages:
             ps = realpath.split("/")

@@ -40,8 +40,11 @@ def html2ibotag(string):
 
     return rt
 
+#unnecessary. Element tree does all the escaping for you :)
 def clean_html(string):
-    return cgi.escape(string)
+    return string
+    
+    #return cgi.escape(string)
 
 
 #would be nicer with a map

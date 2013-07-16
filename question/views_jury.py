@@ -50,7 +50,7 @@ def profile(request,lang_id=1,permissions=None):
         raise Http404()
 
     add_form = AddLanguageForm()
-    edit_form = EditLanguageForm(instance=language)
+    edit_form = EditLanguageForm()
 
     if request.user.is_staff:
         exams = Exam.objects.all()
@@ -59,14 +59,26 @@ def profile(request,lang_id=1,permissions=None):
     
     if request.method == "POST":
         if "editlanguage" in request.POST:
+            print request.POST
+            print 'ok'
             if not 'admin' in permissions:
                 raise PermissionDenied()
-            form = EditLanguageForm(request.POST,instance=language)
+            form = EditLanguageForm(request.POST)
+            print form.is_bound
             if form.is_valid():
-                lang = form.save()
+                cd = form.cleaned_data
+                dlg = cd['dlg']
+                members = dlg.members.all()
+                rt = []
+                for m in members:
+                    if "Jury" in m.groups.values_list("name",flat=True):
+                        rt.append(m.id)
+                language.editors.add(*rt)
+
+                return redirect(request.path)
                 #don't want people to remove their own permissions
-                if request.user.id not in form.cleaned_data['coordinators']:
-                    lang.coordinators.add(request.user)
+                #if request.user.id not in form.cleaned_data['coordinators']:
+                #    lang.coordinators.add(request.user)
             edit_form = form
         elif "addlanguage" in request.POST:
             form = AddLanguageForm(request.POST)
@@ -74,7 +86,12 @@ def profile(request,lang_id=1,permissions=None):
                 cd = form.cleaned_data
                 lang = Language(name=cd['name'])
                 lang.save()
-                lang.editors.add(request.user)
+                members = request.user.delegation_set.all()[0].members.all()#includes students, but who cares
+                rt = []
+                for m in members:
+                    if "Jury" in m.groups.values_list("name",flat=True):
+                        rt.append(m.id)
+                lang.editors.add(*rt)
                 lang.coordinators.add(request.user)
                 for exam in exams:
                     exam.languages.add(lang)
@@ -86,12 +103,17 @@ def profile(request,lang_id=1,permissions=None):
             #unknown form
             raise Http404()
             
-    languages = Language.objects.get(id=1).coordinators.all()
-    languages = request.user.coordinator_set.all() | request.user.editor_set.all()
+    #languages = Language.objects.get(id=1).coordinators.all()
+    languages = request.user.editor_set.all()
+    languages2 = request.user.coordinator_set.all()
+    access = language.editors.all().order_by('first_name','last_name')
+
     return render_with_context(request,'jury_profile.html',
         {'exams':exams,
         'perms':permissions,
+        'access':access,
         'languages':languages,
+        'languages2':languages2,
         'addform':add_form,
         'editform':edit_form,
         'lang_id':language.id,
@@ -289,38 +311,46 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         form=JuryQuestionForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-        else:
-            pass 
 
-        oxml = QMLquestion(original.text)
-        clean_post = utils.iboclean(request.POST)
-        oxml.update(clean_post)
-        if not translation:
-            vid = 1
-        else:
-            vid = translation.version+1
+            oxml = QMLquestion(original.text)
+            clean_post = utils.iboclean(request.POST)
+            oxml.update(clean_post)
+            if not translation:
+                vid = 1
+            else:
+                vid = translation.version+1
 
-        v = VersionNode(
-            question_id=question.id,
-            language_id=target_language_id,
-            version=vid,
-            rating=cd['rating'],
-            text=oxml.zackzack(),
-            flag=cd['flag'],
-            checkout=cd['checkout'],
-            comment=cd['comment'],
-            committed=True
-        )
-        v.save()
-        if not v.language == question.primary_language_id:
-            tr = Translation(
-                language=v.language,
-                origin_id=cd['orig'],
-                target=v
+            v = VersionNode(
+                question_id=question.id,
+                language_id=target_language_id,
+                version=vid,
+                rating=cd['rating'],
+                text=oxml.zackzack(),
+                flag=cd['flag'],
+                checkout=cd['checkout'],
+                comment=cd['comment'],
+                committed=True
             )
-            tr.save()
-        return redirect(request.path + "?success") 
-   
+            v.save()
+            if not v.language == question.primary_language_id:
+                tr = Translation(
+                    language=v.language,
+                    origin_id=cd['orig'],
+                    target=v
+                )
+                tr.save()
+            if "savenext" in request.POST:
+                ps = request.path.split("/")
+                ps[-3] = question_position + 1
+                nextpath = "/".join(ps)
+                return redirect(nextpath)
+            else:
+                return redirect(request.path + "?success") 
+        else:
+            print form.errors
+            #form is not valid...
+            pass      
+ 
     if translation is None:
         initial = {'orig':original.id,'rating':0}
     else:
@@ -336,9 +366,11 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
     if 'write' in permissions or 'admin' in permissions:
         form=JuryQuestionForm(initial=initial)
         ro = ""
+        dis = False
     else:
         form=ViewQuestionForm(initial=initial)
         ro = "readonly"
+        dis = True
 
     exam.load_question_status(target_language_id)
 
@@ -381,6 +413,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         'versions':{'orig':root_original_version,'trans':tv},
         'perms':permissions,
         'readonly': ro,
+        'disabled': dis,
         'outdated':outdated
     })
 

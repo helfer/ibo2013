@@ -59,7 +59,9 @@
 	{{form.checkout}}<label for="id_checkout" title="Check-out as final"></label>
 	{% if 'admin' in perms or 'write' in perms %}
 	<a href="#"><img src="/static/icons/save_old.png" title="Save" alt="save" onclick="document.getElementById('submitter').click();"></a>
-	<a href="#"><img src="/static/icons/savenext_old.png" title="Save and next" alt="savenext"></a>
+	{% if pos|add:'1' <= status|length %}
+	<a href="#"><img src="/static/icons/savenext_old.png" title="Save and next" alt="savenext" onclick="document.getElementById('nextsubmitter').click();"></a>
+	{% endif %}
 	{% endif %}
 	{% if pos|add:'1' <= status|length %}
 	<a href="/jury/{{lang_id}}/exam/{{exam.id}}/question/{{pos|add:'1'}}/translate/"><img src="/static/icons/next.png" title="Goto next" alt="next"></a>
@@ -97,7 +99,11 @@ Translated version {{versions.trans}}
         </td>
         <td>
         <div id="i-{{el.id}}">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
-        <textarea {{readonly}} name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
+        {%if not disabled %}
+            <textarea {{readonly}}  name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
+        {% else %}
+            {{el.form}}
+        {% endif %}
         </td>
     </tr>
     {% endif %}
@@ -110,7 +116,11 @@ Translated version {{versions.trans}}
         </td>
         <td>
         <div id="i-{{el.id}}">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
-        <textarea {{readonly}} name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
+        {%if not disabled %}
+            <textarea {{readonly}}  name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
+        {% else %}
+            {{el.form}}
+        {% endif %}
         </td>
     </tr>
     {% endif %}
@@ -130,8 +140,14 @@ Translated version {{versions.trans}}
                 <td>Answer</td>
                 <td id="o-{{sub.id}}">{{sub.data}}</td>
                 <td><a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
-            	<td><textarea {{readonly}} name="{{sub.id}}" id="{{sub.id}}" class="ckeditor">{{sub.form}}</textarea></td>
-                </tr>
+            <td>
+                {%if not disabled %}
+                    <textarea {{readonly}}  name="{{sub.id}}" id="{{sub.id}}" class="ckeditor">{{sub.form}}</textarea>
+                {% else %}
+                    {{sub.form}}
+                {% endif %}
+                </td>
+                        </tr>
             {% endif %}
         {% endfor %}
     {% endif %}
@@ -142,7 +158,13 @@ Translated version {{versions.trans}}
             <td></td>
             <td id="o-{{sub.id}}">{{sub.data}}</td>
             <td><a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a></td>
-            <td><textarea {{readonly}} id="{{sub.id}}" name="{{sub.id}}" class="ckeditor">{{sub.form}}</textarea></td>
+            <td>
+        {%if not disabled %}
+            <textarea {{readonly}}  name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{sub.form}}</textarea>
+        {% else %}
+            {{sub.form}}
+        {% endif %}
+        </td>
         </tr>
         {% endfor %}
     {% endif %}
@@ -186,7 +208,9 @@ Translated version {{versions.trans}}
 </td>
 </tr>
 </table>
+{{form.orig}}
 <input type="submit" style="visibility:hidden" value="submit" id="submitter" name="submit" />
+<input type="submit" style="visibility:hidden" value="nextsubmit" id="nextsubmitter" name="nextsubmit" />
 </form>
 {% endif %}
 <br style="clear: both;">

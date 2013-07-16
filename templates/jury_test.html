@@ -155,12 +155,12 @@ Translated version {{versions.trans}}
     {% if el.tag == "list" %}
         {% for sub in el.data %}
         <tr> <!-- possible list -->
-            <td></td>
+            <td>List</td>
             <td id="o-{{sub.id}}">{{sub.data}}</td>
             <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}</td>
             <td>
         {%if not disabled %}
-            <textarea {{readonly}}  name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{sub.form}}</textarea>
+            <textarea {{readonly}}  name="{{sub.id}}" id="{{sub.id}}" class="ckeditor">{{sub.form}}</textarea>
         {% else %}
             {{sub.form}}
         {% endif %}

@@ -26,6 +26,9 @@ body {
 	padding: 1.7em;
 	height: 598px;  /* 632 - 2*17 = #main height - #question padding */
 }
+#answers {
+	height: 537px;
+}
 
 #question {	width: 690px; }
 #answers { width: 521px; } /* 1280 - 690 - 4*17 - 1 = body width - #question width - 2*#question padding - 2*#answers padding - #question border-right */
@@ -43,6 +46,9 @@ body {
 #main.hide #answers,
 #main.hide #overview {
 	height: 716px; /* 750 - 2*17 = body height - 2*#question padding */
+}
+#main.hide #answers {
+	height: 656px;
 }
 
 
@@ -172,6 +178,11 @@ ul {
 
 #question img:hover {
 	cursor: pointer;
+}
+
+#answers {
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 #answers > p { font-weight: bold; }
@@ -331,66 +342,64 @@ body.zoom #overview a.done.flag {
 }
 
 /* Answer bar (mini-menu) */
-#answers #answerbar {
-	position: absolute;
-	bottom: 60px;
-	right: 0;
+#answerbar {
+	float: right;
+	width: 555px;
 	height: 60px;
 	background: #ccc;
 	text-align: center;
-	width: 555px;
 	border-radius: 0;
 	border: 0;
 	cursor: auto;
 }
 
-#answers #answerbar.hide {
-	bottom: 0;
+#answerbar.hide {
+	top: 691px;
 	padding-right: 150px;
 	width: 405px;
 }
 
-#answers #answerbar a:first-child,
-#answers #answerbar a:last-child {
+#answerbar a:first-child,
+#answerbar a:last-child {
 	display: none;
 }
 
-#answers #answerbar.hide a:first-child,
-#answers #answerbar.hide a:last-child {
+#answerbar.hide a:first-child,
+#answerbar.hide a:last-child {
 	display: inline-block;
 }
 
-#answers #answerbar a {
+#answerbar a {
 	display: inline-block;
 	height: 6em;
 	width: 10em;
 }
 
-#answers #answerbar a.prev { background: url('icons/prev.png') center center no-repeat; }
-#answers #answerbar a.next { background: url('icons/next.png') center center no-repeat; }
+#answerbar a.prev { background: url('icons/prev.png') center center no-repeat; }
+#answerbar a.next { background: url('icons/next.png') center center no-repeat; }
 
-#answers #answerbar a:hover {
+#answerbar a:hover {
 	background-color: #555;
 	cursor: pointer;
 }
 
-#answers #answerbar input {
+#answerbar input {
 	display: none;
 }
-#answers #answerbar label {
+#answerbar label {
 	float: none;
 	display: inline-block;
 	cursor: pointer;
 	height: 6em;
 	width: 10em;
 }
-#answers #answerbar #id_flag + label {
+#answerbar #id_flag + label {
 	background: url('icons/flag.png') no-repeat center;	
 }
-#answers #answerbar #id_flag + label:hover {
+#answerbar #id_flag + label:hover {
 	background-color: #555;
 }
-#answers #answerbar #id_flag:checked + label {
+#answerbar #id_flag:checked + label {
 	background: #eabf03 url('icons/flag.png') no-repeat center;
 }
 
@@ -423,23 +432,18 @@ body {
 	height: 404px;
 }
 
-#answerbar {
-	width: 100%;
-}
-
 #overview {
 	height: 1082px;
 	width: 766px;
 }
 
+#answerbar {
+	width: 800px;
+}
+
 /* hidden stuff */
 #main.hide {
 	height: 1235px;
-}
-
-#main #answers #answerbar {
-	padding-right: 0;
-	width: 100%;
 }
 
 #main.hide #overview {
@@ -456,6 +460,10 @@ body {
 
 #main.hide #answers table {
 	height: 425px;
+}
+
+#main.hide #answerbar {
+	width: 800px;
 }
 
 }

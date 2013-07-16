@@ -51,6 +51,13 @@ def profile(request,lang_id=1,permissions=None):
 
     add_form = AddLanguageForm()
     edit_form = EditLanguageForm()
+    ctr = CategoryTranslation.objects.filter(language=language).order_by("category")
+    print ctr
+    init = {}
+    for c in ctr:
+        init["f"+str(c.category_id)] = c.text
+    print init
+    cf = CatTransForm(initial=init)
 
     if request.user.is_staff:
         exams = Exam.objects.all()
@@ -99,14 +106,27 @@ def profile(request,lang_id=1,permissions=None):
                 return HttpResponseRedirect('/jury/'+str(lang.id)+'/')
             else:
                 add_form = form
+        elif "translate_cat" in request.POST:
+            if not ('edit' in permissions or 'admin' in permissions):
+                raise PermissionDenied()
+            f = CatTransForm(request.POST)
+            if f.is_valid():
+                cd = f.cleaned_data
+                for c in cd:
+                    ct,created = CategoryTranslation.objects.get_or_create(category_id=int(c[1:]),language=language)
+                    ct.text = cd[c]
+                    ct.save()
+                return redirect(request.path)
+            else:
+                print "error"
         else:
             #unknown form
             raise Http404()
             
-    #languages = Language.objects.get(id=1).coordinators.all()
     languages = request.user.editor_set.all()
     languages2 = request.user.coordinator_set.all()
     access = language.editors.all().order_by('first_name','last_name')
+
 
     return render_with_context(request,'jury_profile.html',
         {'exams':exams,
@@ -117,7 +137,8 @@ def profile(request,lang_id=1,permissions=None):
         'addform':add_form,
         'editform':edit_form,
         'lang_id':language.id,
-        'language':language
+        'language':language,
+        'cf':cf
         })
 
 
@@ -339,9 +360,9 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
                     target=v
                 )
                 tr.save()
-            if "savenext" in request.POST:
+            if "nextsubmit" in request.POST:
                 ps = request.path.split("/")
-                ps[-3] = question_position + 1
+                ps[-3] = str(question_position + 1)
                 nextpath = "/".join(ps)
                 return redirect(nextpath)
             else:
@@ -562,5 +583,3 @@ def practical(request,lang_id=1,permissions=None):
         'language':language,
         'examfiles':examfiles})
     
-
-

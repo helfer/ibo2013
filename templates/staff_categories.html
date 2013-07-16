@@ -12,14 +12,15 @@
 
 <hr></hr>
 {{errors|safe}}
-{% for c in categories %}
+<!--{% for c in categories %}
     <form action="" method="POST">
     {{c.form.errors}}
     {{c.form.as_table}}
     <input type="hidden" name="cat_id" value="{{c.cat.id}}" />
     <input type="submit" value="update" name="update" />
     </form>
-{% endfor %}
+{% endfor %}-->
 
+{{catform.as_table}}
 
 {% endblock %}

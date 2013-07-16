@@ -68,6 +68,8 @@ a:hover {
 
 em { font-style: italic; }
 strong { font-weight: bold; }
+sup { font-size: 75%; vertical-align: super; line-height: 0; }
+sub { font-size: 75%; vertical-align: sub; }
 
 p { font-size: 1.7em;
 	line-height: 1.35em;

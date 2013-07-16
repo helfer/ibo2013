@@ -23,7 +23,7 @@ body {
 /* MARKUP GENERAL ELEMENTS ==================================== */
 em { font-style: italic; }
 strong { font-weight: bold; }
-sup { font-size: 75%; vertical-align: super; }
+sup { font-size: 75%; vertical-align: super; line-height: 0; }
 sub { font-size: 75%; vertical-align: sub; }
 
 h1 {
@@ -381,8 +381,11 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 .translationtable img {
 	padding: 0;
 	width: 25%;
-	border: 1px solid #ccc;
 	transition: all 200ms ease;
+}
+
+.translationtable[onclick] {
+	border: 1px solid #ccc;
 }
 
 .translationtable img.large {

@@ -55,7 +55,7 @@ urlpatterns = patterns('',
     
     (r'^accounts/login/$', 'django.contrib.auth.views.login',{'template_name': 'auth.html'}),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout',{'next_page': '/accounts/login'}),
-    ('^accounts/profile/$',redirect_to,{'url':'/jury/1/practical/'}),
+    ('^accounts/profile/$',redirect_to,{'url':'/jury/1/'}),
     
     
 

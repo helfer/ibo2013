@@ -19,6 +19,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.resize_maxWidth = 750;
 	config.htmlEncodeOutput = false;
 	config.extraPlugins = 'bidi';
+	config.disableNativeSpellChecker = false;
 };
 
 

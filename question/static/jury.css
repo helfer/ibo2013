@@ -381,6 +381,7 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 .translationtable img {
 	padding: 0;
 	width: 25%;
+	border: 1px solid #ccc;
 	transition: all 200ms ease;
 }
 

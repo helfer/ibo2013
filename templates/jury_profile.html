@@ -26,7 +26,7 @@
         <br style="clear: both"><br>
     {% endif %}
     <h2>The following people can edit {{language.name}}:</h2>
-    <ul style="font-size: 175%; list-style-type: disc;">
+    <ul style="font-size: 175%; list-style-type: disc; margin-left: 1em;">
     {% for a in access %}
         <li>{{a.first_name}} {{a.last_name}} ({{a.username}})</li>
     {% endfor %}

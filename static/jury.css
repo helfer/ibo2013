@@ -19,6 +19,10 @@ body {
 	border: 1px solid #aaa;
 }
 
+#main {
+	overflow: visible;
+}
+
 
 /* MARKUP GENERAL ELEMENTS ==================================== */
 em { font-style: italic; }

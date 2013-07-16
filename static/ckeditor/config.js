@@ -18,6 +18,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.width = '100%';
 	config.resize_maxWidth = 750;
 	config.htmlEncodeOutput = false;
+	config.extraPlugins = 'bidi';
 };
 
 

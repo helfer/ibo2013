@@ -404,7 +404,7 @@ def zipem(texts,forms):
     try:
         assert len(texts) == len(forms)
     except:
-        raise Exception("yep")
+        raise Exception("yep {0} != {1}".format(len(texts),len(forms))
     rt = []
     for i in xrange(len(texts)):
         if not isinstance(texts[i]["data"],unicode) and not isinstance(texts[i]["data"],str): #it's a list

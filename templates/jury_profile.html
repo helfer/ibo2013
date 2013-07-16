@@ -50,7 +50,7 @@
     <p><input type="submit" value="Add translation" name="addlanguage"></p>
     </form>
     {% if "write" in perms %}
-    <h1>Translate categories</h1>
+    <h1>Translate categories for {{language.name}}</h1>
     <form action="" method="post">
     <table>
     {{cf.as_table}}

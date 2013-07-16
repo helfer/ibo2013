@@ -24,21 +24,39 @@ def question(request,language_id,exam_id,question_position):
         question = Question.objects.get(exam__id=exam_id,examquestion__position=question_position)
         eq = ExamQuestion.objects.get(question=question,exam=exam_id)
         num_questions = ExamQuestion.objects.filter(exam=exam_id).count()
-        vnode = question.versionnode_set.filter(language=language.id).order_by('-timestamp')[0]
-    except: 
+    except:
         raise Http404()
+    flag = ExamFlags.objects.filter(user=request.user,question=eq).count() > 0
     
     try:
         a = ExamAnswers.objects.get(user=request.user,question=eq)
         this_answer = [(3,a.answer1),(4,a.answer2),(5,a.answer3),(6,a.answer4)] 
     except:
         this_answer = [(3,None),(4,None),(5,None),(6,None)]
+    
+    try:
+        vnode = question.versionnode_set.filter(language=language.id).order_by('-timestamp')[0]
+        xmlq = qml.QMLquestion(vnode.text)
+        struct = xmlq.get_texts_nested(prep=True)
+    except: 
+        return render_with_context(request,'students_questionview.html',
+        {'available':False,
+        'exam_id':exam_id,
+        'lang_id':language_id,
+        'pos':question_position,
+        'language':language,
+        'question':question,
+        'user':request.user,
+        'eq':eq,
+        'flag':flag,
+        'answers':this_answer,
+        'num_questions':num_questions
+    })
 
-    flag = ExamFlags.objects.filter(user=request.user,question=eq).count() > 0
-    xmlq = qml.QMLquestion(vnode.text)
-    struct = xmlq.get_texts_nested(prep=True)
+
     return render_with_context(request,'students_questionview.html',
-        {'exam_id':exam_id,
+        {'available':True,
+        'exam_id':exam_id,
         'lang_id':language_id,
         'pos':question_position,
         'language':language,

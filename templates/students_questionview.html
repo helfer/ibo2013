@@ -3,6 +3,10 @@
 {% block main %}
 <div id="question">
 <p>{{language}} | Question {{pos}} | {{question.name}}</p>
+
+{% if not available %}
+<p>This question is not available in {{language.name}}. Maybe it has not been translated yet? In the meantime, you can look at this question in the official English and Russion versions by choosing the respective language in the dropdown in the top left corner of the screen.</p>
+{% endif %}
 {% for q in struct %}
 {% for el in q.data %}
 	{% if el.tag == "text" %}

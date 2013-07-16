@@ -354,7 +354,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         if form.is_valid():
             cd = form.cleaned_data
         else:
-            cd = {'flag':0,'checkout':0,'comment':'',rating:0}
+            cd = {'flag':0,'checkout':0,'comment':'',rating:0,'orig':1}
 
         #print "formvalid",form.is_valid()
         #print "cd",form.cleaned_data

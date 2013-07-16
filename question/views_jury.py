@@ -241,6 +241,11 @@ def vote(request,lang_id=1,permissions=None):
             #unknown form
             raise Http404()
     
+    if request.user.is_staff:
+        exams = Exam.objects.all()
+    else:
+        exams = Exam.objects.filter(staff_only=False)
+    
     v = Vote.objects.filter(delegation=delegation,vround=ovo)    
     if v.count() > 0:
         submitted = v[0].answer
@@ -254,6 +259,7 @@ def vote(request,lang_id=1,permissions=None):
         'submitted':submitted,
         'lang_id':lang_id,
         'perms':permissions,
+        'exams':exams
         })
 
 @login_required

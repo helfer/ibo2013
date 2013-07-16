@@ -460,7 +460,7 @@ def print_questions(qlist,lang_id=1,exam_id=3):
 
 def print_question_objects(questions,lang_id=1,exam_id=3):        
 
-    return HttpResponse("Sorry, this feature is not working at the moment. We hope to have it working again soon!",content_type="text/plain")
+    #return HttpResponse("Sorry, this feature is not working at the moment. We hope to have it working again soon!",content_type="text/plain")
 
 
     root = et.Element("exam")

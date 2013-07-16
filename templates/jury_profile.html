@@ -28,7 +28,7 @@
     <h2>The following people can edit {{language.name}}:</h2>
     <ul>
     {% for a in access %}
-        <li>{{a.first_name}} {{a.last_name}}</li>
+        <li>{{a.first_name}} {{a.last_name}} ({{a.username}})</li>
     {% endfor %}
     </ul>
 

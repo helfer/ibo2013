@@ -11,14 +11,13 @@ CKEDITOR.editorConfig = function( config ) {
 	config.toolbarLocation = 'bottom';
 	config.removePlugins = 'elementspath';
 	config.resize_enabled = false;
-	config.extraPlugins = 'autogrow';
+	config.extraPlugins = 'autogrow,bidi';
 	config.autoGrow_minHeight = 0;
 	config.autoGrow_maxHeight = 0;
 	config.autoGrow_onStartup = true;
 	config.width = '100%';
 	config.resize_maxWidth = 750;
 	config.htmlEncodeOutput = false;
-	config.extraPlugins = 'bidi';
 	config.disableNativeSpellChecker = false;
 };
 

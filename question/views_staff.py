@@ -310,9 +310,9 @@ def translate_categories(request,lang_id):
             
         objs.append({"orig":orig,"form":frm})
 
+    cf = CatTransForm(cats=cats)
 
-
-    return render_to_response('staff_categories_trans.html',{'objs':objs})
+    return render_to_response('staff_categories_trans.html',{'objs':objs,'catform':cf})
 
 
 @staff_member_required

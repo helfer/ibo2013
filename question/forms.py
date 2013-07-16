@@ -201,3 +201,16 @@ class AssignPracticalForm(forms.Form):
 class StaffVoteForm(forms.ModelForm):
      class Meta:
         model = VotingRound
+
+
+class CatTransForm(forms.Form):
+
+    def __init__(self,*args,**kwargs):
+        super(CatTransForm,self).__init__(*args,**kwargs)
+        cats = QuestionCategory.objects.all().order_by('name')
+        for c in cats:
+            self.fields["f"+str(c.id)] = forms.CharField(max_length=100,required=False,label=c.name)
+
+
+
+

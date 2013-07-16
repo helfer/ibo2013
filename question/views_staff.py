@@ -483,11 +483,11 @@ def print_question_objects(questions,lang_id=1,exam_id=3):
     return HttpResponse(et.tostring(root),content_type='text/plain')
 
 
-#@staff_member_required
+@staff_member_required
 def discussion(request,exam_id,question_position):
 
-    if not request.user.is_staff and int(exam_id) > 2:
-        raise PermissionDenied()
+    #if not request.user.is_staff and int(exam_id) > 2:
+    #    raise PermissionDenied()
 
     try:
         question_position = int(question_position)

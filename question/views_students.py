@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response, redirect
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from ibo2013.question.models import *
 from ibo2013.question.views_common import render_with_context
+from django.contrib.auth.decorators import permission_required
 from django.db.models import Count
 from django.db import connections
 from django.template import RequestContext
@@ -13,10 +14,11 @@ from django.db.models import Q
 from xml.etree import ElementTree as et
 
 @login_required
+@permission_required('question.is_jury')
 def question(request,language_id,exam_id,question_position):
 
-    if (not request.user.is_staff) and (int(exam_id) not in [1,2]):
-        raise PermissionDenied() #TODO: just a hack to keep people out
+    #if (not request.user.groups) and (int(exam_id) not in [1,2]):
+    #    raise PermissionDenied() #TODO: just a hack to keep people out
     try:
         question_position = int(question_position)
         exam_id = int(exam_id)
@@ -72,10 +74,11 @@ def question(request,language_id,exam_id,question_position):
 
 
 @login_required
+@permission_required('question.is_jury')
 def examview(request,language_id,exam_id):
     
-    if (not request.user.is_staff) and (int(exam_id) not in [1,2]):
-        raise PermissionDenied() #TODO: just a hack to keep people out
+    #if (not request.user.is_staff) and (int(exam_id) not in [1,2]):
+    #    raise PermissionDenied() #TODO: just a hack to keep people out
 
     try:
         exam = Exam.objects.get(id=exam_id)

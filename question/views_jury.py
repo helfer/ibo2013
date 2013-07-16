@@ -328,7 +328,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
             'checkout':translation.checkout,
             'comment':translation.comment,
             'rating':translation.rating,
-            'orig':original.id
+            'orig':root_original_version
         }
     
     if 'write' in permissions or 'admin' in permissions:
@@ -345,7 +345,11 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
     
         #checkout = 1 or not??
         tr_checkout = question.versionnode_set.filter(language=target_language_id).order_by('-timestamp')[0]
-        previous = tr_checkout.translation_target.all()[0].origin
+        if from_lang_id == question.primary_language_id:
+            previous = tr_checkout.translation_target.all()[0].origin
+        else:
+            #need to do a little bit of magic here...
+            previous = tr_checkout.translation_target.all()[0].translation_origin.filter(language=from_lang_id).order_by('timestamp')[0]
         pqml = QMLquestion(previous.text.encode('utf-8'))
         oqml.diff(pqml.get_data())
     except:

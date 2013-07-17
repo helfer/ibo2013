@@ -340,11 +340,17 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
 
     if request.method == "POST":
         #request.POST = utils.iboclean(request.POST)
-        print request.POST
-
+        #print request.POST
         if not ('write' in permissions or 'admin' in permissions):
             raise PermissionDenied()
        
+        if "reset_version" in request.POST:
+            tr = Translation.objects.get(target=translation)
+            BEFORE_TRANSLATION_START = '2013-07-16 00:00:00' 
+            tr.origin = VersionNode.objects.filter(language_id=1,question=question,timestamp__lt=BEFORE_TRANSLATION_START).order_by('-version')[0]
+            print tr
+
+
         form=JuryQuestionForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data

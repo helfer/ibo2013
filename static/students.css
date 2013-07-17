@@ -1,7 +1,7 @@
 /* LAYOUT + GENERAL ATTRIBUTES ================================ */
 body {
 	width: 1280px;
-	height: 751px;
+	height: 695px;
 }
 
 #header,
@@ -16,7 +16,7 @@ body {
 }
 
 #main {
-	height: 632px; /* 751 - 2*60 + 1 = body height - #header height - #footer height */
+	height: 575px; /* 695 - 2*60 + 1 = body height - #header height - #footer height */
 }
 
 #question,
@@ -24,10 +24,10 @@ body {
 #overview {
 	float: left;
 	padding: 1.7em;
-	height: 598px;  /* 632 - 2*17 = #main height - #question padding */
+	height: 541px;  /* 575 - 2*17 = #main height - #question padding */
 }
 #answers {
-	height: 537px;
+	height: 480px;
 }
 
 #question {	width: 690px; }
@@ -40,15 +40,15 @@ body {
 	height: 0;
 }
 #main.hide {
-	height: 750px; /* body height - 1 */
+	height: 694px; /* body height - 1 */
 }
 #main.hide #question,
 #main.hide #answers,
 #main.hide #overview {
-	height: 716px; /* 750 - 2*17 = body height - 2*#question padding */
+	height: 660px; /* 694 - 2*17 = body height - 2*#question padding */
 }
 #main.hide #answers {
-	height: 656px;
+	height: 600px;
 }
 
 
@@ -157,13 +157,13 @@ ul {
 	border-right: 1px solid #999;
 }
 
-#question p:first-child {
+/*#question p:first-child {
 	margin: -1em -1em 1em -1em;
 	padding: 0.5em 1em;
 	color: #000;
 	background: #ccc;
 	font-weight: bold;
-}
+}/*/
 
 #question img {
 	padding: 0.5em 0;
@@ -408,11 +408,11 @@ body.zoom #overview a.done.flag {
 @media only screen and (orientation: portrait) {
 body {
 	width: 800px;
-	height: 1231px;
+	height: 1171px;
 }
 
 #main {
-	height: 1112px; /* body height - 120 + 1 */
+	height: 1052px; /* body height - 120 + 1 */
 }
 
 #question {
@@ -429,11 +429,11 @@ body {
 }
 
 #answers table {
-	height: 404px;
+	height: 400px;
 }
 
 #overview {
-	height: 1082px;
+	height: 1052px;
 	width: 766px;
 }
 
@@ -443,11 +443,11 @@ body {
 
 /* hidden stuff */
 #main.hide {
-	height: 1235px;
+	height: 1175px;
 }
 
 #main.hide #overview {
-	height: 1201px;
+	height: 1141px;
 }
 
 #main.hide #question {
@@ -455,11 +455,11 @@ body {
 }
 
 #main.hide #answers {
-	height: 522px;
+	height: 462px;
 }
 
 #main.hide #answers table {
-	height: 425px;
+	height: 364px;
 }
 
 #main.hide #answerbar {

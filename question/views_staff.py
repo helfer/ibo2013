@@ -492,11 +492,11 @@ def print_question_objects(questions,lang_id=1,exam_id=3):
     root.attrib["name"] = "print_exam_test"
     for q in questions:
         try:
-            vnode_t = q.question.versionnode_set.filter(language=lang_id).order_by('-version')[0]
+            vnode = q.question.versionnode_set.filter(language=lang_id).order_by('-version')[0]
             target_vid = vnode.version
         except:
             target_vid = 0
-        vnode = q.question.versionnode_set.filter(language=1,committed=True).order_by('-version')[0]
+            vnode = q.question.versionnode_set.filter(language=1,committed=True).order_by('-version')[0]
         xmlq = qml.QMLquestion(vnode.text.encode("utf-8"))
         xmlq.inline_image()
         xmlq.xml.attrib["info"] = "{0}_{1}_L{2}".format(vnode.version,target_vid,lang_id)

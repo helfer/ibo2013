@@ -608,7 +608,7 @@ def vote(request):
         votes = Vote.objects.filter(vround=current.id).order_by('delegation')
         vnum = votes.count()
 
-    stats = {'yes':0,'no':0,'abstain':0,'noanswer':dl.count()-vnum}
+    stats = {'yes':0,'no':0,'abstain':0,'noanswer':dl.count()-vnum-6}
     do = []
     for d in dl:
         if d.name in ["Exam_Staff","Test country", "Malaysia","Ireland","France","Portugal"]:

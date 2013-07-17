@@ -1,0 +1,24 @@
+{% extends "ibo2013_staff.html" %}
+
+{% block main %}
+
+    {{form.as_table}}
+
+    <form action="" method="POST">
+    <table>
+    <tr>
+    {% for h in table.header%}
+        <th>{{h}}</th>
+    {% endfor %} 
+    </tr>
+    {% for row in table.body%}
+        <tr><td>Praktikum {{forloop.counter}}</td>
+        {% for col in row %}
+            <td>{{col.q.position}}:<input type="text" style="width:2em" name="praq{{col.q.id}}" value="{{col.score}}" /></td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+    </table>
+    <input type="submit" value="submit" name="submit" />
+    </form>
+{% endblock %}

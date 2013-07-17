@@ -213,4 +213,17 @@ class CatTransForm(forms.Form):
 
 
 
-
+class SelectStudentForm(forms.Form):
+    
+    def __init__(self,request,*args,**kwargs):
+        super(SelectStudentForm,self).__init__(*args,**kwargs)
+        students = Student.objects.select_related().all()
+        choices = []
+        for s in students:
+            pth = request.path.split('/')
+            pth[-2] = str(s.id)
+            choices.append(("/".join(pth),str(s)))
+            self.fields['student'] = forms.ChoiceField(
+            choices=choices,
+            widget = forms.Select(attrs={'onchange':'window.location = this.value;'}),
+            )

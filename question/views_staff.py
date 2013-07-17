@@ -642,28 +642,54 @@ def vote(request):
 def score_practical(request,student_id):
     try:
         stu = Student.objects.get(pk=int(student_id))
+        oops = False
     except:
         oops = True
 
+
+    if request.method == "POST":
+        print request.POST
+        for ans in request.POST:
+            post = request.POST
+            if ans.startswith("praq") and len(post[ans]) > 0:
+                pa,created = PracticalAnswer.objects.get_or_create(question_id=int(ans[4:]),student=stu)
+                pa.answer = post[ans]
+                pa.save()
+
+        return redirect(request.path)
+
+
     pracs = PracticalExam.objects.all().order_by('position')
 
+    select = SelectStudentForm(request,initial={'student':request.path})
+
     maxlen = 0
-    table = []
+    table = {}
+    table['body'] = []
     for prac in pracs:
         qset = prac.practicalquestion_set.all().order_by('position')
         if len(qset) > maxlen:
             maxlen = len(qset)
         row = []
         for q in qset:
-            row.append(q)
-
+            try:
+                s = PracticalAnswer.objects.get(student=stu,question=q).answer
+            except:
+                s = ''
+            row.append({'q':q,'score':s})
+        table['body'].append(row)
+    row = []
+    for i in range(maxlen):
+        row.append(i+1)
+    #table['header'] = row
+    print table
     print maxlen
 
-    return HttpResponse('ok',content_type='text/plain')
+    #return HttpResponse('ok',content_type='text/plain')
 
-    return RenderToResponse('staff_score.html',{
+    return render_to_response('staff_score.html',{
         'oops':oops,
-        'select':select,
+        'form':select,
         'table':table
     })
 

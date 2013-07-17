@@ -47,6 +47,7 @@ def profile(request,lang_id=1,permissions=None):
         lang_id = int(lang_id)
         language = Language.objects.get(id=lang_id)
     except:
+        print "here?"
         raise Http404()
 
     add_form = AddLanguageForm()
@@ -65,7 +66,8 @@ def profile(request,lang_id=1,permissions=None):
     notsofast = False
     if request.method == "POST":
         if "finalize" in request.POST:
-            if not "admin" in permissions or "write" in permissions:
+            print permissions
+            if not "admin" in permissions and not "write" in permissions:
                 raise PermissionDenied()
             finalizable = True
             for exam in exams:
@@ -80,7 +82,7 @@ def profile(request,lang_id=1,permissions=None):
 
 
 
-        if "editlanguage" in request.POST:
+        elif "editlanguage" in request.POST:
             if not 'admin' in permissions:
                 raise PermissionDenied()
             form = EditLanguageForm(request.POST)
@@ -139,7 +141,6 @@ def profile(request,lang_id=1,permissions=None):
     languages2 = request.user.coordinator_set.all()
     access = language.editors.all().order_by('first_name','last_name')
 
-
     return render_with_context(request,'jury_profile.html',
         {'exams':exams,
         'perms':permissions,
@@ -150,6 +151,8 @@ def profile(request,lang_id=1,permissions=None):
         'editform':edit_form,
         'lang_id':language.id,
         'language':language,
+        'finalized':language.finalized,
+        'notsofast':notsofast,
         'cf':cf
         })
 

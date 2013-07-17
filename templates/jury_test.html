@@ -74,7 +74,6 @@
 <tr><th style="width: 6%;"></th><th style="width: 45%;">
 Original version {{versions.orig}}
 {{from_language_switch.language}}
-<form action="" method="POST"><input type="submit" name="reset_version" value="Reset track-changes" style="font-size: 65%;"></form>
 {% if outdated %}
 <br>
 <span style="color:red">This version is not up to date with the official English version!!!</span>
@@ -90,6 +89,7 @@ Version {{versions.trans}} translated from English v{{trans_from_version}}
 </select>
 <a href="#">Restore this version</a>-->
 </th></tr>
+<tr><td colspan="4"><form action="" method="POST"><input type="submit" name="reset_version" value="Reset track-changes" style="font-size: 65%;"></form></td></tr>
 
 {% for q in struct %}
   {% for el in q.data %} 

@@ -14,6 +14,8 @@
 {% endblock %}
 
 {% block main %}
+	{% if not finalized %}
+
     {% if 'admin' in perms %}
         <h1>Give others the right to edit {{language.name}}</h1>
         <p><strong>Please note that once access is given, it cannot be taken away again. Every delegation can read your translation, so only give access to other delegations who need to be able to <em>edit</em> your translation.</strong></p>
@@ -59,17 +61,25 @@
     </form>
     {% endif %}
 
-	<!--<h1>Finalize exam</h1>
-	<p>By clicking the button below, you confirm that the current version of the exam is the final version. The current version will be locked and presented to your students at the exam. This option is only available after the official IBO versions have been finalized. Every exam <strong>must</strong> be finalized, or it cannot be used. Only IBO-personnel can undo finalization.</p>
-	<table style="width: 500px">
-	{# for u in request.user.coordinator_set.all() #}
+	<h1>Finalize exam</h1>
+	<p style="font-size: 115%; font-weight: bold;">By clicking Finalize, you confirm that the current versions of Exam 1 and Exam 2 are the final versions. The current versions will be locked. After you Finalize, you can assign these exams to your students.</p>
+	{% if notsofast %}
+	<p style="font-size: 115%; color: #f00;">You have not yet finalized all of the questions in your exams. Please make sure all questions show up as Green blocks before you Finalize.</p>
+	{% endif %}
+	<table>
 	<tr>
-	<td>{{u.name}}</td>
-	<td><input type="button" value="Finalize" name="{{u.name}}"></td>
+	<td><form action="" method="post">
+<input type="submit" name="finalize" value="Finalize exams" onclick="return confirm('The exams will be locked after finalization and cannot be changed anymore. Click \'OK\' to finalize or \'Cancel\' to abort.')">
+</form></td>
 	</tr>
-	{# endfor #}
-	</table>-->
+	</table>
+	
 	<br style="clear: both;">
-
+	
+	{% else %}
+	
+	<p style="font-size: 125%; color: #f00;">All exams have been finalized. You can assign exams to your students now on the Students page.</p>
+	
+	{% endif %}
 
 {% endblock %}

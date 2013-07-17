@@ -74,8 +74,10 @@
 <tr><th style="width: 6%;"></th><th style="width: 45%;">
 Original version {{versions.orig}}
 {{from_language_switch.language}}
+<form action="" method="POST"><input type="submit" value="Reset track-canges" style="font-size: 65%;"></form>
 {% if outdated %}
-<br/><span style="color:red">This version is not up to date with the official English version!!!</span>
+<br>
+<span style="color:red">This version is not up to date with the official English version!!!</span>
 <script>setTimeout(function(){alert("This version is not up to date with the official English version. Please wait for an update or translate from the English version");},100)</script>
 {% endif %}
 </th><th style="width: 4%; min-width: 60px">{% if not disabled %}<a onclick="CopyContentAll()"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContentAll()"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}

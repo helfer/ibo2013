@@ -157,13 +157,13 @@ ul {
 	border-right: 1px solid #999;
 }
 
-#question p:first-child {
+/*#question p:first-child {
 	margin: -1em -1em 1em -1em;
 	padding: 0.5em 1em;
 	color: #000;
 	background: #ccc;
 	font-weight: bold;
-}
+}/*/
 
 #question img {
 	padding: 0.5em 0;

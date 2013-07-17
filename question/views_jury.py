@@ -346,10 +346,12 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
        
         if "reset_version" in request.POST:
             tr = Translation.objects.get(target=translation)
+            #print "BEFORE",tr
             BEFORE_TRANSLATION_START = '2013-07-16 00:00:00' 
-            tr.origin = VersionNode.objects.filter(language_id=1,question=question,timestamp__lt=BEFORE_TRANSLATION_START).order_by('-version')[0]
-            print tr
-
+            tr.origin = VersionNode.objects.filter(language=1,question=question,timestamp__lt=BEFORE_TRANSLATION_START).order_by('-version')[0]
+            #print "AFTER",tr
+            tr.save()
+            return redirect(request.path)
 
         form=JuryQuestionForm(request.POST)
         if form.is_valid():
@@ -365,7 +367,7 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
             vid = 1
         else:
             vid = translation.version+1
-        print oxml.zackzack()
+        #print oxml.zackzack()
         v = VersionNode(
             question_id=question.id,
             language_id=target_language_id,

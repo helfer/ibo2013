@@ -71,7 +71,7 @@ class VersionNode(models.Model):
     #committed = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return u'VersionNode: %s (%s)[v%s] %s' % (self.question.name,self.language,self.version,self.committed)
+        return u'vnode: {0} {1}[v{2}] {3} - {4}'.format(self.question.name,self.language,self.version,self.committed,self.timestamp)
 
     def compare_with(self,vn2):
         return simplediff.html_diff(self.text,vn2.text)

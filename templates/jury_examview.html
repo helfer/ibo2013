@@ -18,7 +18,7 @@
 <form action="" method="POST">
 {% for o in categories %}
     <h2>{{o.cat.text}}</h2>
-    <!--<p><a onclick="SelectAllToggle()">(De)select all questions</a> | <a onclick="DownloadPDF()">Download PDF of selected questions</a></p>-->
+    <p><a onclick="SelectAllToggle()">(De)select all questions</a> | <a onclick="DownloadPDF()">Download PDF of selected questions</a></p>
 
     {% for q in o.questions %}
     <div class="questionbox">

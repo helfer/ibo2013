@@ -1,4 +1,6 @@
 from HTMLParser import HTMLParser
+import cStringIO
+import sys,subprocess,os
 import cgi
 from django.utils.safestring import mark_safe
 
@@ -63,3 +65,15 @@ def prep_for_display(string):
 def nl2br(string):
     return string.replace("\n","<br />")
 
+"""
+should pipe to php script to get pdf of exam
+"""
+def xml2pdf(exml,filename='exam1.pdf'):
+    php_file = '/var/www/django/ibo2013/xml2pdf/PDFgenIBO2013_15Juli.php'
+    phpinput = cStringIO.StringIO(exml)
+    #print exml[:2000]
+    os.chdir('./xml2pdf/')
+    p1 = subprocess.Popen(["php", php_file,filename], stdin = subprocess.PIPE,stdout=subprocess.PIPE)
+    output = p1.communicate(phpinput.getvalue())[0]
+    os.chdir('..')
+    print output

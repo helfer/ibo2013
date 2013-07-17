@@ -4,6 +4,33 @@ TODO
 sorted by priority:
 
 
+still current:
+
+1. print pdf function for theory
+2. fix disappearing question in translate bug 
+3. practical enter results
+4. student exam login page
+4. practical upload corrections
+5. practical download corrections
+
+9. jury practical correction view
+ status?     RB: I'll make a template
+
+10. jury theoretical correction view
+ status?     RB: I'll make a template
+
+optional:
+* prefetch images in student view (difficult, need many languages)
+* prefetch questions in student view (even more difficult, like a bundle)
+
+11. create Prof. Dr. Besserwisser (user to enter exam solutions)
+
+
+
+
+older todos: ###################################################################
+
+
 DONE: exam question printing with figures for Phaentu
     - position, nicht id
     - comment in printout
@@ -16,54 +43,55 @@ DONE: undo non-committed button, commit automatically
 
 NO TIME. 1. Code cleanup, refactoring, find inefficient pages
 
-2. accounts/users/roles
+DONE 2. accounts/users/roles
     - get all people in there according to group
     - authentication: students only student view, jury only jury view
 
-4. practicals pdf download and upload
+DONE 4. practicals pdf download and upload
 
-5. logging: make sure you could find out who did what and from where.
+DONE 5. logging: make sure you could find out who did what and from where.
 
-Voting
+DONE Voting
 
 
 
 
 6. jury view: 
-    - EN_official
-    - RU_official
-    - translate categories and common phrases
+  DONE  - EN_official
+  DONE  - RU_official
+  DONE (no time for common phrases)  - translate categories and common phrases
         RB: Idea to put this on the Profile page and make it only available for the coordinators/admins.
         Could be just a big list of text fields, how easy is it to make this into a view?
-    - versions
-    - revamp page for giving edit/coordinator rights
+  no time  - versions
+  DONE  - revamp page for giving edit/coordinator rights
     - student page for assigning exams
         RB: the basics are already in the template
 
-7. get hand translation to work (major overhaul)
+NO TIME 7. get hand translation to work (major overhaul)
     - tags <div> are already in the template, maybe need to be renamed
     - make compatible in student questionview
 
 8. student views: 
     - prefetch all images. 
     - prefetch all questions? 
-    - ajax for every question submission? (must be secure!)
-    - complete logging of all actions on interface.
-    - countdown
-    - flagging
-    - add max question numbers in questionview
+DONE    - ajax for every question submission? (must be secure!)
+~DONE    - complete logging of all actions on interface.
+NO TIME    - countdown
+DONE    - flagging
+DONE    - add max question numbers in questionview
 
 8b. student exam overview view
-      RB: I'll make a template
+ DONE     RB: I'll make a template
 
 9. jury practical correction view
-      RB: I'll make a template
+ status?     RB: I'll make a template
 
 10. jury theoretical correction view
-      RB: I'll make a template
+ status?     RB: I'll make a template
 
 
 BUGS:
 
 FEATURES:
-* low priority: english update from translation page
+DONE * low priority: english update from translation page
+* super-low priority: english update without commit from translation page

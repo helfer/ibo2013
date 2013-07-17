@@ -1,7 +1,9 @@
 from django.shortcuts import render_to_response, redirect
+from django.core.servers.basehttp import FileWrapper
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from ibo2013.question.models import *
 from ibo2013.question.forms import *
+from ibo2013.question import utils
 from django.db.models import Count
 from django.db import connections
 from django.template import RequestContext
@@ -12,6 +14,7 @@ from ibo2013.question import qml
 from django.db.models import Q
 from xml.etree import ElementTree as et
 import base64
+import os
 
 @login_required
 @staff_member_required
@@ -445,9 +448,23 @@ def print_exam(request,exam_id,lang_id=1):
 
 
     questions = ExamQuestion.objects.filter(exam=exam).order_by("position")
-    return print_question_objects(questions,lang_id,exam_id)
+    exam_xml = print_question_objects(questions,lang_id,exam_id)
+
+    filename = "{0}_{1}_{2}.pdf".format(exam.name,language.name,request.user.id)
+    utils.xml2pdf(exam_xml,filename)
+    path = 'xml2pdf/output/{0}'.format(filename)
+    wrapper = FileWrapper(file(path))
+    response = DeleteFileAfterResponse(wrapper,content_type='application/pdf',filename=path)
+    response['Content-Length'] = os.path.getsize(path)
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    return response
+
 # don't call directly! use only through other view.
-def print_questions(qlist,lang_id=1,exam_id=3):
+def print_questions(request,qlist,lang_id=1,exam_id=3):
+
+    if len(qlist) > 3:
+        return HttpResponse("Please download at most 3 questions at once. Sorry for the inconvenience, we hope to be able to remove this limitation at a later stage.",content_type="text/plain")
+
     try:
         exam = Exam.objects.get(id=int(exam_id))
         language = Language.objects.get(id=int(lang_id))
@@ -455,8 +472,16 @@ def print_questions(qlist,lang_id=1,exam_id=3):
         raise Http404()
 
     questions = ExamQuestion.objects.filter(id__in=[int(x) for x in qlist]).order_by("position")
-    return print_question_objects(questions,lang_id,exam_id)
+    exam_xml = print_question_objects(questions,lang_id,exam_id)
 
+    filename = "{0}_{1}_{2}.pdf".format(exam.name,language.name,request.user.id)
+    utils.xml2pdf(exam_xml,filename)
+    path = 'xml2pdf/output/{0}'.format(filename)
+    wrapper = FileWrapper(file(path))
+    response = DeleteFileAfterResponse(wrapper,content_type='application/pdf',filename=path)
+    response['Content-Length'] = os.path.getsize(path)
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    return response
 
 def print_question_objects(questions,lang_id=1,exam_id=3):        
 
@@ -464,6 +489,7 @@ def print_question_objects(questions,lang_id=1,exam_id=3):
 
 
     root = et.Element("exam")
+    root.attrib["name"] = "print_exam_test"
     for q in questions:
         try:
             vnode_t = q.question.versionnode_set.filter(language=lang_id).order_by('-version')[0]
@@ -480,8 +506,20 @@ def print_question_objects(questions,lang_id=1,exam_id=3):
         xmlq.xml.append(comment)
         root.append(xmlq.xml)
 
-    return HttpResponse(et.tostring(root),content_type='text/plain')
+    return et.tostring(root,encoding='utf-8')
 
+
+"""
+Http Response class that removes a temporary file created for the response
+"""
+class DeleteFileAfterResponse(HttpResponse):
+    def __init__(self,*args,**kwargs):
+        self.filename = kwargs.pop('filename')
+        super(DeleteFileAfterResponse,self).__init__(*args,**kwargs)
+
+    def close(self):
+        os.remove(self.filename)
+        pass
 
 @staff_member_required
 def discussion(request,exam_id,question_position):

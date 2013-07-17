@@ -611,7 +611,7 @@ def vote(request):
     stats = {'yes':0,'no':0,'abstain':0,'noanswer':dl.count()-vnum}
     do = []
     for d in dl:
-        if d.name == "Exam_Staff" or d.name == "Test country":
+        if d.name in ["Exam_Staff","Test country", "Malaysia","Ireland","France","Portugal"]:
             continue
         a = ''
         for v in votes:

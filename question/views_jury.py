@@ -80,8 +80,6 @@ def profile(request,lang_id=1,permissions=None):
                 print "not finalizable"
                 notsofast = True       
 
-
-
         elif "editlanguage" in request.POST:
             if not 'admin' in permissions:
                 raise PermissionDenied()
@@ -218,12 +216,43 @@ def students(request,lang_id=1,permissions=None):
         delegation = request.user.delegation_set.all()[0]
     form = DelegationExamLanguagesForm(instance=delegation)
     final = delegation.finalized 
+    comeon = False
+   
+    if request.method == "POST":
+        form = DelegationExamLanguagesForm(request.POST,instance=delegation)
+        if "submit" in request.POST:
+            print "o"
+            if form.is_valid():
+                print "k"
+                cd = form.cleaned_data
+                ok = True
+                comeon = ''
+                for el in cd['exam_languages']:
+                    if not el.finalized:
+                        ok = False
+                        comeon = comeon + " " + el.name
+                print ok
+                if len(cd['exam_languages']) == 0:
+                    comeon = " x - please pick at least one language"
+                    ok = False
+                if ok:
+                    form.save()
+                    return redirect(request.path)
+                else:
+                    pass
+        elif "finalize" in request.POST:      
+            print "finalize"
+            if form.is_valid():
+                delegation.finalized = True
+                delegation.save()
+                return redirect(request.path)
 
     return render_with_context(request,'jury_students.html',
         {'exams':exams,
         'final':final,
         'form':form,
         'lang_id':lang_id,
+        'comeon':comeon,
         'perms':permissions
         })
 

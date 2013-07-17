@@ -1,6 +1,8 @@
 from django.shortcuts import render_to_response, redirect
+from django.template import RequestContext
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from ibo2013.question.models import *
+from ibo2013.question.forms import *
 from ibo2013.question.views_common import render_with_context
 from django.contrib.auth.decorators import permission_required
 from django.db.models import Count
@@ -57,8 +59,10 @@ def question(request,language_id,exam_id,question_position):
         'num_questions':num_questions
     })
 
+    langs = Language.objects.filter(id__in=[1,2])
+    picker = PickLanguageForm(request.user,language_id,request,languages = langs,initial={'language':request.path})        
 
-    return render_with_context(request,'students_questionview.html',
+    return render_to_response('students_questionview.html',
         {'available':True,
         'exam_id':exam_id,
         'lang_id':language_id,
@@ -71,7 +75,8 @@ def question(request,language_id,exam_id,question_position):
         'eq':eq,
         'flag':flag,
         'answers':this_answer,
-        'num_questions':num_questions
+        'num_questions':num_questions,
+        'lang_picker':picker
     })
 
 
@@ -128,15 +133,16 @@ def examview(request,language_id,exam_id):
         cq = {'q':q,'status':status,'flag':flag }
         objs[-1]['questions'].append(cq)
 
-        
+    langs = Language.objects.filter(id__in=[1,2])
+    picker = PickLanguageForm(request.user,language_id,request,languages = langs,initial={'language':request.path})        
+    
 
-
-    return render_with_context(request,'students_examview.html',{
+    return render_to_response('students_examview.html',{
         'lang_id':language_id,
         'exam_id':exam_id,
         'categories':objs,
-        'user':request.user
-        })
+        'user':request.user,
+        'lang_picker':picker})
 
 
 """

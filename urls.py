@@ -14,7 +14,10 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Example:
     ('^$',redirect_to,{'url':'/jury/1/overview/'}),
+    
     ('^test/$',redirect_to,{'url':'/students/1/overview/2/'}),
+    (r'^test/(\d{1,9})/question/(\d{1,9})/(\d{1,9})/$',studentview.question_test),
+    (r'^test/(\d{1,9})/overview/(\d{1,9})/$',studentview.examview_test),
     
     (r'^jury/(?P<lang_id>\d{1,9})/$',juryview.profile),
     (r'^jury/(?P<lang_id>\d{1,9})/practical$',juryview.practical),
@@ -56,7 +59,7 @@ urlpatterns = patterns('',
     
     (r'^accounts/login/$', 'django.contrib.auth.views.login',{'template_name': 'auth.html'}),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout',{'next_page': '/accounts/login'}),
-    ('^accounts/profile/$',redirect_to,{'url':'/jury/1/overview/'}),
+    ('^accounts/profile/$',redirect_to,{'url':'/students/1/overview/2'}),
     
     
 

@@ -637,6 +637,7 @@ function exam_table ($table_xml, $question_info) {
 }
 
 function exam_figure ($figure_xml, $question_info) {
+    return;
 	global $namespaces;
 	global $verboseXML;
 	global $pdf;

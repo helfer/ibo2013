@@ -462,8 +462,8 @@ def print_exam(request,exam_id,lang_id=1):
 # don't call directly! use only through other view.
 def print_questions(request,qlist,lang_id=1,exam_id=3):
 
-    if len(qlist) > 3:
-        return HttpResponse("Please download at most 3 questions at once. Sorry for the inconvenience, we hope to be able to remove this limitation at a later stage.",content_type="text/plain")
+    if len(qlist) > 100:
+        return HttpResponse("Please download at most 100 questions at once. Sorry for the inconvenience, we hope to be able to remove this limitation at a later stage.",content_type="text/plain")
 
     try:
         exam = Exam.objects.get(id=int(exam_id))

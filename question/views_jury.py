@@ -326,8 +326,14 @@ def xmlquestionview(request,exam_id=1,question_position=1,lang_id=1,from_lang_id
         root_original_version = original.version
     try:
         translation = question.versionnode_set.filter(language=target_language_id).order_by('-version')[0]
-        myo = Translation.objects.get(target=translation)
-        trans_from_version = myo.origin.version
+        if not target_language_id == question.primary_language_id:
+            try:
+                myo = Translation.objects.get(target=translation)
+                trans_from_version = myo.origin.version
+            except:
+                trans_from_version = 1 #fallback, although I don't know why...
+        else:
+            trans_from_version = "NA"
     except:
         trans_from_version = "NA"
         translation = None

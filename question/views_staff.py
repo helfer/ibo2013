@@ -638,3 +638,39 @@ def vote(request):
     }
 )
 
+@staff_member_required
+def score_practical(request,student_id):
+    try:
+        stu = Student.objects.get(pk=int(student_id))
+    except:
+        oops = True
+
+    pracs = PracticalExam.objects.all().order_by('position')
+
+    maxlen = 0
+    table = []
+    for prac in pracs:
+        qset = prac.practicalquestion_set.all().order_by('position')
+        if len(qset) > maxlen:
+            maxlen = len(qset)
+        row = []
+        for q in qset:
+            row.append(q)
+
+    print maxlen
+
+    return HttpResponse('ok',content_type='text/plain')
+
+    return RenderToResponse('staff_score.html',{
+        'oops':oops,
+        'select':select,
+        'table':table
+    })
+
+
+
+
+
+
+
+

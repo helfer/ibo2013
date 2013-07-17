@@ -51,6 +51,7 @@ urlpatterns = patterns('',
     (r'^staff/exam/(\d{1,9})/$',staffview.view_exam),
     (r'^staff/practical/$',staffview.practical),
     (r'^staff/vote/$',staffview.vote),
+    (r'^staff/score/(\d{1,9})/$',staffview.score_practical),
     
     
     (r'^accounts/login/$', 'django.contrib.auth.views.login',{'template_name': 'auth.html'}),

@@ -294,6 +294,10 @@ class PracticalExam(models.Model):
     en_official = models.CharField(max_length=100)
     ru_official = models.CharField(max_length=100)
 
+
+    def __unicode__(self):
+        return self.name
+
 class PracticalExamFile(models.Model):
     name = models.CharField(max_length=100)
     filename = models.CharField(unique=True,max_length=200) #this is the actual filenmame for serving
@@ -375,4 +379,21 @@ class SimpleLog(models.Model):
     ip = models.CharField(max_length=50)
     timestamp = models.DateTimeField(auto_now=True,null=True)
     info = models.CharField(max_length=200)
+
+#################################################################################
+# Korrektur Praktika
+#################################################################################
+
+class PracticalQuestion(models.Model):
+    practical = models.ForeignKey(PracticalExam)
+    position = models.IntegerField()
+
+    def __unicode__(self):
+        return self.practical.name + " q"+str(self.position)
+
+class PracticalAnswer(models.Model):
+    question = models.ForeignKey(PracticalQuestion)
+    student = models.ForeignKey(Student)
+    answer = models.CharField(max_length=100)
+
 

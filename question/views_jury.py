@@ -119,7 +119,7 @@ def profile(request,lang_id=1,permissions=None):
             else:
                 add_form = form
         elif "translate_cat" in request.POST:
-            if not ('edit' in permissions or 'admin' in permissions):
+            if not ('write' in permissions or 'admin' in permissions):
                 raise PermissionDenied()
             f = CatTransForm(request.POST)
             if f.is_valid():

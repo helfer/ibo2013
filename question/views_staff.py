@@ -498,7 +498,7 @@ def print_question_objects(questions,lang_id=1,exam_id=3):
             target_vid = 0
             vnode = q.question.versionnode_set.filter(language=1,committed=True).order_by('-version')[0]
         xmlq = qml.QMLquestion(vnode.text.encode("utf-8"))
-        xmlq.inline_image()
+        #xmlq.inline_image()
         xmlq.xml.attrib["info"] = "{0}_{1}_L{2}".format(vnode.version,target_vid,lang_id)
         xmlq.xml.attrib['position'] = str(q.position)
         comment = et.Element("comment")

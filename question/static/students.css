@@ -1,7 +1,7 @@
 /* LAYOUT + GENERAL ATTRIBUTES ================================ */
 body {
 	width: 1280px;
-	height: 751px;
+	height: 691px;
 }
 
 #header,
@@ -16,7 +16,7 @@ body {
 }
 
 #main {
-	height: 632px; /* 751 - 2*60 + 1 = body height - #header height - #footer height */
+	height: 572px; /* 691 - 2*60 + 1 = body height - #header height - #footer height */
 }
 
 #question,
@@ -24,10 +24,7 @@ body {
 #overview {
 	float: left;
 	padding: 1.7em;
-	height: 598px;  /* 632 - 2*17 = #main height - #question padding */
-}
-#answers {
-	height: 537px;
+	height: 538px;  /* 572 - 2*17 = #main height - #question padding */
 }
 
 #question {	width: 690px; }
@@ -40,15 +37,12 @@ body {
 	height: 0;
 }
 #main.hide {
-	height: 750px; /* body height - 1 */
+	height: 690px; /* body height - 1 */
 }
 #main.hide #question,
 #main.hide #answers,
 #main.hide #overview {
-	height: 716px; /* 750 - 2*17 = body height - 2*#question padding */
-}
-#main.hide #answers {
-	height: 656px;
+	height: 656px; /* 690 - 2*17 = body height - 2*#question padding */
 }
 
 

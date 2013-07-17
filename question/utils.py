@@ -69,12 +69,12 @@ def nl2br(string):
 """
 should pipe to php script to get pdf of exam
 """
-def xml2pdf(exml,filename='exam1.pdf'):
+def xml2pdf(exml,filename='exam1.pdf',images=False):
     php_file = '/var/www/django/ibo2013/xml2pdf/PDFgenIBO2013_15Juli.php'
     phpinput = cStringIO.StringIO(exml)
     #print exml[:2000]
     os.chdir('/var/www/django/ibo2013/xml2pdf/')
-    p1 = subprocess.Popen(["php", php_file,filename], stdin = subprocess.PIPE,stdout=subprocess.PIPE)
+    p1 = subprocess.Popen(["php", php_file,filename,images], stdin = subprocess.PIPE,stdout=subprocess.PIPE)
     output = p1.communicate(phpinput.getvalue())[0]
     os.chdir('..')
     print output

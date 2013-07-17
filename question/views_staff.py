@@ -451,7 +451,7 @@ def print_exam(request,exam_id,lang_id=1):
     exam_xml = print_question_objects(questions,lang_id,exam_id)
 
     filename = "{0}_{1}_{2}.pdf".format(exam.name,language.name,request.user.id)
-    utils.xml2pdf(exam_xml,filename)
+    utils.xml2pdf(exam_xml,filename,images=True)
     path = 'xml2pdf/output/{0}'.format(filename)
     wrapper = FileWrapper(file(path))
     response = DeleteFileAfterResponse(wrapper,content_type='application/pdf',filename=path)
@@ -464,7 +464,9 @@ def print_questions(request,qlist,lang_id=1,exam_id=3):
 
     if len(qlist) > 100:
         return HttpResponse("Please download at most 100 questions at once. Sorry for the inconvenience, we hope to be able to remove this limitation at a later stage.",content_type="text/plain")
-
+    show_images = False
+    if len(qlist) == 1:
+        show_images = True
     try:
         exam = Exam.objects.get(id=int(exam_id))
         language = Language.objects.get(id=int(lang_id))
@@ -475,7 +477,7 @@ def print_questions(request,qlist,lang_id=1,exam_id=3):
     exam_xml = print_question_objects(questions,lang_id,exam_id)
 
     filename = "{0}_{1}_{2}.pdf".format(exam.name,language.name,request.user.id)
-    utils.xml2pdf(exam_xml,filename)
+    utils.xml2pdf(exam_xml,filename,show_images)
     path = 'xml2pdf/output/{0}'.format(filename)
     wrapper = FileWrapper(file(path))
     response = DeleteFileAfterResponse(wrapper,content_type='application/pdf',filename=path)

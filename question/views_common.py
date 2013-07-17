@@ -22,16 +22,17 @@ def permission_check(f):
     def secure_f(*args,**kwargs):
         request = args[0]
         lang_id = kwargs['lang_id']
+        language = Language.objects.get(id=lang_id)
         permissions = ['read']
+        if not language.finalized:
+            if request.user.is_superuser:
+                permissions = ['read','write','admin']
+            else:
 
-        if request.user.is_superuser:
-            permissions = ['read','write','admin']
-        else:
-
-            if  Language.objects.get(id=lang_id).editors.filter(id=request.user.id).exists():
-                permissions.append('write')
-            if  Language.objects.get(id=lang_id).coordinators.filter(id=request.user.id).exists():
-                permissions.append('admin')
+                if  language.editors.filter(id=request.user.id).exists():
+                    permissions.append('write')
+                if  language.coordinators.filter(id=request.user.id).exists():
+                    permissions.append('admin')
 
 
         res = f(*args,permissions=permissions,**kwargs)

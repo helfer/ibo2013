@@ -19,6 +19,7 @@ class Language(models.Model):
     editors = models.ManyToManyField(User,related_name='editor_set')
     official = models.BooleanField(default=False)
     hidden = models.BooleanField(default=False)
+    finalized = models.BooleanField(default=False) #TODO this should be per exam, not globally
 
     def __unicode__(self):
         return u'%s' % (self.name)
@@ -153,7 +154,7 @@ class Exam(models.Model):
         return objs
 
     #strictly speaking this should be in views.py, but I find it more convenient to access here
-    def load_question_status(self,lang_id):
+    def load_question_status(self,lang_id,simple=False):
         
         if self.question_status is not None:
             return
@@ -201,6 +202,16 @@ class Exam(models.Model):
         pv = list(primary_versions)
         tv = list(target_versions)
         assert len(pv) == len(tv) #if not, you screwed up the queries
+
+        done_yesno = []
+        for i in range(len(pv)):
+            done_yesno.append(tv[i].checkout == 1 and tv[i].origin_id == pv[i].vid)
+
+        #print done_yesno
+        #print all(done_yesno)
+        #print any(done_yesno)
+        if simple:
+            return done_yesno
 
         #import at file start fails due to some cyclic dependencies
         #from ibo2013.question import qml
@@ -283,6 +294,8 @@ class Delegation(models.Model):
     name = models.CharField(unique=True,max_length=100)
     group = models.ForeignKey(Group)
     members = models.ManyToManyField(User)
+    exam_languages = models.ManyToManyField(Language)
+    finalized = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name

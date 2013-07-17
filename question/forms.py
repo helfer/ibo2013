@@ -227,3 +227,8 @@ class SelectStudentForm(forms.Form):
             choices=choices,
             widget = forms.Select(attrs={'onchange':'window.location = this.value;'}),
             )
+
+class DelegationExamLanguagesForm(forms.ModelForm):
+     class Meta:
+        model = Delegation
+        fields = ['exam_languages']

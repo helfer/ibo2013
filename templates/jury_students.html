@@ -29,6 +29,13 @@
 
 <p><input type="button" value="Save"></p>
 -->
+<form action="" method="post">
+    {{form.exam_languages}}
+    <input type="submit" name="submit" value="submit" />
+</form>
+{% if final %}
+    @Roel: this only shows if they have made their language choice final.
+{% endif %}
 <br style="clear: both;">
 
 <br><br>

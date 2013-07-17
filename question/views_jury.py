@@ -62,7 +62,24 @@ def profile(request,lang_id=1,permissions=None):
     else:
         exams = Exam.objects.filter(staff_only=False)
     
+    notsofast = False
     if request.method == "POST":
+        if "finalize" in request.POST:
+            if not "admin" in permissions or "write" in permissions:
+                raise PermissionDenied()
+            finalizable = True
+            for exam in exams:
+                finalizable = finalizable and all(exam.load_question_status(lang_id,simple=True))
+            if finalizable:    
+                language.finalized = True
+                language.save()
+                return redirect(request.path)
+            else:
+                print "not finalizable"
+                notsofast = True       
+
+
+
         if "editlanguage" in request.POST:
             if not 'admin' in permissions:
                 raise PermissionDenied()
@@ -190,9 +207,19 @@ def students(request,lang_id=1,permissions=None):
     
     for e in exams:
         e.load_question_status(lang_id)
-       
+      
+
+    if request.user.is_staff or request.user.is_superuser:
+        delegation = Delegation.objects.get(name="Exam_Staff")
+    else:
+        delegation = request.user.delegation_set.all()[0]
+    form = DelegationExamLanguagesForm(instance=delegation)
+    final = delegation.finalized 
+
     return render_with_context(request,'jury_students.html',
         {'exams':exams,
+        'final':final,
+        'form':form,
         'lang_id':lang_id,
         'perms':permissions
         })

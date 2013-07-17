@@ -33,7 +33,8 @@ def ibotag2html(string):
     return rt
 
 
-
+#should loop in reverse order of ibotag2html
+#XXX both functions obsolete
 def html2ibotag(string):
     rt = string
     for tag in IBO_TAGS:

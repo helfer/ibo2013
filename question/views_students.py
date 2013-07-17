@@ -89,15 +89,21 @@ def examview(request,language_id,exam_id):
     answers = ExamAnswers.objects.filter(user=request.user)
     flags = ExamFlags.objects.filter(user=request.user)
     questions = ExamQuestion.objects.filter(exam=exam).order_by('category','position')
-    categories = CategoryTranslation.objects.filter(language=1).order_by('category')
+    categories = CategoryTranslation.objects.filter(language=language_id).order_by('category')
     categories = dictify(categories,'category_id')
+    cats_en = CategoryTranslation.objects.filter(language=1).order_by('category')
+    cats_en = dictify(cats_en,'category_id')
+    
 
     cid = -1
     objs = []
     for q in questions:
         if q.category_id != cid:
             cid = q.category_id
-            objs.append({'cat':categories[cid],'questions':[]})
+            try:
+                objs.append({'cat':categories[cid],'questions':[]})
+            except:
+                objs.append({'cat':cats_en[cid],'questions':[]})
 
         flag = False
         for f in flags:

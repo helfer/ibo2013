@@ -62,6 +62,9 @@ def question(request,language_id,exam_id,question_position):
     langs = Language.objects.filter(id__in=[1,2])
     picker = PickLanguageForm(request.user,language_id,request,languages = langs,initial={'language':request.path})        
 
+    if not request.user.username.startswith("test"):
+        picker = PickLanguageForm(request.user,language_id,request,initial={'language':request.path})        
+
     return render_to_response('students_questionview.html',
         {'available':True,
         'exam_id':exam_id,
@@ -136,6 +139,8 @@ def examview(request,language_id,exam_id):
     langs = Language.objects.filter(id__in=[1,2])
     picker = PickLanguageForm(request.user,language_id,request,languages = langs,initial={'language':request.path})        
     
+    if not request.user.username.startswith("test"):
+        picker = PickLanguageForm(request.user,language_id,request,initial={'language':request.path})        
 
     return render_to_response('students_examview.html',{
         'lang_id':language_id,

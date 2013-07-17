@@ -408,11 +408,11 @@ body.zoom #overview a.done.flag {
 @media only screen and (orientation: portrait) {
 body {
 	width: 800px;
-	height: 1231px;
+	height: 1171px;
 }
 
 #main {
-	height: 1112px; /* body height - 120 + 1 */
+	height: 1052px; /* body height - 120 + 1 */
 }
 
 #question {
@@ -429,11 +429,11 @@ body {
 }
 
 #answers table {
-	height: 404px;
+	height: 400px;
 }
 
 #overview {
-	height: 1082px;
+	height: 1052px;
 	width: 766px;
 }
 
@@ -443,11 +443,11 @@ body {
 
 /* hidden stuff */
 #main.hide {
-	height: 1235px;
+	height: 1175px;
 }
 
 #main.hide #overview {
-	height: 1201px;
+	height: 1141px;
 }
 
 #main.hide #question {

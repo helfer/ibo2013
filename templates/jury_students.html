@@ -29,15 +29,19 @@
 
 <p><input type="button" value="Save"></p>
 -->
+<!--<p>Hold down ctrl and click to select multiple languages</p>
 <form action="" method="post">
     {{form.exam_languages}}
     <input type="submit" name="submit" value="submit" />
-</form>
 {% if final %}
-    @Roel: this only shows if they have made their language choice final.
+<p font-size="150%">All your work has been finalized and languages have been assigned to your students. That's it, you're done for today! But before you run out, make sure to check one last time that everything is displaying okay for the students.</p>
 {% endif %}
 <br style="clear: both;">
-
+<p font-size="150%">
+ Please choose the languages you want your students to be able to see. Regardless of your choice, they will have the official English and Russian versions available. Below you can see exactly what they will see in the exam. We will not double-check this, so it is your responsibility to check that every question is displaying as it is supposed to before you click finalize!!!
+</p>
+<input type="submit" name="finalize" value="Can I go now?" onclick="return confirm('Are you absolutely sure you want to finalize? If yes, click \'OK\', if not, click \'Cancel\'');" />
+</form>-->
 <br><br>
 <h1>Exam preview (Part 1)</h1>
 

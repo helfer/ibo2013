@@ -538,7 +538,7 @@ function exam_task ($task_xml, $question_info) {
 	$text = $task_xml->asXML();
 	$text = preg_replace(':.+?\>(.+)</.+:','$1',$text); // strip preciding and trailing xml tags from html content
 	$html = tex_to_html($text);
-	$html = "Indicate for each of the following statements if it is <b>true</b> or false.";
+	//$html = "Indicate for each of the following statements if it is <b>true</b> or false.";
 	
 	if ($TRANSLALTION == 1) {
 		translation_box($left_panel_width, $text, $html, $question_info, $question_fragment_id);

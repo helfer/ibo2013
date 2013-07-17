@@ -217,7 +217,7 @@ class SelectStudentForm(forms.Form):
     
     def __init__(self,request,*args,**kwargs):
         super(SelectStudentForm,self).__init__(*args,**kwargs)
-        students = Student.objects.select_related().all()
+        students = Student.objects.select_related().all().order_by('user__first_name','user__last_name')
         choices = []
         for s in students:
             pth = request.path.split('/')

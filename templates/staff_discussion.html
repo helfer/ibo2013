@@ -56,7 +56,7 @@ $(window).load(function(){
 <input type="checkbox" id="do_sync" checked/><label for="do_sync">sync</label>
 <a href="../{{ question_position|add:'1'}}">next question -&gt;</a>
 <br style="clear: both;">
-<h1>Question: <strong>{{ question.name }}</strong> version {{vnode.version}}</h1>
+<h1>Question {{question.position}}: <strong>{{ question.name }}</strong> version {{vnode.version}}</h1>
 
 <div class="coll">
 {% for q in struct %}

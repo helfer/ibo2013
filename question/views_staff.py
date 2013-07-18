@@ -686,17 +686,17 @@ def score_practical(request,student_id):
     print maxlen
 
     #return HttpResponse('ok',content_type='text/plain')
+    missing = list_missing_corrections(45)
 
     return render_to_response('staff_score.html',{
         'oops':oops,
         'form':select,
-        'table':table
+        'table':table,
+        'missing':missing
     })
 
+""" list missing corrections """
+def list_missing_corrections(num):
+    return Student.objects.raw("SELECT * FROM (SELECT s.id, COUNT(s.id) AS count, s.user_id ,u.first_name,u.last_name FROM question_student s JOIN auth_user u ON u.id = s.user_id LEFT JOIN question_practicalanswer a ON s.id = a.student_id GROUP BY s.id ORDER by count ASC) t WHERE count < {0}".format(int(num)))
 
-
-
-
-
-
-
+    

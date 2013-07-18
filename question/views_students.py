@@ -95,6 +95,8 @@ def question(request,language_id,exam_id,question_position):
 @login_required
 #@permission_required('question.is_jury')
 def examview(request,language_id,exam_id):
+    if exam_id==2:
+        exam_id=3
     if request.user.groups.all().count() == 0:
         exam_id = 2
  
@@ -176,7 +178,7 @@ def theory(request):
     try:
         lang = delegation.exam_languages.all().order_by('-id')[0]
     except:
-        lang = Languages.objects.get(id=1)
+        lang = Language.objects.get(id=1)
 
     return redirect("/students/{0}/overview/3/".format(lang.id))
 

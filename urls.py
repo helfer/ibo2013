@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     # Example:
     ('^$',redirect_to,{'url':'/jury/1/overview/'}),
     
-    #('^test/$',redirect_to,{'url':'/students/1/overview/2/'}),
+    ('^test/$',redirect_to,{'url':'/theory/'}),
     
     ('^theory/$',studentview.theory),
 

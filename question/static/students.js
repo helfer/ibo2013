@@ -155,7 +155,9 @@ function submit_flag(qid,uid) {
 }
 
 function save_answer(qid,ans,ename) {
-    ck = $('input[name="'+ename+'"]:checked').val();
+    ck = $('input[name="'+ename+'"]:checked')
+    console.log("ckid",ck.id);
+    ckv = ck.val();
  
     url = "/ajax/answer/";
     ajax_req = $.ajax({
@@ -164,16 +166,29 @@ function save_answer(qid,ans,ename) {
         data: {
             qid:qid,
             ans:ans,
-            choice:ck
+            choice:ckv,
+            ename:ename
         },
         success: function(data, textStatus, jqXHR) {
+            console.log("success");
             console.log(data);
+            //ck = document.getElementByName(data);
+            ck.prop("checked",true);
+            return true;
         },
         error: function(data, textStatus, jqXHR) {
-                    console.log(data.responseText)
-                    console.log("ERROR: " + $.parseJSON(data.responseText));
+                    console.log("fail");
+                    //console.log(data.responseText)
+                    response = $.parseJSON(data.responseText);
+                    console.log("ERROR: " + response); 
+                    if(response == "exam is over"){
+                        alert("Your answer was not recorded because the exam is over. Please follow the instructions of the exam staff.");
+                    }
+                    ck.checked = false;
+                    return false;
             }
     });
+    return false;
    //alert(qid + " " + ans + "  " + ename + " " + ck);
 }
 

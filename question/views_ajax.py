@@ -38,6 +38,10 @@ def ajax_flag(request):
         try:
             eq = ExamQuestion.objects.get(id=request.POST['qid'])
             flg,created = ExamFlags.objects.get_or_create(user=request.user,question=eq)
+            index = 0
+            data = request.POST['flag'] == "true"
+            elog = ExamAjaxLog(user=request.user,question=eq,index=index,data=data)
+            elog.save()
             if request.POST['flag'] == "true":
                 pass
             else:
@@ -56,6 +60,17 @@ def ajax_answer(request):
         print request.POST
         try:
             eq = ExamQuestion.objects.get(id=request.POST['qid'])
+            index = int(request.POST['ans']) - 2
+            data = request.POST['choice'] == "true"
+            elog = ExamAjaxLog(user=request.user,question=eq,index=index,data=data)
+            if not eq.exam.start:
+                elog.response = "exam not started"
+                elog.save()
+                return HttpResponseBadRequest(json.dumps("exam has not started"))
+            if eq.exam.stop:
+                elog.response = "exam over"
+                elog.save()
+                return HttpResponseBadRequest(json.dumps("exam is over"))
             print eq
             answer,created = ExamAnswers.objects.get_or_create(user=request.user,question=eq)
             print answer
@@ -68,9 +83,13 @@ def ajax_answer(request):
             elif int(request.POST['ans']) == 6:
                 answer.answer4 = request.POST['choice'] == "true"
             else:
+                elog.response = "unknown answer number"
+                elog.save()
                 return HttpResponseBadRequest("unknown question number")
             answer.save()
-            return HttpResponse(json.dumps("success, flag saved"),mimetype="application/json")
+            elog.response = "OK"
+            elog.save()
+            return HttpResponse(json.dumps(request.POST['ename']),mimetype="application/json")
         except Exception as e:
             print e
             return HttpResponseBadRequest("not ajax")

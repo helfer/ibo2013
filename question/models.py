@@ -91,6 +91,8 @@ class Exam(models.Model):
     languages = models.ManyToManyField(Language)
     questions = models.ManyToManyField(Question,blank=True,null=True,through='ExamQuestion')
     staff_only = models.BooleanField(default=False)
+    start = models.BooleanField(default=False)
+    stop = models.BooleanField(default=False)
 
 
     def __init__(self,*args,**kwargs):
@@ -385,6 +387,15 @@ class ExamAnswers(models.Model):
 class ExamFlags(models.Model):
     user = models.ForeignKey(User)
     question = models.ForeignKey(ExamQuestion)
+
+class ExamAjaxLog(models.Model):
+    user = models.ForeignKey(User)
+    question = models.ForeignKey(ExamQuestion)
+    index = models.IntegerField() # 0 for flag, 1 through 4 for answer
+    data = models.BooleanField()
+    response = models.CharField(max_length=64)
+    timestamp = models.DateTimeField(auto_now=True)
+
 
 class SimpleLog(models.Model):
     user = models.ForeignKey(User,null=True)

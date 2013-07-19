@@ -673,7 +673,7 @@ def practical(request,lang_id=1,permissions=None):
 
 
 @permission_check
-#@permission_required('question.is_jury')
+@permission_required('question.is_jury')
 def results(request,lang_id=1,permissions=None):
     if request.user.is_staff or request.user.is_superuser:
         delegation = Delegation.objects.get(name="Exam_Staff")
@@ -729,7 +729,7 @@ def results(request,lang_id=1,permissions=None):
 
 def filelist(request):
 
-    with open('/var/www/django/ibo2013/raw_names.txt') as f:
+    with open('/var/www/django/ibo2013/file_list.txt') as f:
         s = '<html><head></head><body>'
         amzn = 'https://s3-eu-west-1.amazonaws.com/ibo2013/'
         for line in f:

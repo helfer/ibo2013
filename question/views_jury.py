@@ -727,4 +727,15 @@ def results(request,lang_id=1,permissions=None):
         context['delegations'] = dlist
     return render_to_response('jury_results.html',context)        
 
+def filelist(request):
 
+    with open('/var/www/django/ibo2013/raw_names.txt') as f:
+        s = '<html><head></head><body>'
+        amzn = 'https://s3-eu-west-1.amazonaws.com/ibo2013/'
+        for line in f:
+            (a,b,c) = line.split('/')
+            lst = c.split('_')
+            name = "_".join(lst[:3]) + '.pdf'
+            s += '<a href="'+ amzn + line + '">' + name + '</a><br />'
+        s += '</body></html>'
+        return HttpResponse(s)

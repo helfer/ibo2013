@@ -1,0 +1,8 @@
+
+
+{% for s in slist %}
+{{s.s.user.first_name}}
+{%for a in s.score %}{{a}},{% endfor %}
+  {{s.sum}}
+<br />
+{% endfor %}

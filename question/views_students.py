@@ -95,8 +95,8 @@ def question(request,language_id,exam_id,question_position):
 @login_required
 #@permission_required('question.is_jury')
 def examview(request,language_id,exam_id):
-    if int(exam_id)!=4:
-        exam_id=4
+#    if int(exam_id)!=4:
+#        exam_id=4
     if request.user.groups.all().count() == 0:
         exam_id = 2
  

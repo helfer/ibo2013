@@ -339,6 +339,7 @@ class Student(models.Model):
     user = models.ForeignKey(User)
     examfile = models.ManyToManyField(PracticalExamFile,through='PracticalAssignment')
     delegation = models.ForeignKey(Delegation)
+    individual_id = models.CharField(max_length=10)
 
     def __unicode__(self):
         return self.user.first_name + ' ' + self.user.last_name
@@ -383,6 +384,9 @@ class ExamAnswers(models.Model):
     answer4 = models.NullBooleanField() 
     timestamp = models.DateTimeField(auto_now=True)
 
+    def __unicode__(self):
+        #return " exam answer " 
+        return "{0}-{1} {2}.{3}.{4}.{5}".format(self.user,self.question,str(self.answer1),str(self.answer2),str(self.answer3),str(self.answer4))
 
 class ExamFlags(models.Model):
     user = models.ForeignKey(User)
@@ -420,4 +424,9 @@ class PracticalAnswer(models.Model):
     student = models.ForeignKey(Student)
     answer = models.CharField(max_length=100)
 
+class FilenameConversion(models.Model):
+    prakti = models.CharField(max_length=10)
+    individual_id = models.CharField(max_length=10)
+    ctype = models.CharField(max_length=20)
+    filename = models.CharField(max_length=200)
 

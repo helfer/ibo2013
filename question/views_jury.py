@@ -670,3 +670,61 @@ def practical(request,lang_id=1,permissions=None):
 
     def find_real_origin():
         pass 
+
+
+@permission_check
+#@permission_required('question.is_jury')
+def results(request,lang_id=1,permissions=None):
+    if request.user.is_staff or request.user.is_superuser:
+        delegation = Delegation.objects.get(name="Exam_Staff")
+    else:
+        delegation = request.user.delegation_set.all()[0]
+    #if request.user.is_staff:
+        #dels = Delegation.objects.all()
+    #else:
+    dels = [delegation]
+    dlist = []
+    for de in dels:
+        students = de.student_set.all()
+        pe = PracticalExam.objects.all()
+
+        studlst = []
+        for s in students:
+            pelist = []
+            for p in pe:
+                pas = PracticalAnswer.objects.select_related().filter(student=s,question__practical=p).order_by('question__position')
+                scorelist = ['.']*18
+                sm = 0
+                for pa in pas:
+                    try:
+                        pa.answer = float(pa.answer)
+                        sm += pa.answer
+                    except:
+                        pa.answer = '.'
+                    scorelist[pa.question.position-1] = pa.answer
+                scorelist[17] = sm
+                amzn = 'https://s3-eu-west-1.amazonaws.com/ibo2013/'
+                try:
+                    correct_name = FilenameConversion.objects.get(individual_id=s.individual_id,prakti=p.filename,ctype='correct')
+                    f1 = "{3}{0}_{1}/correction/{2}".format(p.position,p.filename,correct_name.filename,amzn)
+                except:
+                    f1 = 'wau'
+                try:
+                    raw_name = FilenameConversion.objects.get(individual_id=s.individual_id,prakti=p.filename,ctype='rawscan')
+                    f2 = "{3}{0}_{1}/raws/{2}".format(p.position,p.filename,raw_name.filename,amzn)
+                except:
+                    f2 = 'wau' 
+                pelist.append({'pe':p,
+'f1':f1,
+'f2':f2,
+'scores':scorelist})
+            studlst.append({'s':s,'plist':pelist})
+
+        print studlst
+        dlist.append({'d':de,'studlst':studlst})
+        context = {}
+        context['loop_times'] = [i+1 for i in range(17)]
+        context['delegations'] = dlist
+    return render_to_response('jury_results.html',context)        
+
+

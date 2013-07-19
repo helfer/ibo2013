@@ -13,7 +13,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Example:
-    ('^$',redirect_to,{'url':'/jury/1/overview/'}),
+    ('^$',redirect_to,{'url':'/jury/1/results/'}),
     
     ('^test/$',redirect_to,{'url':'/theory/'}),
     
@@ -29,6 +29,8 @@ urlpatterns = patterns('',
     (r'^jury/(?P<lang_id>\d{1,9})/vote/$',juryview.vote),
     (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/question/(?P<question_position>\d{1,9})/translate/$',juryview.xmlquestionview),
     (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/question/(?P<question_position>\d{1,9})/translate/(?P<from_lang_id>\d{1,9})/$',juryview.xmlquestionview),
+    (r'^jury/(?P<lang_id>\d{1,9})/results/$',juryview.results),
+
     (r'^students/(\d{1,9})/question/(\d{1,9})/(\d{1,9})/$',studentview.question),
     (r'^students/(\d{1,9})/overview/(\d{1,9})/$',studentview.examview),
     
@@ -55,11 +57,12 @@ urlpatterns = patterns('',
     (r'^staff/practical/$',staffview.practical),
     (r'^staff/vote/$',staffview.vote),
     (r'^staff/score/(\d{1,9})/$',staffview.score_practical),
+    (r'^staff/results/(\d{1,9})/$',staffview.results_theory),
     
     
     (r'^accounts/login/$', 'django.contrib.auth.views.login',{'template_name': 'auth.html'}),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout',{'next_page': '/accounts/login'}),
-    ('^accounts/profile/$',redirect_to,{'url':'/theory/'}),
+    ('^accounts/profile/$',redirect_to,{'url':'/jury/1/results/'}),
     
     
 

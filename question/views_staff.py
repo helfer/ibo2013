@@ -699,4 +699,49 @@ def score_practical(request,student_id):
 def list_missing_corrections(num):
     return Student.objects.raw("SELECT * FROM (SELECT s.id, COUNT(s.id) AS count, s.user_id ,u.first_name,u.last_name FROM question_student s JOIN auth_user u ON u.id = s.user_id LEFT JOIN question_practicalanswer a ON s.id = a.student_id GROUP BY s.id ORDER by count ASC) t WHERE count < {0}".format(int(num)))
 
-    
+   
+@staff_member_required
+def results_theory(request,exam_id):
+
+    studis = Student.objects.select_related().all()[:50]
+    masterkey = Student.objects.get(user__id=303)
+    print masterkey.user.username
+    solution = ExamAnswers.objects.filter(user=303,question__exam=exam_id).order_by('question__position')
+    print len(solution)
+    slist = []
+    for s in studis:
+        zum = 0
+        qlist = []
+        i = 0
+        print "studi"
+        for q in solution:
+            #print i,q.question.position
+            assert q.question.position == i+1
+            try:
+                a = ExamAnswers.objects.get(user=s.user,question__exam=exam_id,question__position=i+1)
+            except:    
+                print i,'notfound'
+                qlist.append(0)
+                i += 1
+                continue
+             
+            count = 0
+            #print q, a
+            if q.answer1==a.answer1:
+                count +=1
+            if q.answer2==a.answer2:
+                count +=1
+            if q.answer3==a.answer3:
+                count +=1
+            if q.answer4==a.answer4:
+                count +=1
+            
+            qlist.append(count)
+            zum += count
+            i += 1
+        slist.append({'s':s,'score':qlist,'sum':zum})
+
+    return render_to_response('results.html',{'list':slist})
+
+
+ 

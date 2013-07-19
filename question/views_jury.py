@@ -727,6 +727,8 @@ def results(request,lang_id=1,permissions=None):
         context['delegations'] = dlist
     return render_to_response('jury_results.html',context)        
 
+
+""" The following are the most beautiful lines of codes ever written in the history of mankind"""
 def filelist(request):
 
     with open('/var/www/django/ibo2013/file_list.txt') as f:
@@ -734,6 +736,10 @@ def filelist(request):
         amzn = 'https://s3-eu-west-1.amazonaws.com/ibo2013/'
         for line in f:
             (a,b,c) = line.split('/')
+            if a == '4_syst' and b == 'corrections':
+                line = "/".join([a,c])
+            if a == '3_ethno' and b == 'correction':
+                line = "/".join([a,c])
             lst = c.split('_')
             name = "_".join(lst[:3]) + '.pdf'
             s += '<a href="'+ amzn + line + '">' + name + '</a><br />'

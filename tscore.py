@@ -39,3 +39,22 @@ sds = map(lambda x:x/count,sds)
 print 'sds after divide',sds
 sds = map(math.sqrt,sds)
 print 'sds final',sds
+
+zums = [0]*4
+var = [0]*4
+for f in fs:
+    for i in range(1,5):
+        score = float(getattr(f,"p{0}".format(i)))
+        if score == 0:
+            continue
+        tscore = (score-avgs[i-1])/sds[i-1]
+        zums[i-1] += tscore
+        setattr(f,"t{0}".format(i),tscore)
+        
+    #f.save()
+
+
+print "sums",zums
+print "done"
+
+        

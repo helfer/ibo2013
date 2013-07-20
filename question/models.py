@@ -441,7 +441,8 @@ class FinalScore(models.Model):
     p4 = models.DecimalField(max_digits=10,decimal_places=3, null=True)
     t1 = models.DecimalField(max_digits=10,decimal_places=3, null=True)
     t2 = models.DecimalField(max_digits=10,decimal_places=3, null=True)
-    tt = models.DecimalField(max_digits=10,decimal_places=3, null=True)
+    t3 = models.DecimalField(max_digits=10,decimal_places=3, null=True)
+    t4 = models.DecimalField(max_digits=10,decimal_places=3, null=True)
     
 
     def __unicode__(self):

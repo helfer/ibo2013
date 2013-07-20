@@ -726,6 +726,7 @@ def results(request,lang_id=1,permissions=None):
             studlst.append({'s':s,'plist':pelist})
             fs.save()
 
+
         #print studlst
         dlist.append({'d':de,'studlst':studlst})
         context = {}

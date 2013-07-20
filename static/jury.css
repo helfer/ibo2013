@@ -208,8 +208,8 @@ table tr:last-child td { border-bottom: 1px solid #999; }
 	text-decoration: none;
 }
 
-#main select {height: 500px; }
-
+/*#main select {height: 500px; }
+*/
 /* MAIN ELEMENTS ============================================== */
 #main {
 	padding: 1.5em 1.5em 5em 1.5em;

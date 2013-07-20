@@ -703,12 +703,13 @@ def list_missing_corrections(num):
 @staff_member_required
 def results_theory(request,exam_id):
 
-    studis = Student.objects.select_related().all()[:50]
+    studis = Student.objects.select_related().all()
     masterkey = Student.objects.get(user__id=303)
     print masterkey.user.username
     solution = ExamAnswers.objects.filter(user=303,question__exam=exam_id).order_by('question__position')
     print len(solution)
     slist = []
+    sums = []
     for s in studis:
         zum = 0
         qlist = []
@@ -740,6 +741,7 @@ def results_theory(request,exam_id):
             zum += count
             i += 1
         slist.append({'s':s,'score':qlist,'sum':zum})
+        sums.append(zum)
 
     return render_to_response('results.html',{'list':slist})
 

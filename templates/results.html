@@ -1,8 +1,7 @@
 
 
 {% for s in list %}
-{{s.s.user.first_name}}
-{%for a in s.score %}{{a}},{% endfor %}
-  {{s.sum}}
+{{s.s.delegation.name}},{{s.s.user.first_name}},{{s.s.user.last_name}},{{s.s.individual_id}};
+{%for a in s.score %}{{a}},{% endfor %}};{{s.sum}}
 <br />
 {% endfor %}

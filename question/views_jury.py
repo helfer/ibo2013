@@ -725,7 +725,9 @@ def results(request,lang_id=1,permissions=None):
         context = {}
         context['loop_times'] = [i+1 for i in range(17)]
         context['delegations'] = dlist
-    return render_to_response('jury_results.html',context)        
+        context['lang_id'] = lang_id
+        context['perms'] = permissions
+    return render_with_context(request,'jury_results.html',context)        
 
 
 """ The following are the most beautiful lines of codes ever written in the history of mankind"""

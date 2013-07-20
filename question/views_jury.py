@@ -679,10 +679,10 @@ def results(request,lang_id=1,permissions=None):
         delegation = Delegation.objects.get(name="Exam_Staff")
     else:
         delegation = request.user.delegation_set.all()[0]
-    #if request.user.is_staff:
-        #dels = Delegation.objects.all()
-    #else:
-    dels = [delegation]
+    if request.user.is_staff:
+        dels = Delegation.objects.all()
+    else:
+        dels = [delegation]
     dlist = []
     for de in dels:
         students = de.student_set.all()

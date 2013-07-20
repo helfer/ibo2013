@@ -690,6 +690,7 @@ def results(request,lang_id=1,permissions=None):
 
         studlst = []
         for s in students:
+            fs,created = FinalScore.objects.get_or_create(auth_user=s.user)
             pelist = []
             for p in pe:
                 pas = PracticalAnswer.objects.select_related().filter(student=s,question__practical=p).order_by('question__position')
@@ -703,6 +704,10 @@ def results(request,lang_id=1,permissions=None):
                         pa.answer = '.'
                     scorelist[pa.question.position-1] = pa.answer
                 scorelist[17] = sm
+                #update sum of scores.
+                #print s.id,p.id,sm
+                #print fs
+                setattr(fs,p.en_official,sm)
                 amzn = 'https://s3-eu-west-1.amazonaws.com/ibo2013/'
                 try:
                     correct_name = FilenameConversion.objects.get(individual_id=s.individual_id,prakti=p.filename,ctype='correct')
@@ -719,8 +724,9 @@ def results(request,lang_id=1,permissions=None):
 'f2':f2,
 'scores':scorelist})
             studlst.append({'s':s,'plist':pelist})
+            fs.save()
 
-        print studlst
+        #print studlst
         dlist.append({'d':de,'studlst':studlst})
         context = {}
         context['loop_times'] = [i+1 for i in range(17)]

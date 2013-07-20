@@ -424,9 +424,25 @@ class PracticalAnswer(models.Model):
     student = models.ForeignKey(Student)
     answer = models.CharField(max_length=100)
 
+
 class FilenameConversion(models.Model):
     prakti = models.CharField(max_length=10)
     individual_id = models.CharField(max_length=10)
     ctype = models.CharField(max_length=20)
     filename = models.CharField(max_length=200)
 
+
+class FinalScore(models.Model):
+    auth_user = models.ForeignKey(User,unique=True)
+    participant_id = models.IntegerField(null=True)
+    p1 = models.DecimalField(max_digits=10,decimal_places=3, null=True)
+    p2 = models.DecimalField(max_digits=10,decimal_places=3, null=True)
+    p3 = models.DecimalField(max_digits=10,decimal_places=3, null=True)
+    p4 = models.DecimalField(max_digits=10,decimal_places=3, null=True)
+    t1 = models.DecimalField(max_digits=10,decimal_places=3, null=True)
+    t2 = models.DecimalField(max_digits=10,decimal_places=3, null=True)
+    tt = models.DecimalField(max_digits=10,decimal_places=3, null=True)
+    
+
+    def __unicode__(self):
+        return "{0} {1} {2} {3} {4}".format(self.auth_user_id,self.p1,self.p2,self.p3,self.p4)

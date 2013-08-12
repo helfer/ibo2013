@@ -15,6 +15,7 @@ for f in fs:
     for i in range(1,5):
         score = getattr(f,"p{0}".format(i))
         if score == 0:
+            print "z",f.auth_user_id
             count -= 1
             zerocount += 1
             continue

@@ -449,6 +449,8 @@ def print_exam(request,exam_id,lang_id=1):
 
     questions = ExamQuestion.objects.filter(exam=exam).order_by("position")
     exam_xml = print_question_objects(questions,lang_id,exam_id)
+    return HttpResponse(exam_xml,content_type="text/plain")
+    #TODO: implement proper pdf printing
 
     filename = "{0}_{1}_{2}.pdf".format(exam.name,language.name,request.user.id)
     utils.xml2pdf(exam_xml,filename,images=True)
@@ -475,6 +477,8 @@ def print_questions(request,qlist,lang_id=1,exam_id=3):
 
     questions = ExamQuestion.objects.filter(id__in=[int(x) for x in qlist]).order_by("position")
     exam_xml = print_question_objects(questions,lang_id,exam_id)
+    return HttpResponse(exam_xml,content_type="text/plain")
+    #TODO: implement proper pdf printing
 
     filename = "{0}_{1}_{2}.pdf".format(exam.name,language.name,request.user.id)
     utils.xml2pdf(exam_xml,filename,show_images)
@@ -504,7 +508,9 @@ def print_question_objects(questions,lang_id=1,exam_id=3):
         xmlq.xml.attrib["info"] = "{0}_{1}_L{2}".format(vnode.version,target_vid,lang_id)
         xmlq.xml.attrib['position'] = str(q.position)
         comment = et.Element("comment")
-        comment.text = base64.b64encode(vnode.comment.encode("utf-8"))
+        comment.text = vnode.comment#.encode("utf-8")
+        #comment.text = base64.b64encode(vnode.comment.encode("utf-8"))
+        #TODO: re-encode in utils.xml2pdf
         xmlq.xml.append(comment)
         root.append(xmlq.xml)
 

@@ -447,3 +447,14 @@ class FinalScore(models.Model):
 
     def __unicode__(self):
         return "{0} {1} {2} {3} {4}".format(self.auth_user_id,self.p1,self.p2,self.p3,self.p4)
+
+
+class ExamSimilarity(models.Model):
+
+    user1 = models.ForeignKey(User,related_name='user1')
+    user2 = models.ForeignKey(User,related_name='user2')
+    exam = models.ForeignKey(Exam)
+    hamming = models.IntegerField(null=True)
+    corr = models.DecimalField(max_digits=10,decimal_places=3, null=True)
+    
+

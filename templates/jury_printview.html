@@ -77,7 +77,7 @@ img {
 </head>
 <body>
 
-<img src="/static/icons/IBO2013.png" style="float: right">
+<img src="/static/icons/IBO2013.png" style="float: right; width: 200px;">
 {% if exam_id == 3 %}
 <h1 style="margin-bottom: 2.5rem">IBO 2013 Theoretical Exam 1</h1>
 {% endif %}
@@ -85,7 +85,7 @@ img {
 <h1 style="margin-bottom: 2.5rem">IBO 2013 Theoretical Exam 2</h1>
 {% endif %}
 
-<p>Translation version: {{language.name}}, downloaded by: {{user}}</p>
+<p>Translation version: <b>{{language.name}}</b>, downloaded by: <b>{{user}}</b></p>
 
 {% for quest in qarray %}
 <div class="question">
@@ -141,7 +141,8 @@ img {
 {% endfor %}
 
 <div class="commentary">
-{{quest.vnode.comment}}{# This is probably the translated commentary. We want to original English one too. #}
+<b>Commentary</b><br>
+{{quest.vnode.comment}}{# This is the translated commentary. We want to original English one too. #}
 </div>
 
 </div>

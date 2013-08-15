@@ -4,122 +4,119 @@
 <meta charset="utf-8">
 <title>IBO Exam Display</title>
 <link href="/static/reset.css" rel="stylesheet" type="text/css">
-<link href="/static/jury.css" rel="stylesheet" type="text/css">
+	<style>
+html { font-size: 62.5%; }
+
+body {
+	background: #fff;
+	color: #000;
+	font-family: serif;
+	margin: 3rem;
+	width: 800px;
+}
+
+b {
+	font-weight: bold;
+}
+
+em {
+	font-style: italic;
+}
+
+p {
+	margin: 0.8rem 0;
+	text-align: justify;
+}
+
+ol {
+	list-style-type: upper-alpha;
+	margin-left: 3rem;
+}
+
+li {
+	margin: 1rem 0;
+}
+
+h1 {
+	font-size: 2.5rem;
+	font-weight: bold;
+	margin: 0.5rem 0 1.5rem 0;
+}
+
+.question {
+	border-top: 1px solid #000;
+	padding: 1rem 0;
+	font-size: 1.6rem;
+	line-height: 2rem;
+	margin-bottom: 2rem;
+}
+
+.commentary {
+	margin-top: 2rem;
+	font-size: 0.8em;
+	border: 1px solid #000;
+	padding: 1rem;
+}
+
+	</style>
 </head>
 <body>
 
-<p>Exam id: {{exam_id}} | Language id: {{lang_id}} | Language: {{language}}</p>
-<p>Downloaded by {{user}}</p>
-<p>Number of questions: {{num_questions}}</p>
+{% if exam_id == 3 %}
+<h1>IBO 2013 Theoretical Exam 1</h1>
+{% elif exam_id == 4 %}
+<h1>IBO 2013 Theoretical Exam 2</h1>
+{% endif %}
+<p>Translation version: {{language}}, Downloaded by: {{user}}</p>
+
+<p>Questions:
+{% for quest in qarray %}
+{% for q in quest.struct %}
+{{q.pos}}&nbsp;
+{% endfor %}
+{% endfor %}
+</p>
 
 {% for quest in qarray %}
-<table>
+<div class="question">
 {% for q in quest.struct %}
-  {% for el in q.data %} 
+  {% for el in q.data %}
+
     {% if el.tag == "text" %}
-    <tr> <!-- the question -->
-        <td>Question</td>
-        <td id="o-{{el.id}}">{{el.data}}</td>
-        <td>{% if not disabled %}<a onclick="CopyContent('o-{{el.id}}','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}
-        </td>
-        <td>
-        <div id="i-{{el.id}}">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
-        {%if not disabled %}
-            <textarea {{readonly}}  name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
-        {% else %}
-            {{el.form}}
-        {% endif %}
-        </td>
-    </tr>
+    <p>{{el.data}}</p>
     {% endif %}
 
     {% if el.tag == "task" %}
-    <tr> <!-- the task -->
-        <td>Task</td>
-        <td id="o-{{el.id}}">{{el.data}}</td>
-        <td>{% if not disabled %}<a onclick="CopyContent('o-{{el.id}}','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}
-        </td>
-        <td>
-        <div id="i-{{el.id}}">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
-        {%if not disabled %}
-            <textarea {{readonly}}  name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
-        {% else %}
-            {{el.form}}
-        {% endif %}
-        </td>
-    </tr>
+    <p><b>{{el.data}}</b></p>
     {% endif %}
 
     {% if el.tag == "answerlist" %}
+    <ol>
         {% for sub in el.data %}
             {% if sub.tag == "answersplit" %}
-                <tr> <!-- answer options -->
-                <td>Option</td>
-                <td id="o-{{sub.id}}">{{sub.data}}</td>
-                <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}</td>
-            	<td><input {{readonly}} type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"></td>
-                </tr>
+            {# Leave empty for now #}
             {% endif %}
             {% if sub.tag == "choice" %}
-                <tr> <!-- answers -->
-                <td>Answer</td>
-                <td id="o-{{sub.id}}">{{sub.data}}</td>
-                <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}</td>
-            <td>
-                {%if not disabled %}
-                    <textarea {{readonly}}  name="{{sub.id}}" id="{{sub.id}}" class="ckeditor">{{sub.form}}</textarea>
-                {% else %}
-                    {{sub.form}}
-                {% endif %}
-                </td>
-                        </tr>
+            <li>{{sub.data}}</li>
             {% endif %}
         {% endfor %}
+    </ol>
     {% endif %}
 
     {% if el.tag == "list" %}
+    <ul>
         {% for sub in el.data %}
-        <tr> <!-- possible list -->
-            <td>List</td>
-            <td id="o-{{sub.id}}">{{sub.data}}</td>
-            <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}</td>
-            <td>
-        {%if not disabled %}
-            <textarea {{readonly}}  name="{{sub.id}}" id="{{sub.id}}" class="ckeditor">{{sub.form}}</textarea>
-        {% else %}
-            {{sub.form}}
-        {% endif %}
-        </td>
-        </tr>
+        <li>{{sub.data}}</li>
         {% endfor %}
+    </ul>
     {% endif %}
 
     {% if el.tag == "figure" %}
-    <tr> <!-- possible image -->
-        <td>Image</td>
-        <td>
-        <img src="/staff/images/{{el.meta}}/{{question.id}}/1/{{versions.orig}}/" onclick="enlarge(this);">
-        </td>
-        <td></td>
-        <td>
-        <img src="/staff/images/{{el.meta}}/{{question.id}}/{{lang_id}}/{{versions.trans}}/" onclick="enlarge(this);">
-        </td>
-        </tr>
-        {% for sub in el.data %}
-            <tr>
-            <td></td>
-            <td id="o-{{sub.id}}">{{sub.data}}</td>
-            <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}
-            </td>
-            <td><input {{readonly}} type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"/></td>
-            </tr>
-        {% endfor %}
+    <p><img src="/staff/images/{{el.meta}}/{{quest.id}}/{{lang_id}}/{{versions.trans}}/"></p>
     {% endif %}
   {% endfor %}
 {% endfor %}
-</table>
-
-<hr>
+</div>
 
 {% endfor %}
 

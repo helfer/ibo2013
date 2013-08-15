@@ -1,0 +1,88 @@
+﻿{% extends "print_base.html" %}
+{% load ibotags %}
+
+{% block header %}
+{% endblock %}
+
+{% block main %}
+{% for qstruct in qarray %}
+    <div id="question">
+    Question {{qstruct.pos}} Category {{qstruct.eq.category.name}}<br/>
+
+    {% if not qstruct.available %}
+    <p>This question is not available in {{language.name}}. Maybe it has not been translated yet? In the meantime, you can look at this question in the official English and Russion versions by choosing the respective language in the dropdown in the top left corner of the screen.</p>
+    {% endif %}
+    {% for q in qstruct.struct %}
+    {% for el in q.data %}
+        {% if el.tag == "text" %}
+        <p>{{el.data}}</p>
+        {% endif %}
+        {% if el.tag == "list" %}
+            <ul>
+            {% for sub in el.data %}
+                <li>{{sub.data}}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% if el.tag == "figure" %}
+        <img src="/staff/images/{{el.meta}}/{{qstruct.question.id}}/{{language.id}}/{{qstruct.vnode.version}}/" onclick="enlarge(this);">{# TODO: The URL to the images will probably be a bit different! #}
+        {% endif %}
+    {% endfor %}
+    {% endfor %}
+    </div>
+
+    <div id="answers">
+    {% for q in qstruct.struct %}
+    {% for el in q.data %}
+        {% if el.tag == "task" %}
+        <p>{{el.data}}</p>
+        {% endif %}
+    {% endfor %}
+    {% endfor %}
+
+    <table>
+    <form action="" method="POST" autocomplete="off">
+    <tr>
+        <th></th>
+        {% for q in qstruct.struct %}
+        {% for el in q.data %}
+        {% if el.tag == "answerlist" %}
+        {% for sub in el.data %}
+        {% if sub.tag == "answersplit" %}
+        <th><p>{{sub.data}}</p></th>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+    </tr>
+
+    {% for q in qstruct.struct %}
+    {% for el in q.data %}
+    {% if el.tag == "answerlist" %}
+    {% for sub in el.data %}
+        {% if sub.tag == "choice" %}
+        <tr>
+        <td><p>{{sub.data}}</p></td>
+        <td>
+        <input autocomplete="off" type="radio" id="i{{sub.id}}t" name="n{{sub.id}}" value="true" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1 %}checked{%endif%}{%endif%}{%endfor%} onclick="return save_answer({{eq.id}},{{forloop.counter}},'n{{sub.id}}')" >
+            <label for="i{{sub.id}}t" class="true"><div></div></label>
+        </td>
+        <td>
+        <input autocomplete="off" type="radio" id="i{{sub.id}}f" name="n{{sub.id}}" value="false" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1|is_false %}checked{%endif%}{%endif%}{%endfor%} onclick="return save_answer({{eq.id}},{{forloop.counter}},'n{{sub.id}}')">
+            <label for="i{{sub.id}}f" class="false"><div></div></label>
+        </td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+
+    {# TODO: flagging #}
+    </form>
+    </table>
+    </div>
+{% endfor %}
+{% endblock %}
+

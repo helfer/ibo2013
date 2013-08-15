@@ -70,15 +70,9 @@ h1 {
 {% endif %}
 <p>Translation version: {{language}}, downloaded by: {{user}}</p>
 
-<p>Questions:
-{% for quest in qarray %}
-{{quest.pos}}&nbsp;
-{% endfor %}
-</p>
-
 {% for quest in qarray %}
 <div class="question">
-<h1>Question {{quest.pos}}</h1>
+<h1>{{quest.pos}}.</h1>
 {% for q in quest.struct %}
   {% for el in q.data %}
 
@@ -112,7 +106,7 @@ h1 {
     {% endif %}
 
     {% if el.tag == "figure" %}
-    <p><img src="/staff/images/{{el.meta}}/{{quest.eq.id}}/{{lang_id}}/{{vnode.version}}/"></p>
+    <p><img src="/staff/images/{{el.meta}}/{{quest.eq.id}}/{{lang_id}}/{{quest.vnode.version}}/"></p>
     {% endif %}
     
   {% endfor %}

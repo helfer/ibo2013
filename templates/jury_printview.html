@@ -68,11 +68,17 @@ h1 {
 {% if exam_id == 4 %}
 <h1>IBO 2013 Theoretical Exam 2</h1>
 {% endif %}
-<p>Translation version: {{language}}, downloaded by: {{user}}</p>
+<p>Translation version: {{language.name}}, downloaded by: {{user}}</p>
 
 {% for quest in qarray %}
 <div class="question">
 <h1>{{quest.pos}}.</h1>
+<h2>{{quest.eq.category.name}}</h2>
+
+{% if not quest.available %}
+<p>This question is not available in {{language.name}}. Choose a different version in the dropdown in the top left corner of the screen.</p>
+{% endif %}
+
 {% for q in quest.struct %}
   {% for el in q.data %}
 
@@ -91,7 +97,12 @@ h1 {
             {# Leave empty for now #}
             {% endif %}
             {% if sub.tag == "choice" %}
-            <li>{{sub.data}}</li>
+            <li>{{sub.data}}
+        <input type="radio" id="i{{sub.id}}t" name="n{{sub.id}}" value="true" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1 %}checked{%endif%}{%endif%}{%endfor%}>
+            <label for="i{{sub.id}}t" class="true"><div></div></label>
+        <input type="radio" id="i{{sub.id}}f" name="n{{sub.id}}" value="false" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1|is_false %}checked{%endif%}{%endif%}{%endfor%}>
+            <label for="i{{sub.id}}f" class="false"><div></div></label>
+            </li>
             {% endif %}
         {% endfor %}
     </ol>
@@ -106,19 +117,21 @@ h1 {
     {% endif %}
 
     {% if el.tag == "figure" %}
-    <p><img src="/staff/images/{{el.meta}}/{{quest.eq.id}}/{{lang_id}}/{{quest.vnode.version}}/"></p>
+    <p><img src="/staff/images/{{el.meta}}/{{quest.question.id}}/{{lang_id}}/{{quest.vnode.version}}/"></p>
     {% endif %}
     
   {% endfor %}
 {% endfor %}
 
 <div class="commentary">
-{{quest.answers}}
+{{quest.struct.vnode.comment}}{# This is probably the translated commentary. We want to original English one too. #}
 </div>
 
 </div>
 
 {% endfor %}
+
+{# TODO: flagging - I actually don't think that is important at all to show here, right now #}
 
 </body>
 </html>

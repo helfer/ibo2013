@@ -461,6 +461,76 @@ def print_exam(request,exam_id,lang_id=1):
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response
 
+def simpleprint(request,qlist,lang_id=1,exam_id=3):
+    try:
+        questions = ExamQuestion.objects.filter(id__in=[int(x) for x in qlist]).order_by("position")
+        #question_position = int(question_position)
+        exam_id = int(exam_id)
+        exam = Exam.objects.get(id=exam_id,staff_only=0)
+        language = Language.objects.get(id=lang_id)
+        num_questions = ExamQuestion.objects.filter(exam=exam_id).count()
+    except:
+        raise Http404()
+
+    qarray = []
+    for eq in questions:
+        question = eq.question
+        flag = ExamFlags.objects.filter(user=request.user,question=eq).count() > 0
+        
+        try:
+            a = ExamAnswers.objects.get(user=request.user,question=eq)
+            this_answer = [(3,a.answer1),(4,a.answer2),(5,a.answer3),(6,a.answer4)] 
+        except:
+            this_answer = [(3,None),(4,None),(5,None),(6,None)]
+        
+        try:
+            vnode = question.versionnode_set.filter(language=language.id).order_by('-version')[0]
+            xmlq = qml.QMLquestion(vnode.text)
+            struct = xmlq.get_texts_nested(prep=True)
+            
+            qarray.append(
+                {'struct':struct,
+                'available':True,
+                'vnode':vnode,
+                'pos':eq.position,
+                'question':question,
+                'eq':eq,
+                'answers':this_answer,
+                'flag':flag,
+                })
+
+        except: 
+
+            qarray.append(
+                {'available':False,
+                'pos':question_position,
+                'question':question,
+                'eq':eq,
+                'flag':flag,
+                'answers':this_answer,
+                })
+
+    langs = Language.objects.filter(id__in=[1,2])
+    picker = PickLanguageForm(request.user,lang_id,request,languages = langs,initial={'language':request.path})        
+
+    if not request.user.username.startswith("test"):
+        #delegation = request.user.delegation_set.all()[0]
+        #picker = PickLanguageForm(request.user,lang_id,request,languages=delegation.exam_languages.all(),initial={'language':request.path})        
+        picker = PickLanguageForm(request.user,lang_id,request,initial={'language':request.path})        
+    return render_to_response('jury_printview.html',
+        {
+        'exam_id':exam_id,
+        'lang_id':lang_id,
+        'language':language,
+        'user':request.user,
+        'qarray':qarray,
+        'num_questions':num_questions,
+        'lang_picker':picker
+    })
+
+
+
+
 # don't call directly! use only through other view.
 def print_questions(request,qlist,lang_id=1,exam_id=3):
 

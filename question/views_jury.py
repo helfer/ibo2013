@@ -171,7 +171,8 @@ def examview(request,exam_id=1,lang_id=1,permissions=None):
     if request.method == "POST":
         x = dict(request.POST.iterlists())
         qlist = x['pdfselect']
-        return staffview.print_questions(request,qlist,lang_id,exam_id)
+        #return staffview.print_questions(request,qlist,lang_id,exam_id)
+        return staffview.simpleprint(request,qlist,lang_id,exam_id)
 
 
     if request.user.is_staff:

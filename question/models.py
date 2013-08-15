@@ -340,6 +340,8 @@ class Student(models.Model):
     examfile = models.ManyToManyField(PracticalExamFile,through='PracticalAssignment')
     delegation = models.ForeignKey(Delegation)
     individual_id = models.CharField(max_length=10)
+    testbit = models.BooleanField(default=False)
+    #testbit is set for test objects to make it easier to filter them out during deployment
 
     def __unicode__(self):
         return self.user.first_name + ' ' + self.user.last_name

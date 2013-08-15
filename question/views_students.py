@@ -91,7 +91,6 @@ def question(request,language_id,exam_id,question_position):
         'lang_picker':picker
     })
 
-
 @login_required
 #@permission_required('question.is_jury')
 def examview(request,language_id,exam_id):

@@ -112,10 +112,16 @@ h1 {
     {% endif %}
 
     {% if el.tag == "figure" %}
-    <p><img src="/staff/images/{{el.meta}}/{{quest.eq}}/{{lang_id}}/{{vnode.trans}}/"></p>
+    <p><img src="/staff/images/{{el.meta}}/{{quest.eq.id}}/{{lang_id}}/{{vnode.version}}/"></p>
     {% endif %}
+    
   {% endfor %}
 {% endfor %}
+
+<div class="commentary">
+{{quest.answers}}
+</div>
+
 </div>
 
 {% endfor %}

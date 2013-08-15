@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>IBO Exam Display</title>
+<link href="/static/reset.css" rel="stylesheet" type="text/css">
+<link href="/static/jury.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<p>Exam id: {{exam_id}} | Language id: {{lang_id}} | Language: {{language}}</p>
+<p>Downloaded by {{user}}</p>
+<p>Number of questions: {{num_questions}}</p>
+
+{% for quest in qarray %}
+<table>
+{% for q in quest.struct %}
+  {% for el in q.data %} 
+    {% if el.tag == "text" %}
+    <tr> <!-- the question -->
+        <td>Question</td>
+        <td id="o-{{el.id}}">{{el.data}}</td>
+        <td>{% if not disabled %}<a onclick="CopyContent('o-{{el.id}}','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}
+        </td>
+        <td>
+        <div id="i-{{el.id}}">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
+        {%if not disabled %}
+            <textarea {{readonly}}  name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
+        {% else %}
+            {{el.form}}
+        {% endif %}
+        </td>
+    </tr>
+    {% endif %}
+
+    {% if el.tag == "task" %}
+    <tr> <!-- the task -->
+        <td>Task</td>
+        <td id="o-{{el.id}}">{{el.data}}</td>
+        <td>{% if not disabled %}<a onclick="CopyContent('o-{{el.id}}','{{el.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{el.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}
+        </td>
+        <td>
+        <div id="i-{{el.id}}">{# if there is an image uploaded, show this e.g. <img src="/static/images/img.jpg"> #}</div>
+        {%if not disabled %}
+            <textarea {{readonly}}  name="{{el.id}}" id="{{el.id}}" class="ckeditor">{{el.form}}</textarea>
+        {% else %}
+            {{el.form}}
+        {% endif %}
+        </td>
+    </tr>
+    {% endif %}
+
+    {% if el.tag == "answerlist" %}
+        {% for sub in el.data %}
+            {% if sub.tag == "answersplit" %}
+                <tr> <!-- answer options -->
+                <td>Option</td>
+                <td id="o-{{sub.id}}">{{sub.data}}</td>
+                <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}</td>
+            	<td><input {{readonly}} type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"></td>
+                </tr>
+            {% endif %}
+            {% if sub.tag == "choice" %}
+                <tr> <!-- answers -->
+                <td>Answer</td>
+                <td id="o-{{sub.id}}">{{sub.data}}</td>
+                <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}</td>
+            <td>
+                {%if not disabled %}
+                    <textarea {{readonly}}  name="{{sub.id}}" id="{{sub.id}}" class="ckeditor">{{sub.form}}</textarea>
+                {% else %}
+                    {{sub.form}}
+                {% endif %}
+                </td>
+                        </tr>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% if el.tag == "list" %}
+        {% for sub in el.data %}
+        <tr> <!-- possible list -->
+            <td>List</td>
+            <td id="o-{{sub.id}}">{{sub.data}}</td>
+            <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}</td>
+            <td>
+        {%if not disabled %}
+            <textarea {{readonly}}  name="{{sub.id}}" id="{{sub.id}}" class="ckeditor">{{sub.form}}</textarea>
+        {% else %}
+            {{sub.form}}
+        {% endif %}
+        </td>
+        </tr>
+        {% endfor %}
+    {% endif %}
+
+    {% if el.tag == "figure" %}
+    <tr> <!-- possible image -->
+        <td>Image</td>
+        <td>
+        <img src="/staff/images/{{el.meta}}/{{question.id}}/1/{{versions.orig}}/" onclick="enlarge(this);">
+        </td>
+        <td></td>
+        <td>
+        <img src="/staff/images/{{el.meta}}/{{question.id}}/{{lang_id}}/{{versions.trans}}/" onclick="enlarge(this);">
+        </td>
+        </tr>
+        {% for sub in el.data %}
+            <tr>
+            <td></td>
+            <td id="o-{{sub.id}}">{{sub.data}}</td>
+            <td>{% if not disabled %}<a onclick="CopyContent('o-{{sub.id}}','{{sub.id}}')"><img src="/static/icons/copy.png" style="width: 30px;"></a><a onclick="ClearContent('{{sub.id}}')"><img src="/static/icons/empty.png" style="width: 30px;"></a>{% endif %}
+            </td>
+            <td><input {{readonly}} type="text" name="{{sub.id}}" id="{{sub.id}}" value="{{sub.form}}"/></td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+</table>
+
+<hr>
+
+{% endfor %}
+
+</body>
+</html>

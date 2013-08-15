@@ -68,18 +68,17 @@ h1 {
 {% if exam_id == 4 %}
 <h1>IBO 2013 Theoretical Exam 2</h1>
 {% endif %}
-<p>Translation version: {{language}}, Downloaded by: {{user}}</p>
+<p>Translation version: {{language}}, downloaded by: {{user}}</p>
 
 <p>Questions:
 {% for quest in qarray %}
-{% for q in quest.struct %}
-{{q.pos}}&nbsp;
-{% endfor %}
+{{quest.pos}}&nbsp;
 {% endfor %}
 </p>
 
 {% for quest in qarray %}
 <div class="question">
+<h1>Question {{quest.pos}}</h1>
 {% for q in quest.struct %}
   {% for el in q.data %}
 
@@ -113,7 +112,7 @@ h1 {
     {% endif %}
 
     {% if el.tag == "figure" %}
-    <p><img src="/staff/images/{{el.meta}}/{{quest.id}}/{{lang_id}}/{{versions.trans}}/"></p>
+    <p><img src="/staff/images/{{el.meta}}/{{quest.eq}}/{{lang_id}}/{{vnode.trans}}/"></p>
     {% endif %}
   {% endfor %}
 {% endfor %}

@@ -29,6 +29,11 @@ p {
 	text-align: justify;
 }
 
+ul {
+	list-style-type: disc;
+	margin-left: 2rem;
+}
+
 ol {
 	list-style-type: upper-alpha;
 	margin-left: 3rem;
@@ -39,9 +44,18 @@ li {
 }
 
 h1 {
-	font-size: 2.5rem;
+	font-size: 3rem;
 	font-weight: bold;
-	margin: 0.5rem 0 1.5rem 0;
+	margin: 0.5rem 0 1rem 0;
+}
+
+h2 {
+	font-size: 1.8rem;
+	font-weight: bold;
+}
+
+img {
+	width: 100%;
 }
 
 .question {
@@ -63,12 +77,14 @@ h1 {
 </head>
 <body>
 
+<img src="/static/icons/IBO2013.png" style="float: right">
 {% if exam_id == 3 %}
-<h1>IBO 2013 Theoretical Exam 1</h1>
+<h1 style="margin-bottom: 2.5rem">IBO 2013 Theoretical Exam 1</h1>
 {% endif %}
 {% if exam_id == 4 %}
-<h1>IBO 2013 Theoretical Exam 2</h1>
+<h1 style="margin-bottom: 2.5rem">IBO 2013 Theoretical Exam 2</h1>
 {% endif %}
+
 <p>Translation version: {{language.name}}, downloaded by: {{user}}</p>
 
 {% for quest in qarray %}
@@ -98,10 +114,10 @@ h1 {
             {# Leave empty for now #}
             {% endif %}
             {% if sub.tag == "choice" %}
-            <li>{{sub.data}}
-        <input type="radio" id="i{{sub.id}}t" name="n{{sub.id}}" value="true" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1 %}checked{%endif%}{%endif%}{%endfor%}>
+            <li>{{sub.data}}<br>
+<input type="radio" id="i{{sub.id}}t" name="n{{sub.id}}" value="true" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1 %}checked{%endif%}{%endif%}{%endfor%}>
             <label for="i{{sub.id}}t" class="true"><div></div></label>
-        <input type="radio" id="i{{sub.id}}f" name="n{{sub.id}}" value="false" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1|is_false %}checked{%endif%}{%endif%}{%endfor%}>
+<input type="radio" id="i{{sub.id}}f" name="n{{sub.id}}" value="false" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1|is_false %}checked{%endif%}{%endif%}{%endfor%}>
             <label for="i{{sub.id}}f" class="false"><div></div></label>
             </li>
             {% endif %}
@@ -125,7 +141,7 @@ h1 {
 {% endfor %}
 
 <div class="commentary">
-{{quest.struct.vnode.comment}}{# This is probably the translated commentary. We want to original English one too. #}
+{{quest.vnode.comment}}{# This is probably the translated commentary. We want to original English one too. #}
 </div>
 
 </div>

@@ -90,7 +90,7 @@ img {
 {% for quest in qarray %}
 <div class="question">
 <h1>{{quest.pos}}.</h1>
-<h2>{{quest.eq.category.name}}</h2>
+<h2>{{quest.trans_category}}</h2>
 
 {% if not quest.available %}
 <p>This question is not available in {{language.name}}. Choose a different version in the dropdown in the top left corner of the screen.</p>
@@ -140,16 +140,23 @@ img {
   {% endfor %}
 {% endfor %}
 
+<div class="commentary">{{quest.solution}}</div>
+
+<div class="commentary">{{quest.answers}}</div>
+
 <div class="commentary">
-<b>Commentary</b><br>
-{{quest.vnode.comment}}{# This is the translated commentary. We want to original English one too. #}
+<b>Original commentary</b><br>
+{{quest.official_commentary}}
+{% if lang_id != 1 %}
+<br><br>
+<b>Own commentary</b><br>
+{{quest.vnode.comment}}
+{% endif %}
 </div>
 
 </div>
 
 {% endfor %}
-
-{# TODO: flagging - I actually don't think that is important at all to show here, right now #}
 
 </body>
 </html>

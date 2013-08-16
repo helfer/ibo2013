@@ -478,9 +478,11 @@ def simpleprint(request,qlist,lang_id=1,exam_id=3):
         question = eq.question
         flag = ExamFlags.objects.filter(user=request.user,question=eq).count() > 0
         
-
-        sol = ExamAnswers.objects.get(user=303,question=eq)
-        this_solution = [(3,sol.answer1),(4,sol.answer2),(5,sol.answer3),(6,sol.answer4)] 
+        try:
+        	sol = ExamAnswers.objects.get(user=303,question=eq)
+        	this_solution = [(3,sol.answer1),(4,sol.answer2),(5,sol.answer3),(6,sol.answer4)] 
+        except:
+        	this_solution = [(3,None),(4,None),(5,None),(6,None)]
 
         trans_category = CategoryTranslation.objects.get(category=eq.category,language=lang_id)
 

@@ -12,6 +12,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from ibo2013.question import qml
 from django.db.models import Q
+from django.utils import safestring
 from xml.etree import ElementTree as et
 import base64
 import os
@@ -477,6 +478,12 @@ def simpleprint(request,qlist,lang_id=1,exam_id=3):
         question = eq.question
         flag = ExamFlags.objects.filter(user=request.user,question=eq).count() > 0
         
+
+        sol = ExamAnswers.objects.get(user=303,question=eq)
+        this_solution = [(3,sol.answer1),(4,sol.answer2),(5,sol.answer3),(6,sol.answer4)] 
+
+        trans_category = CategoryTranslation.objects.get(category=eq.category,language=lang_id)
+
         try:
             a = ExamAnswers.objects.get(user=request.user,question=eq)
             this_answer = [(3,a.answer1),(4,a.answer2),(5,a.answer3),(6,a.answer4)] 
@@ -484,6 +491,7 @@ def simpleprint(request,qlist,lang_id=1,exam_id=3):
             this_answer = [(3,None),(4,None),(5,None),(6,None)]
         
         try:
+            en_vnode = question.versionnode_set.filter(language=1).order_by('-version')[0]
             vnode = question.versionnode_set.filter(language=language.id).order_by('-version')[0]
             xmlq = qml.QMLquestion(vnode.text)
             struct = xmlq.get_texts_nested(prep=True)
@@ -496,6 +504,9 @@ def simpleprint(request,qlist,lang_id=1,exam_id=3):
                 'question':question,
                 'eq':eq,
                 'answers':this_answer,
+                'solution':this_solution,
+                'trans_category':trans_category,
+                'official_commentary':safestring.mark_safe(en_vnode.comment),
                 'flag':flag,
                 })
 
@@ -508,6 +519,9 @@ def simpleprint(request,qlist,lang_id=1,exam_id=3):
                 'eq':eq,
                 'flag':flag,
                 'answers':this_answer,
+                'solution':this_solution,
+                'trans_category':trans_category,
+                'official_commentary':safestring.mark_safe(en_vnode.comment),
                 })
 
     langs = Language.objects.filter(id__in=[1,2])

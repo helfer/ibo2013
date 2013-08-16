@@ -91,7 +91,7 @@ img {
 {% for quest in qarray %}
 <div class="question">
 <h1>{{quest.pos}}.</h1>
-<h2>{{quest.trans_category.name}}</h2>
+<h2>{{quest.trans_category.text}}</h2>
 
 {% if not quest.available %}
 <p>This question is not available in {{language.name}}. Choose a different version in the dropdown in the top left corner of the screen.</p>
@@ -115,11 +115,9 @@ img {
             {# Leave empty for now #}
             {% endif %}
             {% if sub.tag == "choice" %}
-            <li>{{sub.data}}<br>
-<input type="radio" id="i{{sub.id}}t" name="n{{sub.id}}" value="true" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1 %}checked{%endif%}{%endif%}{%endfor%}>
-            <label for="i{{sub.id}}t" class="true"><div></div></label>
-<input type="radio" id="i{{sub.id}}f" name="n{{sub.id}}" value="false" {%for a in answers %}{% if forloop.parentloop.counter == a.0 %}{%if a.1|is_false %}checked{%endif%}{%endif%}{%endfor%}>
-            <label for="i{{sub.id}}f" class="false"><div></div></label>
+            <li>{{sub.data}}
+            {%for a in quest.solution %}{% if forloop.parentloop.counter == a.0 %}{%if a.1 %}<b>True</b>{%endif%}{%endif%}{%endfor%}
+            {%for a in quest.solution %}{% if forloop.parentloop.counter == a.0 %}{%if a.1|is_false %}<b>False</b>{%endif%}{%endif%}{%endfor%}>
             </li>
             {% endif %}
         {% endfor %}
@@ -140,10 +138,6 @@ img {
     
   {% endfor %}
 {% endfor %}
-
-<div class="commentary">{{quest.solution}}</div>
-
-<div class="commentary">{{quest.answers}}</div>
 
 <div class="commentary">
 <b>Original commentary</b><br>

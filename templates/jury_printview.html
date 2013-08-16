@@ -64,6 +64,7 @@ img {
 	font-size: 1.6rem;
 	line-height: 2rem;
 	margin-bottom: 2rem;
+	page-break-after: always;
 }
 
 .commentary {
@@ -90,7 +91,7 @@ img {
 {% for quest in qarray %}
 <div class="question">
 <h1>{{quest.pos}}.</h1>
-<h2>{{quest.trans_category}}</h2>
+<h2>{{quest.trans_category.name}}</h2>
 
 {% if not quest.available %}
 <p>This question is not available in {{language.name}}. Choose a different version in the dropdown in the top left corner of the screen.</p>
@@ -147,12 +148,13 @@ img {
 <div class="commentary">
 <b>Original commentary</b><br>
 {{quest.official_commentary}}
+</div>
 {% if lang_id != 1 %}
-<br><br>
+<div class="commentary">
 <b>Own commentary</b><br>
 {{quest.vnode.comment}}
-{% endif %}
 </div>
+{% endif %}
 
 </div>
 

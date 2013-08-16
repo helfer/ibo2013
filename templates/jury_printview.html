@@ -75,15 +75,18 @@ img {
 }
 
 .answers {
-	counter-reset:item;
+	counter-reset: item;
+	margin-left: 0.5rem;
 }
 
 .answers li {
 	counter-increment: item;
 	display: inline;
+	margin-right: 2rem;
 }
 .answers li:before {
-	content: counter(item,upper-alpha) ", ";
+	content: counter(item,upper-alpha) ". ";
+	font-weight: bold;
 }
 
 	</style>
@@ -131,7 +134,7 @@ img {
             {% endif %}
         {% endfor %}
     </ol>
-    <ul style="answers">Answers: 
+    <ul class="answers">
     {%for a in quest.solution %}{% if forloop.parentloop.counter == a.0 %}{%if a.1 %}<li>True</li>{%endif%}{%endif%}{%endfor%}
     {%for a in quest.solution %}{% if forloop.parentloop.counter == a.0 %}{%if a.1|is_false %}<li>False</li>{%endif%}{%endif%}{%endfor%}
     </ul>

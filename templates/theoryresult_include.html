@@ -1,0 +1,11 @@
+    <table>
+    {% for e in ae %}
+        <tr><th>{{e.exam.name}}</th><th>Your answer</th><th>Solution</th><th>Score</th></tr>
+        {% for row in e.list %}
+            <tr>
+              <td><a href="/students/{{lang_id}}/question/{{e.exam.id}}/{{forloop.counter}}/">Question {{forloop.counter}}</a></td><td>{{row.ans}}</td><td>{{row.sol}}</td><td>{{row.score}}</td></tr>
+        {% endfor %}
+        <tr><td colspan="3">TOTAL</td><td>{{e.total}}</td></tr>
+    {% endfor %}
+    </table>
+

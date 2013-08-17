@@ -100,6 +100,7 @@ def resultview(request):
     #make a view similar to jury, use results_base
  
 #may throw exception if user_id is not valid
+@login_required
 def theoryresults_meta(request,user_id=None):
  
     exams = Exam.objects.filter(staff_only=False)

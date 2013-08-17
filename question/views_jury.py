@@ -58,13 +58,13 @@ def theoryresults(request,lang_id=1,permissions=None):
     students = Student.objects.filter(delegation=delegation)
     ae = None
     if request.method == "POST":
-        print request.POST
+        #print request.POST
         try:
             #that means anyone can see anyone's results if they want. I'm OK with that.
             ae,_ = studentview.theoryresults_meta(request,user_id=request.POST['uid'])
         except:
             ae = None
-    print ae
+    #print ae
     return render_with_context(request,'jury_theoryresults.html',
         {'exams':exams,
         'lang_id':lang_id,
@@ -81,7 +81,7 @@ def profile(request,lang_id=1,permissions=None):
         lang_id = int(lang_id)
         language = Language.objects.get(id=lang_id)
     except:
-        print "here?"
+        #print "here?"
         raise Http404()
 
     add_form = AddLanguageForm()

@@ -9,7 +9,7 @@ import datetime
 def make_student_json():
     students = Student.objects.filter(testbit=False).select_related()
     sid = linear_projection(students,k='user_id')
-    #print "studentlen ", len(list(students))
+    print "studentlen ", len(list(students))
     ret = []
     for s in students:
         details = {
@@ -38,17 +38,22 @@ def make_question_json():
     print json.dumps(ret)
 
 def run(start=0,end=1000000,examid=3):
-  pass
   students = Student.objects.filter(testbit=False).select_related()
   print "studentlen ", len(list(students))
   questions = ExamQuestion.objects.filter(exam=examid).order_by('question__examquestion__position')
   log = ExamAjaxLog.objects.filter(question__exam=examid).select_related().order_by('timestamp')[start:end]
   sid = linear_projection(students,k='user_id')
   qid = linear_projection(questions)
-
+  
+  sol = list(ExamAnswers.objects.filter(question__exam=examid,user=303).order_by('question__position'))
+  solutions = np.zeros((len(qid),4))
+  for i,s in enumerate(sol):
+    for j in range(1,5):
+      solutions[i,j-1] = getattr(s,'answer'+str(j))
   scores = np.zeros((len(sid),len(qid),4))#three dim, for each question 4 answers
   focus = {}
-
+  print solutions
+    
   events = []
 
   for item in log:
@@ -73,11 +78,10 @@ def run(start=0,end=1000000,examid=3):
       e['flag'] = item.data 
     elif item.index <= 4:
       #update score
-      #TODO: give the actual score, not the number of true!
       try:
         sc = scores[si,qi]
         e['prev_score'] = np.sum(sc)
-        if(item.data):
+        if(item.data == (solutions[qi,item.index-1] == 1)):
           sc[item.index-1] = 1
         else:
           sc[item.index-1] = 0

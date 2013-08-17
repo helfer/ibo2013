@@ -109,7 +109,7 @@ def theoryresults_meta(request,user_id=None):
     else:
         selected_user = User.objects.get(id=user_id)
 
-    print 'userid',user_id,'sel',selected_user.id
+    #print 'userid',user_id,'sel',selected_user.id
 
     for exam in exams:
         ex = {'exam':exam}
@@ -122,10 +122,7 @@ def theoryresults_meta(request,user_id=None):
             if i >= len(answers) or sol.question_id != answers[i].question_id:
                 ans = ExamAnswers(user=selected_user,question=sol.question)
             else:
-                try:
-                    ans = answers[i]
-                except:
-                    print len(answers),i
+                ans = answers[i]
                 i += 1
 
             sc = score(ans,sol)

@@ -13,11 +13,11 @@
 
 <div id="header">
 <img src="/static/icons/IBO2013.png">
-{{lang_picker.language}} | {% block lead %}Exam Translation{% endblock %}
+{%if lang_picker %}{{lang_picker.language}} | {% endif %}{% block lead %}Exam Translation{% endblock %}
 <div class="infobox">
 {% block infobox %}
 <strong>{{ user }}</strong> {% for g in user.groups.all %}{{g.name}} {% endfor %} | <a href="/accounts/logout">Log out</a><br>
-You can <strong>{% for p in perms %}{{p}} {% endfor %}</strong> this translation.
+{% if perms %} You can <strong>{% for p in perms %}{{p}} {% endfor %}</strong> this translation.{% endif %}
 {% endblock %}
 </div>
 </div>

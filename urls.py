@@ -22,8 +22,10 @@ urlpatterns = patterns('',
     (r'^jury/(?P<lang_id>\d{1,9})/$',juryview.profile),
     (r'^jury/(?P<lang_id>\d{1,9})/practical$',juryview.practical),
     (r'^jury/(?P<lang_id>\d{1,9})/students/$',juryview.students),
+    (r'^jury/(?P<lang_id>\d{1,9})/theory/$',juryview.theoryresults),
     (r'^jury/(?P<lang_id>\d{1,9})/overview/$',juryview.overview),
-    (r'^jury/(?P<lang_id>\d{1,9})/practical/$',juryview.practical),
+    #(r'^jury/(?P<lang_id>\d{1,9})/practical/$',juryview.practical),
+    (r'^jury/(?P<lang_id>\d{1,9})/practical/$',juryview.results),
     (r'^jury/files/(?P<fname>[^/]+)/$',views_common.secure_download),
     (r'^jury/(?P<lang_id>\d{1,9})/exam/(?P<exam_id>\d{1,9})/$',juryview.examview),
     (r'^jury/(?P<lang_id>\d{1,9})/vote/$',juryview.vote),
@@ -34,6 +36,9 @@ urlpatterns = patterns('',
     (r'^students/(\d{1,9})/question/(\d{1,9})/(\d{1,9})/$',studentview.question),
     (r'^students/(\d{1,9})/overview/(\d{1,9})/$',studentview.examview),
     
+    (r'^students/results/$',studentview.resultview),
+    (r'^students/results/theory/$',studentview.theoryresults),
+    (r'^students/results/practical/$',studentview.practicalresults),
 
     (r'^ajax/$',ajaxview.ajax_update),
     (r'^ajax/flag/$',ajaxview.ajax_flag),
@@ -63,7 +68,7 @@ urlpatterns = patterns('',
     
     (r'^accounts/login/$', 'django.contrib.auth.views.login',{'template_name': 'auth.html'}),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout',{'next_page': '/accounts/login'}),
-    ('^accounts/profile/$',redirect_to,{'url':'/jury/1/results/'}),
+    ('^accounts/profile/$',views_common.redirect_to_home),
     
     
 

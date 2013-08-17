@@ -182,7 +182,8 @@ function save_answer(qid,ans,ename) {
                     response = $.parseJSON(data.responseText);
                     console.log("ERROR: " + response); 
                     if(response == "exam is over"){
-                        alert("Your answer was not recorded because the exam is over. Please follow the instructions of the exam staff.");
+                        //alert("Your answer was not recorded because the exam is over. Please follow the instructions of the exam staff.");
+                        alert("the exam is over, you can no longer change your responses");
                     }
                     ck.checked = false;
                     return false;

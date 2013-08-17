@@ -11,10 +11,12 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from ibo2013.question.qml import *
 from ibo2013.question.views_common import *        
+from ibo2013.question import views_students as studentview     
 from ibo2013.question import utils   
 from ibo2013.question import views_staff as staffview
 
- 
+
+
 @permission_required('question.is_jury')
 @permission_check
 def overview(request,lang_id=1,permissions=None):
@@ -37,6 +39,38 @@ def overview(request,lang_id=1,permissions=None):
         {'exams':exams,
         'lang_id':lang_id,
         'perms':permissions
+        })
+
+@permission_required('question.is_jury')
+@permission_check
+def theoryresults(request,lang_id=1,permissions=None):
+    try:
+        lang_id = int(lang_id)
+    except:
+        raise Http404()
+
+    if request.user.is_staff:
+        exams = Exam.objects.all()
+    else:
+        exams = Exam.objects.filter(staff_only=False)
+
+    delegation = request.user.delegation_set.all()[0]
+    students = Student.objects.filter(delegation=delegation)
+    ae = None
+    if request.method == "POST":
+        print request.POST
+        try:
+            #that means anyone can see anyone's results if they want. I'm OK with that.
+            ae,_ = studentview.theoryresults_meta(request,user_id=request.POST['uid'])
+        except:
+            ae = None
+    print ae
+    return render_with_context(request,'jury_theoryresults.html',
+        {'exams':exams,
+        'lang_id':lang_id,
+        'perms':permissions,
+        'ae':ae,
+        'students':students,
         })
 
 @permission_required('question.is_jury')
@@ -672,21 +706,30 @@ def practical(request,lang_id=1,permissions=None):
     def find_real_origin():
         pass 
 
-
-@permission_check
-@permission_required('question.is_jury')
-def results(request,lang_id=1,permissions=None):
+@login_required
+#@permission_check
+#@permission_required('question.is_jury')
+def results_meta(request,lang_id=1,permissions=None):
     if request.user.is_staff or request.user.is_superuser:
         delegation = Delegation.objects.get(name="Exam_Staff")
     else:
         delegation = request.user.delegation_set.all()[0]
+    
+    if request.user.is_staff:
+        exams = Exam.objects.all()
+    else:
+        exams = Exam.objects.filter(staff_only=False)
+    
     if request.user.is_staff:
         dels = Delegation.objects.all()
     else:
         dels = [delegation]
     dlist = []
     for de in dels:
-        students = de.student_set.all()
+        if "Student" in request.user.groups.values_list("name",flat=True):
+            students = Student.objects.filter(user=request.user)
+        else:
+            students = de.student_set.all()
         pe = PracticalExam.objects.all()
 
         studlst = []
@@ -735,6 +778,16 @@ def results(request,lang_id=1,permissions=None):
         context['delegations'] = dlist
         context['lang_id'] = lang_id
         context['perms'] = permissions
+        context['exams'] = exams
+
+    return context
+
+
+@login_required
+#@permission_check
+#@permission_required('question.is_jury')
+def results(request,lang_id=1,permissions=None):
+    context = results_meta(request,lang_id,permissions)
     return render_with_context(request,'jury_results.html',context)        
 
 

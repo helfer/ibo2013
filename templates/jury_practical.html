@@ -2,10 +2,14 @@
 {% block title %}IBO Translation Interface{% endblock %}>
 {% block lead %}Practical exam{% endblock %}
 {% block menu %}
-    <ul>
-        <li><a href="/jury/{{language.id}}/practical/" class="select">Practical exam</a></li>
-        <li><a href="/jury/{{language.id}}/vote/">Vote</a></li>
-    </ul>
+<ul>
+        <li><a href="/jury/{{lang_id}}/">Profile</a></li>
+        {% for e in exams %}
+        <li><a href="/jury/{{lang_id}}/exam/{{e.id}}/">{{e.name}}</a></li>
+        {% endfor %}
+        <li><a href="/jury/{{lang_id}}/theory/">Results Theory</a></li>
+        <li><a href="/jury/{{lang_id}}/practical/" class="select">Results Practical</a></li>
+</ul>
 {% endblock %}
 
 {% block main %}

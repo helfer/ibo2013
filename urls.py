@@ -13,7 +13,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Example:
-    ('^$',redirect_to,{'url':'/jury/1/'}),
+    ('^$',redirect_to,{'url':'/accounts/login/'}),
     
     ('^test/$',redirect_to,{'url':'/theory/'}),
     

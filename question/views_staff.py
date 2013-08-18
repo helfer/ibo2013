@@ -484,7 +484,7 @@ def simpleprint(request,qlist,lang_id=1,exam_id=3):
         try:
         	trans_category = CategoryTranslation.objects.get(category=eq.category,language=lang_id)
         except:
-        	trans_category = ''
+        	trans_category = CategoryTranslation.objects.get(category=eq.category,language=1)
 
         try:
             a = ExamAnswers.objects.get(user=request.user,question=eq)

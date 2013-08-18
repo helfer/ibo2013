@@ -134,11 +134,7 @@ img {
 {% for quest in qarray %}
 <div class="question">
 <h1>{{quest.pos}}</h1>
-{% if quest.trans_category.text != "" %}
 <h2>{{quest.trans_category.text}}</h2>
-{% else %}
-<h2>{{quest.eq.category.name}}</h2>
-{% endif %}
 
 {% if not quest.available %}
 <p>This question is not available in {{language.name}}. Choose a different version in the dropdown in the top left corner of the screen.</p>

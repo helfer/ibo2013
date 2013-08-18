@@ -44,14 +44,22 @@ li {
 }
 
 h1 {
-	font-size: 3rem;
+	font-size: 2.4rem;
 	font-weight: bold;
-	margin: 0.5rem 0 1rem 0;
+	display: inline-block;
+	background: #000;
+	color: #fff;
+	padding: 0.8rem 1rem;
+	min-width: 20px;
 }
 
 h2 {
-	font-size: 1.8rem;
+	font-size: 1.2rem;
 	font-weight: bold;
+	display: inline-block;
+	margin-right: 1rem;
+	margin-top: 1rem;
+	float: right;
 }
 
 img {
@@ -105,7 +113,7 @@ img {
 
 {% for quest in qarray %}
 <div class="question">
-<h1>{{quest.pos}}.</h1>
+<h1>{{quest.pos}}</h1>
 <h2>{{quest.trans_category.text}}</h2>
 
 {% if not quest.available %}
@@ -135,14 +143,7 @@ img {
         {% endfor %}
     </ol>
     <ul class="answers">
-    {% for a in quest.solution %}
-    {% if a.1 %}<li>True</li>{% else %}<li>False</li>{% endif %}
-    {% endfor %}
-    <br>
-    {{quest.solution}}
-    <br>
-    {%for a in quest.solution %}{% if forloop.parentloop.counter == a.0 %}{%if a.1 %}<li>True</li>{%endif%}{%endif%}{%endfor%}
-    {%for a in quest.solution %}{% if forloop.parentloop.counter == a.0 %}{%if a.1|is_false %}<li>False</li>{%endif%}{%endif%}{%endfor%}
+    {% for a in quest.solution %}{% if a.1 %}<li>True</li>{% else %}<li>False</li>{% endif %}{% endfor %}
     </ul>
     {% endif %}
 

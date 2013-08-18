@@ -135,6 +135,9 @@ img {
         {% endfor %}
     </ol>
     <ul class="answers">
+    {% for a in quest.solution %}
+    {{a}}&nbsp;-&nbsp;
+    {% endfor %}
     {{quest.solution}}
     {%for a in quest.solution %}{% if forloop.parentloop.counter == a.0 %}{%if a.1 %}<li>True</li>{%endif%}{%endif%}{%endfor%}
     {%for a in quest.solution %}{% if forloop.parentloop.counter == a.0 %}{%if a.1|is_false %}<li>False</li>{%endif%}{%endif%}{%endfor%}

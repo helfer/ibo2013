@@ -1,7 +1,7 @@
 from django.core.servers.basehttp import FileWrapper
 from django.http import Http404,HttpResponse
 import os
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response,redirect
 from django.contrib.auth.decorators import permission_required,login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from ibo2013.question.models import *
@@ -15,6 +15,15 @@ def render_with_context(request,*args,**kwargs):
     kwargs['context_instance'] = RequestContext(request)
     args[1]["lang_picker"] = picker
     return render_to_response(*args,**kwargs)
+
+def redirect_to_home(request):
+    grps = request.user.groups.values_list('name',flat=True)
+    if 'Jury' in grps:
+        return redirect('/jury/1/')
+    elif 'Student' in grps:
+        return redirect('/students/results/')
+    else:
+        return redirect('/staff/exam/1/')
 
 
 #decorator that checks which permissions a user has.

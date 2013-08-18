@@ -37,6 +37,11 @@ def ajax_flag(request):
     if request.is_ajax():
         try:
             eq = ExamQuestion.objects.get(id=request.POST['qid'])
+            if eq.exam.stop:
+                elog.response = "exam over"
+                elog.save()
+                return HttpResponseBadRequest(json.dumps("exam is over"))
+
             flg,created = ExamFlags.objects.get_or_create(user=request.user,question=eq)
             index = 0
             data = request.POST['flag'] == "true"

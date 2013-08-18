@@ -4,6 +4,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from ibo2013.question.models import *
 from ibo2013.question.forms import *
 from ibo2013.question.views_common import render_with_context
+import ibo2013.question #circular import fix?
 from django.contrib.auth.decorators import permission_required
 from django.db.models import Count
 from django.db import connections
@@ -14,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from ibo2013.question import qml
 from django.db.models import Q
 from xml.etree import ElementTree as et
+import itertools
 
 @login_required
 #@permission_required('question.is_jury')
@@ -30,7 +32,7 @@ def question(request,language_id,exam_id,question_position):
         raise Http404()
     flag = ExamFlags.objects.filter(user=request.user,question=eq).count() > 0
     
-    if exam.start == False or exam.stop == True:
+    if exam.start == False: #or exam.stop == True:
         return redirect('/students/{0}/overview/{1}/'.format(language_id,exam_id))
 
     data = False
@@ -90,6 +92,76 @@ def question(request,language_id,exam_id,question_position):
         'num_questions':num_questions,
         'lang_picker':picker
     })
+
+
+@login_required
+def resultview(request):
+    return render_to_response('students_results_overview.html',{'user':request.user})
+    #make a view similar to jury, use results_base
+ 
+#may throw exception if user_id is not valid
+def theoryresults_meta(request,user_id=None):
+ 
+    exams = Exam.objects.filter(staff_only=False)
+    ae = []
+    if user_id is None:
+        selected_user = request.user
+    else:
+        selected_user = User.objects.get(id=user_id)
+
+    print 'userid',user_id,'sel',selected_user.id
+
+    for exam in exams:
+        ex = {'exam':exam}
+        answers = list(ExamAnswers.objects.filter(user=selected_user,question__exam=exam).order_by('question__position'))
+        solution = ExamAnswers.objects.filter(user=303,question__exam=exam).order_by('question__position') 
+        lines = [] 
+        i = 0
+        total = 0
+        for sol in solution:
+            if i >= len(answers) or sol.question_id != answers[i].question_id:
+                ans = ExamAnswers(user=selected_user,question=sol.question)
+            else:
+                try:
+                    ans = answers[i]
+                except:
+                    print len(answers),i
+                i += 1
+
+            sc = score(ans,sol)
+            lines.append(sc)
+            total += sc['score']
+        ex['list'] = lines
+        ex['total'] = total
+        ae.append(ex)
+
+    try:
+        lang_id =  selected_user.delegation_set.all()[0].exam_languages.all()[0].id
+    except:
+        lang_id = 1
+
+    return (ae,lang_id)
+
+@login_required
+def theoryresults(request,user_id=None):
+    ae,lang_id = theoryresults_meta(request,user_id)
+    return render_to_response('students_results_theory.html',{'ae':ae,'lang_id':lang_id})
+    #list TTFT, solution, score, link to questionview in iframe
+
+# score answers and return pattern TTFT
+def score(ans,sol):
+    grading = {0:0,1:0,2:0.2,3:0.6,4:1}
+    ret = {'ans':ans.prettystring(),'sol':sol.prettystring()}
+    correct = sum(itertools.imap(str.__eq__, ret['ans'], ret['sol']))
+    ret['score'] = grading[correct]
+    return ret
+
+@login_required
+def practicalresults(request):
+    context = ibo2013.question.views_jury.results_meta(request)
+    return render_to_response('students_results_practical.html',context)
+    #use same view as jury, but list only this student's results
+
 
 @login_required
 #@permission_required('question.is_jury')

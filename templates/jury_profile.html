@@ -3,13 +3,12 @@
 {% block lead %}User Profile{% endblock %}
 {% block menu %}
     <ul>
-        <li><a href="/jury/{{language.id}}/overview/" >Overview</a></li>
+        <li><a href="/jury/{{language.id}}/" class="select">Profile</a></li>
         {% for e in exams %}
         <li><a href="/jury/{{language.id}}/exam/{{e.id}}">{{e.name}}</a></li>
         {% endfor %}
-        <li><a href="/jury/{{language.id}}/" class="select">Profile</a></li>
-        <li><a href="/jury/{{language.id}}/students/">Students</a></li>
-        <li><a href="/jury/{{language.id}}/vote/">Vote</a></li>
+        <li><a href="/jury/{{language.id}}/theory/">Results Theory</a></li>
+        <li><a href="/jury/{{language.id}}/practical/">Results Practical</a></li>
     </ul>
 {% endblock %}
 

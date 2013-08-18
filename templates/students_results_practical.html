@@ -1,0 +1,33 @@
+{% extends "student_results_base.html" %}
+
+{% block menu %}
+<ul>
+    <li><a href="/students/results/">Overview</a></li>
+    <li><a href="/students/results/theory/">Theory</a></li>
+    <li><a href="/students/results/practical/" class="select">Practical</a></li>
+</ul>
+{% endblock %}
+{% block main %}
+
+    {% for d in delegations %}
+    <hr></hr>
+    <table border="1">
+    <tr><td colspan="22">{{d.d.name}}</td></tr>
+    <th>Student</th><th>Round</th><th>ans</th><th>raw</th>{% for i in loop_times %}<th>{{i}}</th>{% endfor %}<th><b>tot</b></th>
+    {% for s in d.studlst %}
+        <tr><td rowspan="4">{{s.s.user.first_name}} {{s.s.user.last_name}}</td>
+        {% for p in s.plist %}
+            {% if not forloop.first %}<tr>{% endif %}
+          <td>{{p.pe.name}}</td><td><a href="{{p.f1}}">cor</a></td><td><a href="{{p.f2}}">raw</a></td>
+            {% for ans in p.scores %}
+                <td>{{ans}}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+    </table>
+    {% endfor %}
+
+
+{% endblock %}

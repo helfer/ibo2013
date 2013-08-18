@@ -389,6 +389,20 @@ class ExamAnswers(models.Model):
     def __unicode__(self):
         #return " exam answer " 
         return "{0}-{1} {2}.{3}.{4}.{5}".format(self.user,self.question,str(self.answer1),str(self.answer2),str(self.answer3),str(self.answer4))
+    
+    def prettystring(self):
+        ret = ''
+        for i in range(1,5):
+            ret += self.tfstring(getattr(self,'answer'+str(i)))
+        return ret
+            
+    def tfstring(self,bul):
+        if bul is None:
+            return '_'
+        if bul:
+            return 'T'
+        else:
+            return 'F'
 
 class ExamFlags(models.Model):
     user = models.ForeignKey(User)

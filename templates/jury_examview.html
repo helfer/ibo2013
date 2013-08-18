@@ -3,13 +3,12 @@
 {% block lead %} | {{exam.name}}{% endblock %}
 {% block menu %}
 <ul>
-    <li><a href="/jury/{{lang_id}}/overview/">Overview</a></li>
-    {% for e in exams %}
-    <li><a href="/jury/{{lang_id}}/exam/{{e.id}}/" {% if e.id == exam.id %}class="select"{% endif %}>{{e.name}}</a></li>
-    {% endfor %}
-    <li><a href="/jury/{{lang_id}}/">Profile</a></li>
-    <li><a href="/jury/{{lang_id}}/students/">Students</a></li>
-    <li><a href="/jury/{{lang_id}}/vote/">Vote</a></li>
+        <li><a href="/jury/{{lang_id}}/">Profile</a></li>
+        {% for e in exams %}
+        <li><a href="/jury/{{lang_id}}/exam/{{e.id}}/" {% if e.id == exam.id %}class="select"{% endif %}>{{e.name}}</a></li>
+        {% endfor %}
+        <li><a href="/jury/{{lang_id}}/theory/">Results Theory</a></li>
+        <li><a href="/jury/{{lang_id}}/practical/">Results Practical</a></li>
 </ul>
 {% endblock %}
 

@@ -3,14 +3,12 @@
 {% block lead %}Students{% endblock %}
 {% block menu %}
 <ul>
-	<li><a href="/jury/{{lang_id}}/overview/" >Overview</a></li>
-	{% for e in exams %}
-	<li><a href="/jury/{{lang_id}}/exam/{{e.id}}">{{e.name}}</a></li>
-	{% endfor %}
-	<li><a href="/jury/{{lang_id}}/">Profile</a></li>
-	<!--<li><a href="/jury/{{lang_id}}/students/" class="select">Students</a></li>
-	<li><a href="/jury/{{lang_id}}/vote/">Vote</a></li>-->
-    <li><a href="/jury/filelist/">exam file list</a></li>
+        <li><a href="/jury/{{lang_id}}/">Profile</a></li>
+        {% for e in exams %}
+        <li><a href="/jury/{{lang_id}}/exam/{{e.id}}">{{e.name}}</a></li>
+        {% endfor %}
+        <li><a href="/jury/{{lang_id}}/theory/">Results Theory</a></li>
+        <li><a href="/jury/{{lang_id}}/practical/" class="select">Results Practical</a></li>
 </ul>
 {% endblock %}
 

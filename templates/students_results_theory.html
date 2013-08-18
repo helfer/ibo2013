@@ -1,0 +1,13 @@
+{% extends "student_results_base.html" %}
+
+{% block menu %}
+<ul>
+    <li><a href="/students/results/">Overview</a></li>
+    <li><a href="/students/results/theory/" class="select">Theory</a></li>
+    <li><a href="/students/results/practical/">Practical</a></li>
+</ul>
+{% endblock %}
+
+{% block main %}
+    {% include "theoryresult_include.html" %}
+{% endblock %}

@@ -752,21 +752,25 @@ def results_meta(request,lang_id=1,permissions=None):
                 #print s.id,p.id,sm
                 #print fs
                 setattr(fs,p.en_official,sm)
-                amzn = 'https://s3-eu-west-1.amazonaws.com/ibo2013/'
-                try:
-                    correct_name = FilenameConversion.objects.get(individual_id=s.individual_id,prakti=p.filename,ctype='correct')
-                    f1 = "{3}{0}_{1}/correction/{2}".format(p.position,p.filename,correct_name.filename,amzn)
-                except:
-                    f1 = 'wau'
-                try:
-                    raw_name = FilenameConversion.objects.get(individual_id=s.individual_id,prakti=p.filename,ctype='rawscan')
-                    f2 = "{3}{0}_{1}/raws/{2}".format(p.position,p.filename,raw_name.filename,amzn)
-                except:
-                    f2 = 'wau' 
+                #amzn = 'https://s3-eu-west-1.amazonaws.com/ibo2013/'
+                amzn = 'https://195.70.4.105/static/examfiles/'
+                
+                f1 = amzn+'{0}_small/{2}/{1}_{0}_{2}.pdf'.format(p.filename,s.individual_id,'corrected')
+                f2 = amzn+'{0}_small/{2}/{1}_{0}_{2}.pdf'.format(p.filename,s.individual_id,'rawscan')
+                #try:
+                #    correct_name = FilenameConversion.objects.get(individual_id=s.individual_id,prakti=p.filename,ctype='correct')
+                #    f1 = "{3}{0}_{1}/correction/{2}".format(p.position,p.filename,correct_name.filename,amzn)
+                #except:
+                #    f1 = 'wau'
+                #try:
+                #    raw_name = FilenameConversion.objects.get(individual_id=s.individual_id,prakti=p.filename,ctype='rawscan')
+                #    f2 = "{3}{0}_{1}/raws/{2}".format(p.position,p.filename,raw_name.filename,amzn)
+                #except:
+                #    f2 = 'wau' 
                 pelist.append({'pe':p,
-'f1':f1,
-'f2':f2,
-'scores':scorelist})
+                        'f1':f1,
+                        'f2':f2,
+                        'scores':scorelist})
             studlst.append({'s':s,'plist':pelist})
             fs.save()
 

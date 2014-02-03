@@ -1,5 +1,11 @@
-
 TODO
+
+
+How about it?
+
+1. Now that you actually understand Django a little more, migrate to newest version
+2. Split up the mess in "question" into multiple apps.
+3. prettify backend to make it easier to use
 
 sorted by priority:
 
